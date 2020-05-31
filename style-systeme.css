@@ -1,0 +1,643 @@
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! ANIMATIONS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+@keyframes rotation_annee {
+  0% { transform: rotate(0deg) translate3d(var(--distance-x), 0, 0); }
+  100% { transform: rotate(-360deg) translate3d(var(--distance-x), 0, 0); }
+}
+@keyframes rotation_journee {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+@keyframes rotation_lune {
+  0% { transform: rotate(0deg) translate3d(calc(var(--distance-lune) * 1px), 0, 0); }
+  100% { transform: rotate(-360deg) translate3d(calc(var(--distance-lune) * 1px), 0, 0); }
+}
+/*@keyframes rotation_lune_opposee {
+  0% { transform: rotate(-180deg) scale(var(--scale, 1)); }
+  100% { transform: rotate(180deg) scale(var(--scale, 1)); }
+}*/
+/* On calcule chaque étape comme suit :
+ *   - la rotation inversée progresse linéairement (5% de 360deg pour 5% de tour)
+ *   - l'oscillation progresse selon le sinus de l'angle parcouru en ces 5%
+ *     de tour (c'est la valeur décimale que je multiplie à l'angle)
+ *   - l'échelle progresse selon le cosinus de l'angle parcouru en ces 5%
+ *     de tour (c'est la valeur décimale que je multiplie à l'échelle)
+ * On progresse de 5% en 5% pour essayer de reproduire simplement linéairement
+ * cette progression sinusoïdale. */
+@keyframes rotation_lune_opposee {
+  0% { transform: rotate(-180deg) scaleX(var(--scale-min)) scaleY(var(--scale, 1)); }
+  5% { transform: rotate(calc(-162deg + 0.30901699403 * var(--angle))) scaleX(calc(1 - 0.9510565164 + 0.9510565164 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  10% { transform: rotate(calc(-144deg + 0.58778525252 * var(--angle))) scaleX(calc(1 - 0.8090169942 + 0.8090169942 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  15% { transform: rotate(calc(-126deg + 0.80901699433 * var(--angle))) scaleX(calc(1 - 0.58778525235 + 0.58778525235 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  20% { transform: rotate(calc(-108deg + 0.95105651585 * var(--angle))) scaleX(calc(1 - 0.30901699574 + 0.30901699574 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  25% { transform: rotate(calc(-90deg + var(--angle))) scaleX(1) scaleY(var(--scale, 1)); }
+  30% { transform: rotate(calc(-72deg + 0.95105651585 * var(--angle))) scaleX(calc(1 - 0.30901699574 + 0.30901699574 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  35% { transform: rotate(calc(-54deg + 0.80901699433 * var(--angle))) scaleX(calc(1 - 0.58778525235 + 0.58778525235 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  40% { transform: rotate(calc(-36deg + 0.58778525252 * var(--angle))) scaleX(calc(1 - 0.8090169942 + 0.8090169942 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  45% { transform: rotate(calc(-18deg + 0.30901699403 * var(--angle))) scaleX(calc(1 - 0.9510565164 + 0.9510565164 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  50% { transform: rotate(0deg) scaleX(var(--scale-max)) scaleY(var(--scale, 1)); }
+  55% { transform: rotate(calc(18deg - 0.30901699403 * var(--angle))) scaleX(calc(1 - 0.9510565164 + 0.9510565164 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  60% { transform: rotate(calc(36deg - 0.58778525252 * var(--angle))) scaleX(calc(1 - 0.8090169942 + 0.8090169942 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  65% { transform: rotate(calc(54deg - 0.80901699433 * var(--angle))) scaleX(calc(1 - 0.58778525235 + 0.58778525235 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  70% { transform: rotate(calc(72deg - 0.95105651585 * var(--angle))) scaleX(calc(1 - 0.30901699574 + 0.30901699574 * var(--scale-max))) scaleY(var(--scale, 1)); }
+  75% { transform: rotate(calc(90deg - var(--angle))) scaleX(1) scaleY(var(--scale, 1)); }
+  80% { transform: rotate(calc(108deg - 0.95105651585 * var(--angle))) scaleX(calc(1 - 0.30901699574 + 0.30901699574 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  85% { transform: rotate(calc(126deg - 0.80901699433 * var(--angle))) scaleX(calc(1 - 0.58778525235 + 0.58778525235 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  90% { transform: rotate(calc(144deg - 0.58778525252 * var(--angle))) scaleX(calc(1 - 0.8090169942 + 0.8090169942 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  95% { transform: rotate(calc(162deg - 0.30901699403 * var(--angle))) scaleX(calc(1 - 0.9510565164 + 0.9510565164 * var(--scale-min))) scaleY(var(--scale, 1)); }
+  100% { transform: rotate(180deg) scaleX(var(--scale-min)) scaleY(var(--scale, 1)); }
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  @keyframes rotation_lune_opposee {
+    0% { transform: rotate(-180deg) scale(var(--scale, 1)); }
+    100% { transform: rotate(180deg) scale(var(--scale, 1)); }
+  }
+}
+
+.paused .animee, .paused .animee .ombre, .paused #etoile.etoile-binaire {
+  animation-play-state: paused !important;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .animee, .animee .ombre, #etoile.etoile-binaire {
+    animation-play-state: paused !important;
+  }
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! CONTENEURS DU SYSTÈME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+html {
+  background-color: hsl(var(--etoile-couleur), 30%, 5%);
+}
+
+html.etoile-neutrons {
+  background-color: hsl(var(--etoile-couleur), 0%, 5%);
+}
+
+html.no-bg, html.trounoir {
+  background-color: black;
+}
+
+#systeme {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: var(--taille);
+  height: var(--taille);
+  /*position: absolute;
+  top: 0;
+  left: 0;*/
+  overflow: hidden;
+  cursor: move;
+  transform-origin: top left;
+  will-change: transform;
+  /*margin: auto;*/ /* Servait à centrer le système si plus petit que la fenêtre, mais le nouveau coeff de zoom mini supprime ce besoin */
+  --zoom: 1;
+  transform: scale(var(--zoom));
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! ÉTOILE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+.corps {
+  width: calc(1px * var(--size));
+  height: calc(1px * var(--size));
+  position: absolute;
+  border-radius: 50%;
+}
+
+#etoile {
+  z-index: 30;
+  --ombre-etoile: 2vmax;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/*
+ * ÉTOILE NORMALE
+ * et SPHÈRE DE DYSON
+ */
+
+#etoile.normal::after, #etoile.sphere-dyson::after {
+  content: '';
+  width: 80%;
+  height: 80%;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  border-radius: 50%;
+  background-color: hsl(var(--etoile-couleur), 100%, 90%);
+  box-shadow: 
+    0 0 var(--ombre-etoile) hsla(var(--etoile-couleur), 100%, 95%, 1)
+    ;
+}
+
+/*@keyframes dyson-spin {
+  0% { transform: rotate(calc(var(--n) * 45deg)) }
+  100% { transform: rotate(calc(var(--n) * 45deg + 360deg)) }
+}
+
+.dyson-ligne {
+  width: 100%;
+  height: 7%;
+  background: rgb(40, 40, 40);
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  z-index: 1;
+  border-radius: 2% / 50%;
+  animation: rotation_journee calc(0.25 * var(--n) * 30s) linear calc(-0.25 * var(--n) * 30s) infinite;
+}
+
+#etoile.sphere-dyson::before {
+  content: '';
+  display: block;
+  width: calc(0.87 * 25%);
+  height: 25%;
+  background: black;
+  position: absolute;
+  z-index: 2;
+  clip-path: polygon(0 25%, 50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%);
+  animation: rotation_journee 10s linear 0s infinite;
+}*/
+
+
+/*
+ * TROU NOIR AVEC DISQUE D'ACCRÉTION
+ * et TROU NOIR
+ */
+
+#etoile.trounoir-anneau {
+  box-shadow: 
+    0 0 var(--ombre-etoile) hsla(var(--etoile-couleur), 100%, 95%, 1)
+    ;
+}
+
+#etoile.trounoir-anneau::before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 calc(0.3 * var(--size) * 1px) hsl(var(--etoile-couleur), 100%, 90%),
+              inset 0 0 var(--ombre-etoile) calc(0.3 * var(--size) * 1px) hsl(var(--etoile-couleur), 100%, 90%);
+}
+
+#etoile.trounoir::after, #etoile.trounoir-anneau::after {
+  content: '';
+  width: 5%;
+  height: 5%;
+  position: absolute;
+  top: 47.5%;
+  left: 47.5%;
+  border-radius: 50%;
+  background-color: black;
+}
+
+
+/*
+ * ÉTOILE À NEUTRONS
+ */
+
+#etoile.etoile-neutrons::after {
+  content: '';
+  width: 10%;
+  height: 10%;
+  position: absolute;
+  top: 45%;
+  left: 45%;
+  border-radius: 50%;
+  background-color: white;
+  box-shadow: 
+    0 0 var(--ombre-etoile) hsla(var(--etoile-couleur), 0%, 100%, 1)
+    ;
+}
+
+
+/*
+ * ÉTOILE BINAIRE
+ */
+
+#etoile.etoile-binaire {
+  animation: rotation_journee 7s linear 0s infinite;
+}
+
+#etoile.etoile-binaire::before {
+  content: '';
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  border-radius: 50%;
+  background-color: hsl(var(--etoile-couleur), 100%, 90%);
+  box-shadow: 
+    0 0 var(--ombre-etoile) hsla(var(--etoile-couleur), 100%, 100%, 1)
+    ;
+}
+
+#etoile.etoile-binaire::after {
+  content: '';
+  width: 40%;
+  height: 40%;
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  border-radius: 50%;
+  background-color: hsl(var(--etoile-couleur), 100%, 90%);
+  box-shadow: 
+    0 0 var(--ombre-etoile) hsla(var(--etoile-couleur), 100%, 100%, 1)
+    ;
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! PLANÈTES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+.planete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(var(--couleur), 50%, 50%);
+  transform: rotate(calc(-1*var(--angle))) translateX(var(--distance-x));
+  overflow: visible;
+  --ombre-planete: 2px;
+  box-shadow: 0 0 1px var(--ombre-planete) hsla(var(--couleur), 50%, 50%, .2);
+  z-index: calc(100 - var(--ordre));
+}
+
+.planete.animee {
+  animation: rotation_annee calc(1ms * var(--periode-ms)) linear var(--delai) infinite;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .planete.animee {
+    animation: rotation_annee 10s linear var(--delai) infinite;
+  }
+}
+
+.coeur {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: var(--texture);
+  background-position: center center;
+  background-size: cover;
+  border-radius: 50%;
+}
+
+.coeur.animee {
+  animation: rotation_journee calc(1ms * var(--periode-ms) / var(--jours-par-an)) linear 0s infinite;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .coeur.animee {
+    animation: none;
+  }
+}
+
+.no-textures .coeur {
+  background-image: none;
+}
+
+.trounoir .planete .coeur {
+  /*background-image: radial-gradient(rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .8) 100%), var(--texture);*/
+  filter: brightness(0);
+}
+
+@media screen and (max-width: 600px)
+{
+ .planete {
+    --ombre-planete: 1px;
+  }
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! ANNEAUX !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+.anneaux {
+  width: 130%;
+  height: 130%;
+  position: absolute;
+  top: -15%;
+  left: -15%;
+  border-radius: 50%;
+  z-index: 110;
+}
+
+.anneau {
+  width: var(--anneau-taille);
+  height: var(--anneau-taille);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 var(--epaisseur-ombre) hsla(var(--couleur), 10%, 90%, .2);
+}
+
+.trounoir .anneau {
+  box-shadow: 0 0 0 var(--epaisseur-ombre) hsla(var(--couleur), 10%, 90%, .05);
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! LUNES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+.lune {
+  background-color: hsl(var(--couleur), 40%, 50%);
+  background-position: center center;
+  background-size: cover;
+  width: var(--lune-taille);
+  height: var(--lune-taille);
+  position: absolute;
+  --lune-pos: calc(0.5*(100% - var(--lune-taille)));
+  top: var(--lune-pos);
+  left: var(--lune-pos);
+  border-radius: 50%;
+  z-index: calc(120 - var(--ordre));
+}
+
+.trounoir .planete, .trounoir .lune {
+  background-color: hsl(var(--couleur), 20%, 20%);
+  background-image: radial-gradient(rgba(0, 0, 0, .8) 0%, rgba(0, 0, 0, .8) 100%);
+}
+
+.lune.animee {
+  animation: rotation_lune calc(1ms * var(--periode-ms) / var(--divise-vitesse)) linear var(--delai) infinite;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .lune.animee {
+    animation: rotation_lune 10s linear var(--delai) infinite;
+  }
+}
+
+.coeur_lune {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+}
+.lune.animee .ombre {
+  animation: rotation_lune_opposee calc(1ms * var(--periode-ms) / var(--divise-vitesse)) linear var(--delai) infinite;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .lune.animee .ombre {
+    animation: rotation_lune_opposee 10s linear var(--delai) infinite;
+  }
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! ORBITES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+
+
+#toutes-orbites {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+.orbite {
+  width: calc(var(--distance) - var(--epaisseur));
+  height: calc(var(--distance) - var(--epaisseur));
+  position: absolute;
+  --epaisseur: 2px;
+  /*border: var(--epaisseur) dotted hsla(var(--couleur), 30%, 50%, .3);*/ /* Cause des soucis de performance */
+  z-index: calc(20 - var(--ordre));
+  /*background-color: hsla(var(--etoile-couleur), 100%, 95%, .03);*/
+  --intervalle-fond: calc(20% / var(--ordre-max));
+  --teinte-fond: var(--etoile-couleur);
+  --saturation-fond: 20%;
+  --luminosite-fond: calc(5% + (var(--ordre-max) + 1 - var(--ordre)) * var(--intervalle-fond));
+  background-color: hsl(var(--etoile-couleur), var(--saturation-fond), var(--luminosite-fond));
+  --teinte-bordure: calc(var(--couleur) + .1 * (var(--etoile-couleur) - var(--couleur)));
+  --saturation-bordure: 10%;
+  --luminosite-bordure: calc(var(--luminosite-fond) + 10%);
+  border: var(--epaisseur) solid hsl(var(--teinte-bordure), var(--saturation-bordure), var(--luminosite-bordure));
+  border-radius: 50%;
+  /*border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;*/
+}
+
+.etoile-neutrons .orbite {
+  --saturation-fond: 0%;
+}
+
+.orbite.lunaire {
+  background-color: transparent;
+}
+
+.tellurique .orbite.lunaire {
+  --epaisseur: 1px;
+}
+
+.no-bg .orbite {
+  background-color: transparent;
+}
+
+.trounoir .orbite {
+  background-color: transparent;
+  --saturation-bordure: 12%;
+  --luminosite-bordure: 12%;
+}
+
+.orbites-blanches .orbite {
+  --teinte-bordure: var(--etoile-couleur);
+}
+.no-bg.orbites-blanches .orbite,
+.trounoir.orbites-blanches .orbite {
+  --saturation-bordure: 0%;
+}
+
+.no-lunar-orbits .orbite.lunaire {
+  border-color: transparent;
+}
+
+.no-orbits .orbite {
+  border-color: transparent;
+}
+
+.no-orbits #gp-orbites-colorees, .no-orbits #gp-orbites-lunaires, .no-shadows #gp-ombres-exagerees {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media screen and (max-width: 600px)
+{
+  .orbite, .orbite.lunaire {
+    --epaisseur: 1px;
+  }
+}
+
+
+
+
+
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!! OMBRES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+
+ .ombre {
+  height: 100%;
+  position: absolute;
+  left: 50%;
+  z-index: calc(150 - var(--ordre));
+  background: rgba(0, 0, 0, .3);
+  transform: rotate(180deg);
+  transform-origin: center left;
+  clip-path: polygon(0 0, 100% 50%, 100% 50%, 0 100%);
+  --coeff-ombre: 4px;
+  width: calc(var(--coeff-ombre) * var(--longueur));
+}
+
+.gazeuse .ombre {
+  --coeff-ombre: 2px;
+}
+
+.etoile-neutrons .ombre {
+  --coeff-ombre: 2px;
+}
+
+.ombres-realistes .ombre {
+  --coeff-ombre: 1px;
+}
+
+.meme-taille-que-etoile>.ombre {
+  clip-path: none;
+}
+
+.plus-grande-que-etoile>.ombre {
+  --scale: 5;
+  transform: rotate(180deg) scaleY(var(--scale)); /* voir aussi rotation_lune_opposee */
+  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  .plus-grande-que-etoile>.ombre {
+    --scale: 1;
+  }
+}
+
+.lune>.ombre {
+  --angle: calc(0.159154943 * 360deg * var(--distance-lune) / var(--distance-nu)); /* 1 / 2pi ≈ 0,159154943 */
+}
+
+.trounoir .ombre {
+  opacity: 0;
+}
+
+
+
+/*
+ * OMBRES NON-ADDITIVES
+ */
+
+#toutes-ombres {
+  visibility: hidden;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 200;
+}
+
+.ombres-non-additives #systeme>:not(#toutes-ombres) .ombre {
+  display: none; /* Enlever ça pour pouvoir switcher entre ombres additives ou non */
+  visibility: hidden;
+  opacity: 0;
+}
+
+.ombres-non-additives #toutes-ombres {
+  visibility: visible;
+  opacity: .3;
+}
+
+.no-shadows #toutes-ombres {
+  opacity: 0;
+}
+
+#toutes-ombres .ombre {
+  background: black;
+  z-index: unset;
+}
+@supports not (clip-path: circle(1%)) { /* Edge */
+  #toutes-ombres .ombre {
+    background: linear-gradient(to right, black, transparent);
+  }
+}
+
+#toutes-ombres .planete {
+  background: none;
+  box-shadow: none;
+}
+
+#toutes-ombres .lune {
+  background: none;
+}

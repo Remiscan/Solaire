@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+    viewBox="0 0 100 100" width="100" height="100">
+  <g id="hexagonal-clouds">
+    <polygon points="43.30,0 86.60,25 86.60,75 43.30,100 0,75 0,25" fill="transparent" stroke="rgba(255, 255, 255, .3)" stroke-width="15" style="transform: translate(6.69%,0%)"></polygon>
+    <polygon points="25.98,0 51.96,15 51.96,45 25.98,60 0,45 0,15" fill="transparent" stroke="rgba(255, 255, 255, .2)" stroke-width="20" style="transform: translate(24.02%,20%)"></polygon>
+    <polygon points="6.92,0 13.85,4 13.85,12 6.92,16 0,12 0,4" fill="transparent" stroke="rgba(255, 255, 255, .1)" stroke-width="18" style="transform: translate(43.07%,42%)"></polygon>
+    <polygon points="1.73,0 3.46,1 3.46,3 1.73,4 0,3 0,1" fill="transparent" stroke="rgba(255, 255, 255, .15)" stroke-width="4" style="transform: translate(48.26%,48%)"></polygon>
+  </g>
+</svg>
