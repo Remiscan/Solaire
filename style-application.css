@@ -25,7 +25,7 @@
   font-weight: 400;
   src: local('Material Icons'),
        local('MaterialIcons-Regular'),
-       url('MaterialIcons-Regular.woff2') format('woff2');
+       url('ext/MaterialIcons-Regular.woff2') format('woff2');
 }
 
 .material-icons {

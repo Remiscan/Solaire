@@ -1,5 +1,5 @@
 {
-    "version": "2020.05.30_16.02.17",
+    "version": "2020.06.01_23.38.30",
     "fichiers": [
         "index.php",
         "style-application.css",
@@ -7,8 +7,8 @@
         "script-systeme.js",
         "script-application.js",
         "strings.json",
-        "MersenneTwister.js",
-        "MaterialIcons-Regular.woff2",
+        "ext/MersenneTwister.js",
+        "ext/MaterialIcons-Regular.woff2",
         "icons/apple-touch-icon.png",
         "icons/icon-192.png",
         "textures/1.svg",

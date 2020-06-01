@@ -331,7 +331,7 @@ else
     <!----- SCRIPTS ---------------------------------------------------------->
 
 
-    <script src="/solaire/MersenneTwister--<?=$version?>.js"></script>
+    <script src="/solaire/ext/MersenneTwister--<?=$version?>.js"></script>
     <script id="test-support-script">
       <?php include $commonDir.'/js/test-support.js'; ?>
       
