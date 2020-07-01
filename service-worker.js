@@ -79,25 +79,27 @@ self.addEventListener('message', event => {
     const newCACHE = PRE_CACHE + '-' + event.data.version;
     const responsePORT = event.ports[0];
     console.log('[update] Mise à jour du cache demandée...');
-    return caches.open(newCACHE)
-    .then(cache => json2cache(cache, source))
-    .then(() => {
-      console.log('[update] Mise à jour du cache terminée !');
-      // Supprimons les vieux caches
-      return deleteOldCaches(newCACHE, 'update')
-      .catch(raison => console.log('[update] ' + raison))
+    event.waitUntil(
+      caches.open(newCACHE)
+      .then(cache => json2cache(cache, source))
       .then(() => {
-        responsePORT.postMessage({message: '[update] Nettoyage terminé !'});
-      });
-    })
-    .catch(error => {
-      source.postMessage({loaded: false, erreur: true});
-      console.error(error);
-      return caches.delete(newCACHE)
-      .then(() => 
-        console.log('[:(] Mise à jour annulée')
-      );
-    });
+        console.log('[update] Mise à jour du cache terminée !');
+        // Supprimons les vieux caches
+        return deleteOldCaches(newCACHE, 'update')
+        .catch(raison => console.log('[update] ' + raison))
+        .then(() => {
+          responsePORT.postMessage({message: '[update] Nettoyage terminé !'});
+        });
+      })
+      .catch(error => {
+        source.postMessage({loaded: false, erreur: true});
+        console.error(error);
+        return caches.delete(newCACHE)
+        .then(() => 
+          console.log('[:(] Mise à jour annulée')
+        );
+      })
+    );
   }
 });
 
@@ -186,16 +188,16 @@ function updateDBversion(ver)
 
     // On met à jour la version stockée dans la BDD
     ouvertureDB.onsuccess = event => {
-      var db = event.target.result;
-      var store = db.transaction('version', 'readwrite')
+      const db = event.target.result;
+      const store = db.transaction('version', 'readwrite')
                     .objectStore('version');
-      var getVersion = store.get('version');
+      const getVersion = store.get('version');
                     
       getVersion.onsuccess = () => {
-        var data = getVersion.result;
+        const data = getVersion.result;
         data.version = ver;
         
-        var maj = store.put(data);
+        const maj = store.put(data);
         
         maj.onsuccess = () => {
           resolve('[bdd-update] Numéro de version mis à jour');
@@ -224,11 +226,11 @@ function updateDBversion(ver)
 function getDBversion()
 {
   return new Promise((resolve, reject) => {
-    var ouvertureDB = indexedDB.open('solaire', 1);
+    const ouvertureDB = indexedDB.open('solaire', 1);
 
     ouvertureDB.onsuccess = event => {
-      var db = event.target.result;
-      var getVersion = db.transaction('version', 'readwrite')
+      const db = event.target.result;
+      const getVersion = db.transaction('version', 'readwrite')
                          .objectStore('version')
                          .get('version');
                     
