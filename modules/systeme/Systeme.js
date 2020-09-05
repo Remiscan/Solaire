@@ -35,6 +35,8 @@ export class Systeme {
     this.date = date;
   }
 
+
+  // Crée le HTML du système
   populate() {
     if (!this.correctSystem) throw 'systeme-different';
     const conteneur = document.getElementById('systeme');
@@ -224,6 +226,8 @@ export class Systeme {
     return;
   }
 
+
+  // Calcule la longueur de l'ombre d'un astre en fonction de sa position par rapport à l'étoile
   longueurOmbre(objet, distanceAEtoile = false) {
     const comparaison = this.compareEtoile(objet);
     const tailleEtoile = this.tailleEtoile;
@@ -260,6 +264,8 @@ export class Systeme {
     return resultat;
   }
 
+
+  // Détermine si un astre est plus petit ou grand que son étoile
   compareEtoile(objet) {
     const tailleEtoile = this.tailleEtoile;
     const tailleObjet = px(objet.taille_px);
