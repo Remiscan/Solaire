@@ -17,4 +17,59 @@ export function resetWindow()
   conteneurSysteme.customScroll(posX, posY);
 }
 
+/////////////////////////////////
+// Simule un click sur un élément
+export function simulateClick(elem, x = 0, y = 0) {
+	const event = new MouseEvent('click', {
+		bubbles: true,
+		cancelable: true,
+    view: window,
+    clientX: x,
+    clientY: y
+  });
+  elem.dispatchEvent(event);
+};
+
+///////////////////////////////////////////////
+// Recalcule ce qu'il faut au redimensionnement
+function recalcOnResize() {
+  Array.from(document.getElementsByClassName('minipop'))
+  .forEach((e, k) => {
+    e.style.setProperty('--ordre', k);
+    let id = e.id.replace('pop-', '');
+    if (id == 'nouvelle-decouverte')
+      id = 'decouvertes';
+  });
+
+  window.fenetre.largeur = window.innerWidth;
+  window.fenetre.hauteur = window.innerHeight;
+  window.taille_fenetre = Math.max(window.fenetre.largeur, window.fenetre.hauteur);
+  if (typeof astre !== 'undefined')
+    window.coeff_fenetre = Math.round(100 * window.taille_fenetre / astre.taille_fenetre) / 100;
+  else
+    window.coeff_fenetre = 1;
+}
+
+//////////////////////////////////
+// On détecte le redimensionnement
+function callResize() {
+  clearTimeout(resizing);
+  resizing = setTimeout(() => {
+    recalcOnResize();
+    const devraitRedimensionner = (window.taille_fenetre / window.taille_fenetre_pendant_generation > 1.2 || window.taille_fenetre / window.taille_fenetre_pendant_generation < 0.8);
+    if (window.taille_fenetre != window.taille_fenetre_pendant_generation && devraitRedimensionner)
+    {
+      document.getElementById('bouton-redimensionner').classList.add('needed');
+      document.getElementById('bouton-redimensionner').disabled = false;
+      document.getElementById('bouton-redimensionner').tabIndex = 0;
+    }
+    else
+    {
+      document.getElementById('bouton-redimensionner').classList.remove('needed');
+      document.getElementById('bouton-redimensionner').disabled = true;
+      document.getElementById('bouton-redimensionner').tabIndex = -1;
+    }
+  }, 100);
+}
+
 export function wait(time) { return new Promise(resolve => setTimeout(resolve, time)); }

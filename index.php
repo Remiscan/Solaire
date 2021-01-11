@@ -344,8 +344,7 @@ else
         { name: 'ES template literals', priority: 1 }
       ]);
     </script>
-    <script src="/solaire/script-systeme--<?=$version?>.js"></script>
-    <script src="/solaire/script-application--<?=$version?>.js"></script>
+    <script src="/solaire/scripts--<?=$version?>.js" type="module"></script>
 
   </body>
 </html>

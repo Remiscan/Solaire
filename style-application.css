@@ -580,6 +580,11 @@ button:focus:not(:hover),
   box-shadow: 0 0 0 .125rem white;
 }
 
+button:focus:not(:focus-visible),
+.focusable:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
 
 
 

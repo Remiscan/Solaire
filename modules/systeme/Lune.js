@@ -1,6 +1,6 @@
-import { mt } from './seed.js';
+import { mt } from './Seed.js';
 
-class Lune {
+export class Lune {
   constructor(planete, j, jmax, interanneaux = false, lune_taille = 0, lune_distance = 0) {
     const coeff_delai = -1 * Math.round(100 * mt.rnd()) / 100;
     this.delai = Math.round(coeff_delai * planete.periode_ms);

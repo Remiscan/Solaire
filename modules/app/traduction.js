@@ -18,6 +18,7 @@ export function textualiser()
     langage = 'fr';
 
   document.documentElement.lang = langage;
+  const version = document.documentElement.dataset.version;
 
   return new Promise((resolve, reject) => {
     if (Object.keys(Textes).length === 0 && Textes.constructor === Object)

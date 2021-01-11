@@ -1,8 +1,9 @@
-import { mt, seed, updateSeed } from './seed.js';
+import { Seed } from './Seed.js';
 import { Etoile } from './Etoile.js';
 import { Planete } from './Planete.js';
 import { Lune } from './Lune.js';
 import { resetWindow } from '../app/Params.js';
+import { Decouverte } from '../app/Decouverte.js';
 
 
 
@@ -11,7 +12,7 @@ let derniereGeneration = Date.now();
 
 
 
-function getInitialSystemCode() {
+export function getInitialSystemCode() {
   let URLcode;
   try {
     URLcode = window.location.href.match(/(solaire\/systeme\/)(.+)/)[2];
@@ -21,14 +22,11 @@ function getInitialSystemCode() {
   return URLcode;
 }
 
-const even = nombre => 2 * Math.round(nombre / 2); // arrondit au nombre pair le plus proche
-const px = longueur => Math.round(window.coeff_fenetre * longueur); // adapte à la taille de la fenêtre
-
 
 
 export class Systeme {
   constructor(code, date = Date.now()) {
-    updateSeed(code);
+    new Seed(code);
     this.seed = code;
     this.etoile = new Etoile();
     this.decouvertes = new Set();
@@ -46,6 +44,7 @@ export class Systeme {
     window.taille_fenetre_pendant_generation = window.taille_fenetre;
     window.coeff_fenetre = Math.round(100 * window.taille_fenetre / astre.taille_fenetre) / 100;
     const px = longueur => { return Math.round(window.coeff_fenetre * longueur) }; // adapte à la taille de la fenêtre
+    const even = nombre => 2 * Math.round(nombre / 2); // arrondit au nombre pair le plus proche
 
     // On efface le système précédent
     conteneur.innerHTML = '';
@@ -219,9 +218,13 @@ export class Systeme {
     resetWindow();
 
     if (document.querySelector('#welcome') != null || typeof history.state.systeme == 'undefined' || history.state.systeme == null)
-      history.replaceState( { systeme: seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + seed*/);
-    else if (seed != history.state.systeme)
-      history.pushState( { systeme: seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + seed*/);
+      history.replaceState( { systeme: this.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+    else if (this.seed != history.state.systeme)
+      history.pushState( { systeme: this.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+
+    this.decouvertes.forEach(d => Decouverte.add(d, this.seed));
+    Decouverte.save();
+    Decouverte.populate();
 
     return;
   }
@@ -279,7 +282,7 @@ export class Systeme {
   }
 
   get correctSystem() {
-    return seed == this.seed;
+    return Seed.get() == this.seed;
   }
 
   get tailleEtoile() {
@@ -299,5 +302,9 @@ export class Systeme {
   static get universObsolete() {
     const versionLocale = localStorage.getItem('solaire/version-univers');
     return versionLocale != versionUnivers;
+  }
+
+  static get versionUnivers() {
+    return versionUnivers;
   }
 }

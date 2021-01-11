@@ -1,4 +1,4 @@
-import { mt } from './seed.js';
+import { mt } from './Seed.js';
 import { Planete } from './Planete.js';
 
 export class Etoile {

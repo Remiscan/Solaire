@@ -1,4 +1,4 @@
-import { mt } from './seed.js';
+import { mt } from './Seed.js';
 import { Anneau } from './Anneau.js';
 import { Lune } from './Lune.js';
 

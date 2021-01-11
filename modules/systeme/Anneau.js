@@ -1,6 +1,6 @@
-import { mt } from './seed.js';
+import { mt } from './Seed.js';
 
-class Anneau {
+export class Anneau {
   constructor(planete) {
     this.taille = Math.round(90 + 70 * mt.rnd());
     this.epaisseur = 0.01 * Math.round(1 + 29 * mt.rnd());
