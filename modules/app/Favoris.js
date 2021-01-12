@@ -158,13 +158,13 @@ export class Favoris {
           element = document.getElementById(`favori-${this.systeme}`);
         }
       }
-      else if (f.systeme != Seed.get()) {
+      else if (f.systeme != Seed.current) {
         favoris.delete(this);
         favSystemes.delete(this.systeme);
       }
 
-      if (f.systeme == Seed.get())  element.classList.add('actuel');
-      else                          element.classList.remove('actuel');
+      if (f.systeme == Seed.current)  element.classList.add('actuel');
+      else                            element.classList.remove('actuel');
     }
 
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');

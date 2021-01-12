@@ -6,6 +6,7 @@ import { resetWindow } from './custom-scroll-zoom.js';
 
 
 
+//////////////////////////////////////////////////
 // Affiche un effet d'animation autour des boutons
 let pulseTimeout;
 function pulseBouton(event) {
@@ -20,6 +21,8 @@ function pulseBouton(event) {
   });
 }
 
+
+////////////////////////////////////////
 // Initialise les boutons de l'interface
 export function initInterface() {
   // Boutons précédent et suivant

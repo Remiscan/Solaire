@@ -3,8 +3,6 @@ import { Etoile } from './Etoile.js';
 import { Planete } from './Planete.js';
 import { Lune } from './Lune.js';
 import { even, px, Fenetre } from '../app/Params.js';
-import { Decouverte } from '../app/Decouverte.js';
-import { resetWindow } from '../app/custom-scroll-zoom.js';
 
 
 
@@ -12,32 +10,21 @@ const versionUnivers = 2;
 
 
 
-export function getInitialSystemCode() {
-  let URLcode;
-  try {
-    URLcode = window.location.href.match(/(solaire\/systeme\/)(.+)/)[2];
-    if (isNaN(URLcode)) throw 'NaN';
-    console.log('Code détecté :', URLcode);
-  } catch(error) {}
-  return URLcode;
-}
-
-
-
 export class Systeme {
   constructor(code) {
     new Seed(code);
-    this.seed = Seed.get();
+    this.seed = Seed.current;
     this.etoile = new Etoile();
     this.decouvertes = new Set();
   }
 
 
-  // Crée le HTML du système
+  //////////////////////////
+  // Crée le système en HTML
   populate() {
     if (!this.correctSystem) {
-      console.error('Système différent.', `this.seed == ${this.seed}`, `Seed.get() == ${Seed.get()}`);
-      throw 'systeme-different';
+      console.error('Système différent.', `this.seed == ${this.seed}`, `Seed.current == ${Seed.current}`);
+      throw 'Mauvais système';
     }
     const conteneur = document.getElementById('systeme');
 
@@ -215,12 +202,12 @@ export class Systeme {
 
     window['bodySize'] = 2 * window['lastOrbitSize'] - window['beforeOrbitSize'];
     document.body.style.setProperty('--taille', window.bodySize + 'px');
-    resetWindow();
 
     return;
   }
 
 
+  //////////////////////////////////////////////////////////////////////////////////////////////
   // Calcule la longueur de l'ombre d'un astre en fonction de sa position par rapport à l'étoile
   longueurOmbre(objet, distanceAEtoile = false) {
     const comparaison = this.compareEtoile(objet);
@@ -259,6 +246,7 @@ export class Systeme {
   }
 
 
+  ///////////////////////////////////////////////////////////////
   // Détermine si un astre est plus petit ou grand que son étoile
   compareEtoile(objet) {
     const tailleEtoile = this.tailleEtoile;
@@ -272,10 +260,9 @@ export class Systeme {
     return { difference, ratio, classe };
   }
 
-  get correctSystem() {
-    return Seed.get() == this.seed;
-  }
 
+  //////////////////////////////////////////
+  // Calcule la taille effective de l'étoile
   get tailleEtoile() {
     let taille = Math.round(this.etoile.taille * Fenetre.taille);
     const type = this.etoile.type;
@@ -284,6 +271,11 @@ export class Systeme {
     else if (type == 'normal')
       taille = Math.round(.8 * taille);
     return taille;
+  }
+
+
+  get correctSystem() {
+    return Seed.current == this.seed;
   }
 
   get planetes() {

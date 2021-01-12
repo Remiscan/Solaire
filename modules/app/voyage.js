@@ -3,6 +3,8 @@ import { getString } from './traduction.js';
 import { Notification } from './Notification.js';
 import { Menu } from './Menu.js';
 import { Decouverte } from './Decouverte.js';
+import { resetWindow } from './custom-scroll-zoom.js';
+import { Seed } from '../systeme/Seed.js';
 
 
 
@@ -10,35 +12,31 @@ let derniereGeneration = 0;
 
 
 
-/////////////////////////////////////////////
-// Voyage vers le système indiqué par le code
 export class Voyage {
   constructor(code, date = Date.now()) {
     this.date = date;
 
     try {
-      if (isNaN(code))
-        throw 'Code invalide';
-
-      if (code == history.state.systeme)
-        throw 'Système actuel';
+      if (!Seed.validate(code))           throw 'Code invalide';
+      if (code == history.state.systeme)  throw 'Système actuel';
       
       this.systeme = new Systeme(code);
     }
 
     catch(raison) {
-      if (raison == 'Système actuel') {
+      if (raison == 'Système actuel')
         this.systeme = new Systeme(code, history.state.date);
-      }
-      else if (raison == 'Mauvais système')
-        new Notification(getString('erreur-systeme-non-atteint'), 'error');
       else if (raison == 'Code invalide')
         new Notification(getString('erreur-adresse-invalide'), 'error');
+      else if (raison == 'Mauvais système')
+        new Notification(getString('erreur-systeme-non-atteint'), 'error');
       else
         console.error(raison);
     }
   }
 
+
+  /////////////////////
   // Effectue le voyage
   async go() {
     try {
@@ -63,6 +61,7 @@ export class Voyage {
 
       // On affiche le système visité
       this.systeme.populate();
+      resetWindow();
 
       // On met à jour l'entrée de l'historique
       if (document.querySelector('#welcome') != null || typeof history.state.systeme == 'undefined' || history.state.systeme == null)
@@ -81,6 +80,8 @@ export class Voyage {
     }
   }
 
+
+  //////////////////////////////////////////////////////////////////////////
   // Prépare et effectue un voyage à partir de l'adresse saisie manuellement
   static saisie() {
     let i_kc = 0;
@@ -109,39 +110,5 @@ export class Voyage {
         voy.go();
       });
     }
-  }
-}
-
-
-
-/////////////////////////////////////////
-// Voyage vers le code saisi manuellement
-let i_kc = 0;
-export function visiterSaisie()
-{
-  const codeSaisi = document.getElementById('code-saisi').value;
-  if (codeSaisi != '')
-  {
-    document.getElementById('code-saisi').readonly = true;
-    document.getElementById('code-saisi').blur();
-    function isKeyboardClosed()
-    {
-      i_kc++;
-      return new Promise((resolve, reject) => {
-        if (document.getElementById('bouton-redimensionner').classList.contains('needed') && i_kc < 50)
-          return wait(100).then(reject);
-        else {
-          i_kc = 0;
-          return resolve();
-        }
-      })
-      .catch(isKeyboardClosed);
-    }
-
-    isKeyboardClosed()
-    .then(() => {
-      document.getElementById('code-saisi').readonly = false;
-      visiter(codeSaisi);
-    });
   }
 }

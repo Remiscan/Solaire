@@ -6,7 +6,7 @@ import { Voyage } from './modules/app/Voyage.js';
 
 
 
-window.onload = App.onLaunch();
+window.onload = App.launch();
 
 // Gère l'historique
 window.addEventListener('popstate', event => {

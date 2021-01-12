@@ -55,6 +55,7 @@ export class Etoile {
     this.taille_fenetre = Fenetre.taille;
   }
 
+  
   static get types() {
     return ['trounoir', 'etoile-neutrons', 'etoile-binaire', 'trounoir-anneau', 'sphere-dyson', 'normal'];
   }

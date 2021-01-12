@@ -8,6 +8,8 @@ import { wait, recalcOnResize, callResize } from './Params.js';
 import { Parametre } from './parametres.js';
 import { initInterface, createFocusability } from './interface.js';
 import { getString } from './traduction.js';
+import { Voyage } from './Voyage.js';
+import { Seed } from '../systeme/Seed.js';
 
 
 
@@ -72,6 +74,7 @@ export class App {
     }    
   }
 
+
   ///////////////////////////
   // Met à jour l'application
   static async update(update = false) {
@@ -135,6 +138,7 @@ export class App {
     }
   }
 
+
   /////////////////////////////////////////////
   // Vérifie la disponibilité d'une mise à jour
   static async checkUpdate() {
@@ -193,6 +197,7 @@ export class App {
     return;
   }
 
+
   /////////////////////////////////////////
   // Vérifie si l'appli peut être installée
   static checkInstall() {
@@ -241,15 +246,17 @@ export class App {
     });
   }
 
+
   /////////////////////////////////
   // Si service worker indisponible
   static noStart() {
     recalcOnResize();
   }
 
+
   ////////////////////////////////
   // Au lancement de l'application
-  static async onLaunch() {
+  static async launch() {
     // Affichage d'un avertissement sur les navigateurs non/mal supportés
     const warning = document.querySelector('.warning');
     if (getComputedStyle(warning).display == 'none') {
@@ -294,16 +301,17 @@ export class App {
       pop.querySelector('.nouvel-univers').classList.add('on');
     }
 
-    // Création du système planétaire
-    let systeme;
+    // Récupération de l'adresse de système fournie dans l'URL
+    let URLcode;
     try {
-      systeme = new Systeme(getInitialSystemCode());
-    }
-    catch(error) {
-      Notification.create(getString('erreur-' + error), 'error');
-      systeme = new Systeme();
-    }
-    systeme.populate();
+      URLcode = window.location.href.match(/(solaire\/systeme\/)(.+)/)[2];
+      if (!Seed.validate(URLcode)) throw 'Bad initial seed';
+      console.log('Code détecté :', URLcode);
+    } catch(error) {}
+
+    // Création d'un premier système planétaire
+    const voy = new Voyage(URLcode);
+    voy.go();
 
     await wait(100);
 
@@ -331,7 +339,7 @@ export class App {
     currentWorker = navigator.serviceWorker.controller;
     isStarted = 1;
     console.log('[sw] Démarrage...');
-    //App.start();
+    App.start();
 
     try {
       const registration = await navigator.serviceWorker.register('/solaire/service-worker.js');
