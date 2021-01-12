@@ -2,13 +2,13 @@ import { Seed } from './Seed.js';
 import { Etoile } from './Etoile.js';
 import { Planete } from './Planete.js';
 import { Lune } from './Lune.js';
-import { resetWindow } from '../app/Params.js';
+import { even, px, Fenetre } from '../app/Params.js';
 import { Decouverte } from '../app/Decouverte.js';
+import { resetWindow } from '../app/custom-scroll-zoom.js';
 
 
 
 const versionUnivers = 2;
-let derniereGeneration = Date.now();
 
 
 
@@ -27,7 +27,7 @@ export function getInitialSystemCode() {
 export class Systeme {
   constructor(code, date = Date.now()) {
     new Seed(code);
-    this.seed = code;
+    this.seed = Seed.get();
     this.etoile = new Etoile();
     this.decouvertes = new Set();
     this.date = date;
@@ -36,15 +36,15 @@ export class Systeme {
 
   // Crée le HTML du système
   populate() {
-    if (!this.correctSystem) throw 'systeme-different';
+    if (!this.correctSystem) {
+      console.error('Système différent.', `this.seed == ${this.seed}`, `Seed.get() == ${Seed.get()}`);
+      throw 'systeme-different';
+    }
     const conteneur = document.getElementById('systeme');
 
     // Adaptation à la taille de l'écran
-    window.taille_fenetre = Math.max(window.innerWidth, window.innerHeight);
-    window.taille_fenetre_pendant_generation = window.taille_fenetre;
-    window.coeff_fenetre = Math.round(100 * window.taille_fenetre / astre.taille_fenetre) / 100;
-    const px = longueur => { return Math.round(window.coeff_fenetre * longueur) }; // adapte à la taille de la fenêtre
-    const even = nombre => 2 * Math.round(nombre / 2); // arrondit au nombre pair le plus proche
+    window.taille_fenetre_pendant_generation = Fenetre.taille;
+    window.coeff_fenetre = Math.round(100 * Fenetre.taille / this.etoile.taille_fenetre) / 100;
 
     // On efface le système précédent
     conteneur.innerHTML = '';
@@ -63,21 +63,21 @@ export class Systeme {
 
     if (etoile.type != 'normal') this.decouvertes.add(etoile.type);
 
-    document.documentElement.style.setProperty('--largeur-etoile', Math.round(etoile.taille * window.taille_fenetre) + 'px');
-    document.documentElement.style.setProperty('--largeur-eff-etoile-nu', largeur_effective_etoile);
+    document.documentElement.style.setProperty('--largeur-etoile', Math.round(etoile.taille * Fenetre.taille) + 'px');
+    document.documentElement.style.setProperty('--largeur-eff-etoile-nu', this.tailleEtoile);
     document.documentElement.style.setProperty('--etoile-couleur', etoile.couleur);
 
     const etoileTemplate = document.createElement('template');
     etoileTemplate.innerHTML = `
       <div id="etoile" class="corps ${this.etoile.type}" 
            style="
-            --size: ${Math.round(etoile.taille * window.taille_fenetre)};
+            --size: ${Math.round(etoile.taille * Fenetre.taille)};
             --couleur: ${etoile.couleur};
            "
       ></div>
     `;
 
-    conteneur.appendChild(etoileTemplate.content.clodeNode(true));
+    conteneur.appendChild(etoileTemplate.content.cloneNode(true));
 
     // Planètes
     for (const [k, planete] of etoile.planetes.entries()) {
@@ -166,9 +166,10 @@ export class Systeme {
       `;
 
       // Orbite de la planète
-      if (p == nombre_planetes - 1)
+      const nombrePlanetes = etoile.planetes.length;
+      if (p == nombrePlanetes - 1)
         window['beforeOrbitSize'] = Math.round(2 * px(planete.distance));
-      if (p == nombre_planetes)
+      if (p == nombrePlanetes)
         window['lastOrbitSize'] = Math.round(2 * px(planete.distance));
       conteneurOrbites.innerHTML += `
         <div class="orbite"
@@ -180,7 +181,7 @@ export class Systeme {
         </div>
       `;
 
-      conteneur.appendChild(planeteTemplate.content.clodeNode(true));
+      conteneur.appendChild(planeteTemplate.content.cloneNode(true));
     }
 
     // Ombres non-additives
@@ -236,7 +237,7 @@ export class Systeme {
     const tailleEtoile = this.tailleEtoile;
     const distance = Math.round(px(distanceAEtoile || objet.distance));
     const tailleObjet = px(objet.taille_px);
-    const max = window.taille_fenetre;
+    const max = Fenetre.taille;
     let longueur, longueurAttenuee;
 
     if (comparaison.classe == 'plus-grande-que-etoile') {
@@ -261,8 +262,8 @@ export class Systeme {
     };
 
     if (objet instanceof Lune && !distanceAEtoile) {
-      resultat.scaleMax = longueurOmbre(objet, distance + px(objet.distance_planete)).longueur / longueur;
-      resultat.scaleMin = longueurOmbre(objet, distance - px(objet.distance_planete)).longueur / longueur;
+      resultat.scaleMax = this.longueurOmbre(objet, distance + px(objet.distance_planete)).longueur / longueur;
+      resultat.scaleMin = this.longueurOmbre(objet, distance - px(objet.distance_planete)).longueur / longueur;
     }
     return resultat;
   }
@@ -286,7 +287,7 @@ export class Systeme {
   }
 
   get tailleEtoile() {
-    let taille = Math.round(this.etoile.taille * window.taille_fenetre);
+    let taille = Math.round(this.etoile.taille * Fenetre.taille);
     const type = this.etoile.type;
     if (type == 'etoile-neutrons')
       taille = Math.round(.1 * taille);

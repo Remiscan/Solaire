@@ -1,3 +1,7 @@
+import { recalcOnResize } from './Params.js';
+
+
+
 let langage;
 const Textes = {};
 

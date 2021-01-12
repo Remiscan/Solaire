@@ -1,4 +1,5 @@
 import { mt } from './Seed.js';
+import { even } from '../app/Params.js';
 
 export class Lune {
   constructor(planete, j, jmax, interanneaux = false, lune_taille = 0, lune_distance = 0) {

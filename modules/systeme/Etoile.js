@@ -1,5 +1,6 @@
 import { mt } from './Seed.js';
 import { Planete } from './Planete.js';
+import { Fenetre } from '../app/Params.js';
 
 export class Etoile {
   constructor(taille = 0.1) {
@@ -31,7 +32,7 @@ export class Etoile {
     // Taille de l'étoile en % de largeur de page
     // et en px
     this.taille = Math.round(1000 * taille * Math.round(100 * (0.5 + 0.5 * mt.rnd())) / 100) / 1000;
-    this.taille_px = Math.round(this.taille * window.taille_fenetre);
+    this.taille_px = Math.round(this.taille * Fenetre.taille);
 
     // Couleur : valeur entre 0 et 360 de la teine de l'étoile
     this.couleur = Math.floor(360 * mt.rnd());
@@ -51,7 +52,7 @@ export class Etoile {
       this.planetes.push(planete);
     }
 
-    this.taille_fenetre = window.taille_fenetre;
+    this.taille_fenetre = Fenetre.taille;
   }
 
   static get types() {

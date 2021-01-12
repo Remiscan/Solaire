@@ -5,6 +5,7 @@ import { wait } from './Params.js';
 const elements = [...document.querySelectorAll('.minipop')];
 const manuels = ['parametres', 'partage', 'decouvertes'];
 const menus = [];
+let initialised = false;
 
 let isOpen = 0;
 
@@ -97,6 +98,8 @@ export class Menu {
   }
 
   static async openId(id) {
+    if (!initialised) throw 'Menus non initialisés';
+    
     const k = menus.findIndex(m => m.id == id);
     if (k == -1) throw 'Menu inexistant';
     const menu = menus[k];
@@ -104,6 +107,8 @@ export class Menu {
   }
 
   static async toggleId(id) {
+    if (!initialised) throw 'Menus non initialisés';
+    
     const k = menus.findIndex(m => m.id == id);
     if (k == -1) throw 'Menu inexistant';
     const menu = menus[k];
@@ -111,6 +116,8 @@ export class Menu {
   }
 
   static async closeAll() {
+    if (!initialised) throw 'Menus non initialisés';
+    
     let wereOpen = 0
     for (const menu of menus) {
       const wasOpen = await menu.close();
@@ -135,12 +142,16 @@ export class Menu {
     return;
   }
 
-  static initAll() {
+  static init() {
+    if (initialised) throw 'Menus déjà initialisés';
+    
     for (const el of elements) {
       const id = el.id.replace('pop-', '');
       const menu = new Menu(id);
       menus.push(menu);
     }
+
+    initialised = true;
   }
 
   // Change d'onglet dans le carnet de bord

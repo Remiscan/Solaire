@@ -33,8 +33,8 @@ HTMLElement.prototype.customScroll = function(x, y) {
 // avec en entrée coords = [left, top].
 function scrollBound(coords) {
   return [
-    Math.max(0, Math.min(coords[0], ancienZoom * window.bodySize - window.fenetre.largeur)),
-    Math.max(0, Math.min(coords[1], ancienZoom * window.bodySize - window.fenetre.hauteur))
+    Math.max(0, Math.min(coords[0], ancienZoom * window.bodySize - window.innerWidth)),
+    Math.max(0, Math.min(coords[1], ancienZoom * window.bodySize - window.innerHeight))
   ];
 }
 
@@ -67,8 +67,7 @@ function systemeScroll(event) {
 
 /////////////////////////
 // Gestion du zoom custom
-function zoom(nouveauZoom, point = { clientX: window.fenetre.largeur / 2, clientY: window.fenetre.hauteur / 2 })
-{
+function zoom(nouveauZoom, point = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }) {
   if (ancienZoom == 1) {
     document.querySelector('.reset-zoom').classList.add('on');
     document.querySelector('.reset-zoom').tabIndex = 0;
@@ -128,6 +127,25 @@ function pinch_move(event) {
     
     requestAnimationFrame(() => { patience = 1 });
   }
+}
+
+///////////////////////////////////////////
+// Adapte le système à la taille de l'écran
+export function resetWindow() {
+  const conteneurSysteme = document.querySelector('.conteneur-systeme');
+  const divSysteme = document.getElementById('systeme');
+
+  minZoom = 1.01 * Math.max(window.innerWidth, window.innerHeight) / window.bodySize;
+  const coeff = (minZoom > 1) ? minZoom : 1;
+  const posX = 0.5 * (coeff * window.bodySize - window.innerHeight);
+  const posY = 0.5 * (coeff * window.bodySize - window.innerWidth);
+  /*document.querySelector('.zoom-percent').innerHTML = '100%';
+  document.querySelector('.reset-zoom>i').innerHTML = 'zoom_in';*/
+  divSysteme.style.setProperty('--zoom', coeff);
+  ancienZoom = coeff;
+  document.querySelector('.reset-zoom').classList.remove('on');
+  document.querySelector('.reset-zoom').tabIndex = -1;
+  conteneurSysteme.customScroll(posX, posY);
 }
 
 

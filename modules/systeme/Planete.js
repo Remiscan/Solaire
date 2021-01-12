@@ -1,6 +1,7 @@
 import { mt } from './Seed.js';
 import { Anneau } from './Anneau.js';
 import { Lune } from './Lune.js';
+import { even, Fenetre } from '../app/Params.js';
 
 export class Planete {
   constructor(ordre, etoile, distance_precedente = 0) {
@@ -162,7 +163,7 @@ export class Planete {
           condition = (r == 0); // 1 chance sur 4
         }
         const taille_lune = even(taille_lune_min + Math.round(mt.rnd() * (taille_lune_max - taille_lune_min)));
-        if (taille_trou >= Math.floor(0.0032 * window.taille_fenetre) && condition && taille_lune < taille_trou)
+        if (taille_trou >= Math.floor(0.0032 * Fenetre.taille) && condition && taille_lune < taille_trou)
         {
           interLunes.push({
             distance: distance_lune,

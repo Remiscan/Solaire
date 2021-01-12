@@ -2,7 +2,7 @@ import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
 import { Partage } from './Partage.js';
 import { Voyage } from './Voyage.js';
-import { resetWindow } from './Params.js';
+import { resetWindow } from './custom-scroll-zoom.js';
 
 
 

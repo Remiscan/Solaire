@@ -1,11 +1,13 @@
 import { Decouverte } from './Decouverte.js';
 import { getString } from './traduction.js';
 import { Seed } from '../systeme/Seed.js';
+import { createFocusability } from './interface.js';
 
 
 
 const favoris = new Set();
 const favSystemes = new Set();
+let initialised = false;
 
 
 
@@ -133,19 +135,28 @@ export class Favoris {
 
   // Initialise les favoris à partir du stockage local
   static init() {
-    const savedData = localStorage.getItem('solaire/favoris') || [];
+    if (initialised) throw 'Favoris déjà initialisés';
+    
+    const savedData = JSON.parse(localStorage.getItem('solaire/favoris')) || [];
 
     for (const f of savedData) {
       const fav = new Favoris(f, true);
     }
+
+    initialised = true;
   }
 
   // Met à jour la liste des favoris
   static updateList() {
+    if (!initialised) throw 'Favoris non initialisés';
+    
     for (const f of favoris) {
-      const element = document.getElementById(`favori-${this.systeme}`);
+      let element = document.getElementById(`favori-${this.systeme}`);
       if (f.displayed == true) {
-        if (!element) f.populate();
+        if (!element) {
+          f.populate();
+          element = document.getElementById(`favori-${this.systeme}`);
+        }
       }
       else if (f.systeme != Seed.get()) {
         favoris.delete(this);
@@ -156,6 +167,7 @@ export class Favoris {
       else                          element.classList.remove('actuel');
     }
 
+    const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
     createFocusability(liste);
   }
 

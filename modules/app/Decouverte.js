@@ -24,6 +24,7 @@ const data = [
 ];
 
 const decouvertes = [];
+let initialised = false;
 
 
 
@@ -50,6 +51,8 @@ export class Decouverte {
   }
 
   static add(id, adresse) {
+    if (!initialised) throw 'Découvertes non initialisées';
+    
     const k = decouvertes.findIndex(d => d.id == id);
     if (k == -1)
       throw 'Découverte inexistante';
@@ -58,6 +61,8 @@ export class Decouverte {
   }
 
   static get connues() {
+    if (!initialised) throw 'Découvertes non initialisées';
+    
     const c = [];
     for (const d of decouvertes) {
       if (d.unlocked) c.push(d.id);
@@ -66,6 +71,8 @@ export class Decouverte {
   }
 
   static get nouvelles() {
+    if (!initialised) throw 'Découvertes non initialisées';
+    
     const c = [];
     for (const d of decouvertes) {
       if (d.new) c.push(d.id);
@@ -78,6 +85,8 @@ export class Decouverte {
   }
 
   static init() {
+    if (initialised) throw 'Découvertes déjà initialisées';
+    
     const savedData = JSON.parse(localStorage.getItem('solaire/decouvertes')) || [];
 
     for (const d of data) {
@@ -90,6 +99,7 @@ export class Decouverte {
     }
 
     Decouverte.save();
+    initialised = true;
   }
 
   static save() {
@@ -110,6 +120,8 @@ export class Decouverte {
   }
 
   static async populate() {
+    if (!initialised) throw 'Découvertes non initialisées';
+    
     await Menu.closeAll();
 
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-decouvertes');
@@ -135,7 +147,7 @@ export class Decouverte {
               ${getString('decouverte-' + d.id + '-titre')}
             </span>
             <span class="decouverte-description">
-              ${getString('decouverte-' + e.id + '-description')}
+              ${getString('decouverte-' + d.id + '-description')}
             </span>
             <button class="decouverte-lien" tabindex="-1" disabled="" data-systeme="${d.systeme}">
               <i class="material-icons">explore</i>
@@ -166,7 +178,7 @@ export class Decouverte {
               ${getString('decouverte-' + d.id + '-titre')}
             </span>
             <span class="decouverte-description">
-              ${getString('decouverte-' + e.id + '-description')}
+              ${getString('decouverte-' + d.id + '-description')}
             </span>
           </div>
         `;

@@ -4,9 +4,10 @@ import { Decouverte } from './Decouverte.js';
 import { Favoris } from './Favoris.js';
 import { Menu } from './Menu.js';
 import { Notification } from './Notification.js';
-import { wait } from './Params.js';
+import { wait, recalcOnResize, callResize } from './Params.js';
 import { Parametre } from './parametres.js';
 import { initInterface, createFocusability } from './interface.js';
+import { getString } from './traduction.js';
 
 
 
@@ -262,12 +263,15 @@ export class App {
       bouton.tabIndex = -1;
       bouton.title = 'Microsoft Edge supporte mal la présence de certaines variables CSS dans les animations de Solaire. Par conséquent, elles sont désactivées. Désolé pour ce désagrément !';
     }
+
+    // Initialisation des textes
+    await textualiser();
   
-    // Initialisation des textes et données sauvegardées
+    // Initialisation des données sauvegardées
     Parametre.init();
     Decouverte.init();
     Favoris.init();
-    await textualiser();
+    Menu.init();
 
     Favoris.updateList();
     await Decouverte.populate();
@@ -313,7 +317,7 @@ export class App {
     // Affiche les nouvelles découvertes
     // compte incorrect, à revoir
     if (systeme.decouvertes.size > 0)
-      setTimeout(() => Menu.openId('nouvelles-decouvertes'), 500);
+      setTimeout(() => Menu.openId('nouvelle-decouverte'), 500);
 
       
     // Gestion de l'appli par service worker
@@ -327,7 +331,7 @@ export class App {
     currentWorker = navigator.serviceWorker.controller;
     isStarted = 1;
     console.log('[sw] Démarrage...');
-    App.start();
+    //App.start();
 
     try {
       const registration = await navigator.serviceWorker.register('/solaire/service-worker.js');
