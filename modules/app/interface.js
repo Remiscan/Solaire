@@ -78,7 +78,10 @@ export function initInterface() {
   // Bouton explorer
   document.getElementById('bouton-explorer').addEventListener('click', event => {
     pulseBouton(event)
-    .then(() => Voyage.go());
+    .then(() => {
+      const voy = new Voyage();
+      voy.go();
+    });
   }, {passive: true});
 
   // Bouton découvertes
@@ -96,11 +99,8 @@ export function initInterface() {
   document.getElementById('bouton-redimensionner').addEventListener('click', event => {
     pulseBouton(event)
     .then(() => {
-      Voyage.go(history.state.systeme);
-      const boutonRedim = document.getElementById('bouton-redimensionner');
-      boutonRedim.classList.remove('needed');
-      boutonRedim.disabled = true;
-      boutonRedim.tabIndex = -1;
+      const voy = new Voyage(history.state.systeme);
+      voy.go();
     });
   }, {passive: true});
 

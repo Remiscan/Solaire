@@ -25,12 +25,11 @@ export function getInitialSystemCode() {
 
 
 export class Systeme {
-  constructor(code, date = Date.now()) {
+  constructor(code) {
     new Seed(code);
     this.seed = Seed.get();
     this.etoile = new Etoile();
     this.decouvertes = new Set();
-    this.date = date;
   }
 
 
@@ -217,15 +216,6 @@ export class Systeme {
     window['bodySize'] = 2 * window['lastOrbitSize'] - window['beforeOrbitSize'];
     document.body.style.setProperty('--taille', window.bodySize + 'px');
     resetWindow();
-
-    if (document.querySelector('#welcome') != null || typeof history.state.systeme == 'undefined' || history.state.systeme == null)
-      history.replaceState( { systeme: this.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
-    else if (this.seed != history.state.systeme)
-      history.pushState( { systeme: this.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
-
-    this.decouvertes.forEach(d => Decouverte.add(d, this.seed));
-    Decouverte.save();
-    Decouverte.populate();
 
     return;
   }

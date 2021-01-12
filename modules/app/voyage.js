@@ -2,52 +2,86 @@ import { Systeme } from '../systeme/Systeme.js';
 import { getString } from './traduction.js';
 import { Notification } from './Notification.js';
 import { Menu } from './Menu.js';
+import { Decouverte } from './Decouverte.js';
+
+
+
+let derniereGeneration = 0;
 
 
 
 /////////////////////////////////////////////
 // Voyage vers le système indiqué par le code
 export class Voyage {
-  static async go(code) {
-    const boutonRedim = document.getElementById('bouton-redimensionner');
+  constructor(code, date = Date.now()) {
+    this.date = date;
 
     try {
-      await Menu.closeAll();
       if (isNaN(code))
         throw 'Code invalide';
 
       if (code == history.state.systeme)
         throw 'Système actuel';
-
-      window.derniereGeneration = Date.now();
-      const boutonSuivant = document.getElementById('bouton-suivant');
-      boutonSuivant.disabled = true;
-      boutonSuivant.tabIndex = -1;
-      boutonRedim.classList.remove('needed');
-      boutonRedim.disabled = true;
-      boutonRedim.tabIndex = -1;
-
-      const systeme = new Systeme(code);
-      systeme.populate();
+      
+      this.systeme = new Systeme(code);
     }
 
     catch(raison) {
-      if (raison == 'Système actuel')
-      {
-        const systeme = new Systeme(code, history.state.date);
-        systeme.populate();
-
-        boutonRedim.classList.remove('needed');
-        boutonRedim.disabled = true;
-        boutonRedim.tabIndex = -1;
+      if (raison == 'Système actuel') {
+        this.systeme = new Systeme(code, history.state.date);
       }
       else if (raison == 'Mauvais système')
         new Notification(getString('erreur-systeme-non-atteint'), 'error');
       else if (raison == 'Code invalide')
         new Notification(getString('erreur-adresse-invalide'), 'error');
+      else
+        console.error(raison);
     }
   }
 
+  // Effectue le voyage
+  async go() {
+    try {
+      derniereGeneration = Math.max(derniereGeneration, this.date);
+      await Menu.closeAll();
+
+      // On (dés)active le bouton "suivant"
+      const boutonSuivant = document.getElementById('bouton-suivant');
+      if (this.date != derniereGeneration) {
+        boutonSuivant.disabled = false;
+        boutonSuivant.tabIndex = 0;
+      } else {
+        boutonSuivant.disabled = true;
+        boutonSuivant.tabIndex = -1;
+      }
+
+      // On masque le bouton "redimensionner"
+      const boutonRedim = document.getElementById('bouton-redimensionner');
+      boutonRedim.classList.remove('needed');
+      boutonRedim.disabled = true;
+      boutonRedim.tabIndex = -1;
+
+      // On affiche le système visité
+      this.systeme.populate();
+
+      // On met à jour l'entrée de l'historique
+      if (document.querySelector('#welcome') != null || typeof history.state.systeme == 'undefined' || history.state.systeme == null)
+        history.replaceState( { systeme: this.systeme.seed, date: this.systeme.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+      else if (this.seed != history.state.systeme)
+        history.pushState( { systeme: this.ysteme.seed, date: this.systeme.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+
+      // On met à jour le carnet de bord avec les découvertes du système visité
+      this.systeme.decouvertes.forEach(d => Decouverte.add(d, this.seed));
+      Decouverte.save();
+      Decouverte.populate();
+    }
+
+    catch(error) {
+      console.error(error);
+    }
+  }
+
+  // Prépare et effectue un voyage à partir de l'adresse saisie manuellement
   static saisie() {
     let i_kc = 0;
     const codeSaisi = document.getElementById('code-saisi').value;
@@ -71,7 +105,8 @@ export class Voyage {
       isKeyboardClosed()
       .then(() => {
         document.getElementById('code-saisi').readonly = false;
-        Voyage.go(codeSaisi);
+        const voy = new Voyage(codeSaisi);
+        voy.go();
       });
     }
   }
