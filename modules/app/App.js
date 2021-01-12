@@ -1,9 +1,8 @@
-import { Systeme, getInitialSystemCode } from '../systeme/Systeme.js';
+import { Systeme } from '../systeme/Systeme.js';
 import { textualiser } from './traduction.js';
 import { Decouverte } from './Decouverte.js';
 import { Favoris } from './Favoris.js';
 import { Menu } from './Menu.js';
-import { Notification } from './Notification.js';
 import { wait, recalcOnResize, callResize } from './Params.js';
 import { Parametre } from './parametres.js';
 import { initInterface, createFocusability } from './interface.js';
@@ -324,7 +323,7 @@ export class App {
     
     // Affiche les nouvelles découvertes
     // compte incorrect, à revoir
-    if (systeme.decouvertes.size > 0)
+    if (voy.systeme.decouvertes.size > 0)
       setTimeout(() => Menu.openId('nouvelle-decouverte'), 500);
 
       

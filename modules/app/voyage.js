@@ -17,8 +17,7 @@ export class Voyage {
     this.date = date;
 
     try {
-      if (!Seed.validate(code))           throw 'Code invalide';
-      if (code == history.state.systeme)  throw 'Système actuel';
+      if (history.state != null && code == history.state.systeme) throw 'Système actuel';
       
       this.systeme = new Systeme(code);
     }
@@ -26,7 +25,7 @@ export class Voyage {
     catch(raison) {
       if (raison == 'Système actuel')
         this.systeme = new Systeme(code, history.state.date);
-      else if (raison == 'Code invalide')
+      else if (raison == 'Bad seed')
         new Notification(getString('erreur-adresse-invalide'), 'error');
       else if (raison == 'Mauvais système')
         new Notification(getString('erreur-systeme-non-atteint'), 'error');
