@@ -78,11 +78,9 @@ export class Parametre {
       }
       else if (!!param.button) {
         if (param.button.id == 'bouton-pause') {
-          param.button.addEventListener('click', () => {
-            Menu.closeAll()
-            .then(() => {
-              param.change();
-            });
+          param.button.addEventListener('click', async () => {
+            await Menu.closeAll();
+            param.change();
           }, {passive: true});
         }
         else if (param.button.id == 'bouton-interface') {
