@@ -63,9 +63,9 @@ export class Voyage {
 
       // On met à jour l'entrée de l'historique
       if (document.querySelector('#welcome') != null || typeof history.state.systeme == 'undefined' || history.state.systeme == null)
-        history.replaceState( { systeme: this.systeme.seed, date: this.systeme.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
-      else if (this.seed != history.state.systeme)
-        history.pushState( { systeme: this.systeme.seed, date: this.systeme.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+        history.replaceState( { systeme: this.systeme.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
+      else if (this.seed != history.state.systeme && this.date != history.state.date)
+        history.pushState( { systeme: this.systeme.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
 
       // On met à jour le carnet de bord avec les découvertes du système visité
       this.systeme.decouvertes.forEach(d => Decouverte.add(d, this.seed));
