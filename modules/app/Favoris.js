@@ -102,7 +102,7 @@ export class Favoris {
       <div class="decouverte favori" id="favori-${this.systeme}">
         <i class="material-icons icon focusable" style="--couleur: ${this.couleur};">star_border</i>
         <span class="decouverte-titre">${this.titre}</span>
-        <span class="decouverte-description">${getString('adresse') + this.systeme}</span>
+        <span class="decouverte-description"><span data-string="adresse">${getString('adresse')}</span>${this.systeme}</span>
         <button class="decouverte-lien" tabindex="-1" disabled>
           <i class="material-icons">explore</i>
           <span data-string="bouton-revisiter">Revisiter</span>

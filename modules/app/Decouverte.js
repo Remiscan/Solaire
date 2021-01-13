@@ -186,10 +186,10 @@ export class Decouverte {
         liste.innerHTML += `
           <div class="decouverte">
             <i class="material-icons icon">bookmark</i>
-            <span class="decouverte-titre">
+            <span class="decouverte-titre" data-string="decouverte-${d.id}-titre">
               ${getString('decouverte-' + d.id + '-titre')}
             </span>
-            <span class="decouverte-description">
+            <span class="decouverte-description" data-string="decouverte-${d.id}-description">
               ${getString('decouverte-' + d.id + '-description')}
             </span>
             <button class="decouverte-lien" tabindex="-1" disabled="" data-systeme="${d.systeme}">

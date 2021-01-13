@@ -1,4 +1,4 @@
-import { recalcOnResize } from './Params.js';
+import { recalcOnResize, wait } from './Params.js';
 
 
 
@@ -82,8 +82,6 @@ export function switchLangage()
   .then(textualiser)
   .then(() => {
     recalcOnResize();
-    peuplerDecouvertes();
-    favoriActuel();
     document.getElementById('code-saisi').placeholder = getString('saisie-placeholder');
     document.querySelector('.bouton-langage').addEventListener('click', switchLangage);
   });
