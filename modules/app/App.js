@@ -49,10 +49,7 @@ export class App {
 
       // Étape 2 : si la réponse est non, on installe l'application
       //   si l'installation est impossible, on arrête et on retentera une fois le service worker disponible
-      if (!appCached) {
-        result = await App.update();
-        console.log(result);
-      }
+      if (!appCached) await App.update();
 
       // Fini !! :)
 
@@ -135,6 +132,7 @@ export class App {
     catch(error) {
       console.error(error);
     }
+    return;
   }
 
 
@@ -172,6 +170,11 @@ export class App {
           console.log('     Installé : v. ' + localStorage.getItem('solaire/version'));
           console.log('   Disponible : v. ' + data['version']);
           result = texteSucces;
+
+          await wait(2000);
+          boutonMaj.classList.add('on');
+          boutonMaj.disabled = false;
+          boutonMaj.tabIndex = 0;
         }
         else {
           updateAvailable = 0;
@@ -180,12 +183,6 @@ export class App {
           result = 'Pas de mise à jour';
         }
       }
-
-      await wait(2000);
-
-      boutonMaj.classList.add('on');
-      boutonMaj.disabled = false;
-      boutonMaj.tabIndex = 0;
     }
 
     catch(error) {
