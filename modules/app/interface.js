@@ -1,7 +1,6 @@
 import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
 import { Partage } from './Partage.js';
-import { Voyage } from './Voyage.js';
 import { resetWindow } from './custom-scroll-zoom.js';
 
 
@@ -72,7 +71,35 @@ export function initInterface() {
     });
   });
 
-  document.getElementById('bouton-code-saisi').addEventListener('click', Voyage.saisie);
+  document.getElementById('bouton-code-saisi').addEventListener('click', () => {
+    let i_kc = 0;
+    const champ = document.getElementById('code-saisi');
+    const codeSaisi = champ.value;
+    if (codeSaisi != '')
+    {
+      champ.readonly = true;
+      champ.blur();
+      const isKeyboardClosed = () => {
+        i_kc++;
+        return new Promise((resolve, reject) => {
+          if (document.getElementById('bouton-redimensionner').classList.contains('needed') && i_kc < 50)
+            return wait(100).then(reject);
+          else {
+            i_kc = 0;
+            return resolve();
+          }
+        })
+        .catch(isKeyboardClosed);
+      }
+
+      isKeyboardClosed()
+      .then(() => {
+        document.getElementById('code-saisi').readonly = false;
+        const ev = new CustomEvent('voyage', { detail: { systeme: codeSaisi } });
+        window.dispatchEvent(ev);
+      });
+    }
+  });
 
   for (const onglet of [...document.querySelectorAll('.onglet')]) {
     onglet.addEventListener('click', event => Menu.ongletCarnet(event.currentTarget.id));
@@ -81,8 +108,8 @@ export function initInterface() {
   // Bouton explorer
   document.getElementById('bouton-explorer').addEventListener('click', async event => {
     await pulseBouton(event);
-    const voy = new Voyage();
-    voy.go();
+    const ev = new CustomEvent('voyage', { detail: { systeme: undefined } });
+    window.dispatchEvent(ev);
   }, {passive: true});
 
   // Bouton découvertes
@@ -101,8 +128,8 @@ export function initInterface() {
   document.getElementById('bouton-redimensionner').addEventListener('click', event => {
     pulseBouton(event)
     .then(() => {
-      const voy = new Voyage(history.state.systeme);
-      voy.go();
+      const ev = new CustomEvent('voyage', { detail: { systeme: history.state.systeme } });
+      window.dispatchEvent(ev);
     });
   }, {passive: true});
 
