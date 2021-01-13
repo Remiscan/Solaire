@@ -1,4 +1,5 @@
 import { Menu } from './Menu.js';
+import { Fenetre } from './Params.js';
 
 
 
@@ -33,8 +34,8 @@ HTMLElement.prototype.customScroll = function(x, y) {
 // avec en entrée coords = [left, top].
 function scrollBound(coords) {
   return [
-    Math.max(0, Math.min(coords[0], ancienZoom * window.bodySize - window.innerWidth)),
-    Math.max(0, Math.min(coords[1], ancienZoom * window.bodySize - window.innerHeight))
+    Math.max(0, Math.min(coords[0], ancienZoom * Fenetre.tailleBody - window.innerWidth)),
+    Math.max(0, Math.min(coords[1], ancienZoom * Fenetre.tailleBody - window.innerHeight))
   ];
 }
 
@@ -98,6 +99,9 @@ function zoom(nouveauZoom, point = { clientX: window.innerWidth / 2, clientY: wi
   return futur;
 }
 
+
+////////////////
+// Pinch to zoom
 let ancienEcart = -1;
 let premierEcart = 0;
 let premierPinchyZoom = 1;
@@ -129,16 +133,17 @@ function pinch_move(event) {
   }
 }
 
+
 ///////////////////////////////////////////
 // Adapte le système à la taille de l'écran
 export function resetWindow() {
   const conteneurSysteme = document.querySelector('.conteneur-systeme');
   const divSysteme = document.getElementById('systeme');
 
-  minZoom = 1.01 * Math.max(window.innerWidth, window.innerHeight) / window.bodySize;
+  minZoom = 1.01 * Math.max(window.innerWidth, window.innerHeight) / Fenetre.tailleBody;
   const coeff = (minZoom > 1) ? minZoom : 1;
-  const posX = 0.5 * (coeff * window.bodySize - window.innerHeight);
-  const posY = 0.5 * (coeff * window.bodySize - window.innerWidth);
+  const posX = 0.5 * (coeff * Fenetre.tailleBody - window.innerHeight);
+  const posY = 0.5 * (coeff * Fenetre.tailleBody - window.innerWidth);
   /*document.querySelector('.zoom-percent').innerHTML = '100%';
   document.querySelector('.reset-zoom>i').innerHTML = 'zoom_in';*/
   divSysteme.style.setProperty('--zoom', coeff);
@@ -174,6 +179,7 @@ divSysteme.addEventListener('mousedown', divSysteme.md = event => {
   }
 });
 
+
 // On surveille le zoom à la molette
 document.addEventListener('wheel', event => {
   event.preventDefault();
@@ -197,14 +203,14 @@ document.addEventListener('wheel', event => {
   }
 }, {passive: false});
 
+
 // On surveille le scroll et le zoom au toucher
 divSysteme.addEventListener('touchstart', gestionTouch);
 divSysteme.addEventListener('touchend', gestionTouch);
 
 let isClick, isClickTimer;
 function gestionTouch(event) {
-  if (Menu.open)
-    return;
+  if (Menu.open) return;
 
   // Zoom
   if (event.touches.length == 2) {

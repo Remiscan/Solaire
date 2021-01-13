@@ -29,8 +29,9 @@ export class Systeme {
     const conteneur = document.getElementById('systeme');
 
     // Adaptation à la taille de l'écran
-    window.taille_fenetre_pendant_generation = Fenetre.taille;
-    window.coeff_fenetre = Math.round(100 * Fenetre.taille / this.etoile.taille_fenetre) / 100;
+    Fenetre.updateTaille(Fenetre.taille);
+    Fenetre.updateCoeff(this.etoile.taille_fenetre);
+    document.documentElement.dataset.tailleFenetreGen = this.etoile.taille_fenetre;
 
     // On efface le système précédent
     conteneur.innerHTML = '';
@@ -42,6 +43,8 @@ export class Systeme {
 
     const conteneurOmbres = document.createElement('div');
     conteneurOmbres.id = 'toutes-ombres';
+
+    let previousOrbitSize, lastOrbitSize;
 
     // Étoile
     const etoile = this.etoile;
@@ -70,8 +73,7 @@ export class Systeme {
       const p = k + 1;
       const ombre = this.longueurOmbre(planete);
 
-      const planeteTemplate = document.createElement('template');
-      planeteTemplate.innerHTML = `
+      let planeteHTML = `
         <div id="planete${p}" class="corps planete animee ${planete.type}" 
              style="
               --size: ${px(planete.taille_px)};
@@ -101,7 +103,7 @@ export class Systeme {
           this.decouvertes.add('lune-interanneaux');
         const ombre = this.longueurOmbre(lune);
 
-        planeteTemplate.innerHTML += `
+        planeteHTML += `
           <div class="lune animee"
                style="
                 --divide-vitesse: ${lune.divise_vitesse};
@@ -134,29 +136,33 @@ export class Systeme {
       // Anneaux de la planète
       if (planete.anneaux.length > 0)
         this.decouvertes.add('planete-anneaux');
-      planeteTemplate.innerHTML += `<div class="anneaux">`;
+      planeteHTML += `
+          <div class="anneaux">
+      `;
 
       for (const anneau of planete.anneaux) {
-        planeteTemplate.innerHTML += `
-          <div class="anneau"
-               style="
-                --anneau-taille: ${px(even(anneau.taille / 100 * 1.3 * planete.taille_px))}px;
-                --epaisseur-ombre: ${px(planete.taille_px * anneau.epaisseur)}px;
-               ">
-          </div>
+        planeteHTML += `
+            <div class="anneau"
+                style="
+                  --anneau-taille: ${px(even(anneau.taille / 100 * 1.3 * planete.taille_px))}px;
+                  --epaisseur-ombre: ${px(planete.taille_px * anneau.epaisseur)}px;
+                ">
+            </div>
         `;
       }
 
-      planeteTemplate.innerHTML += `
+      planeteHTML += `
+          </div>
         </div>
       `;
 
       // Orbite de la planète
       const nombrePlanetes = etoile.planetes.length;
+      conteneur.style.setProperty('--ordre-max', nombrePlanetes);
       if (p == nombrePlanetes - 1)
-        window['beforeOrbitSize'] = Math.round(2 * px(planete.distance));
-      if (p == nombrePlanetes)
-        window['lastOrbitSize'] = Math.round(2 * px(planete.distance));
+        previousOrbitSize = Math.round(2 * px(planete.distance));
+      else if (p == nombrePlanetes)
+        lastOrbitSize = Math.round(2 * px(planete.distance));
       conteneurOrbites.innerHTML += `
         <div class="orbite"
              style="
@@ -167,6 +173,8 @@ export class Systeme {
         </div>
       `;
 
+      const planeteTemplate = document.createElement('template');
+      planeteTemplate.innerHTML = planeteHTML;
       conteneur.appendChild(planeteTemplate.content.cloneNode(true));
     }
 
@@ -200,8 +208,9 @@ export class Systeme {
     const themeColor = `hsl(${etoile.couleur}, ${saturation}%, ${luminosite}%)`;
     document.querySelector('meta[name=theme-color]').setAttribute('content', themeColor);
 
-    window['bodySize'] = 2 * window['lastOrbitSize'] - window['beforeOrbitSize'];
-    document.body.style.setProperty('--taille', window.bodySize + 'px');
+    const tailleBody = 2 * lastOrbitSize - previousOrbitSize;
+    document.body.style.setProperty('--taille', tailleBody + 'px');
+    Fenetre.updateBody(tailleBody);
 
     return;
   }

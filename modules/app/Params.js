@@ -11,38 +11,35 @@ export function simulateClick(elem, x = 0, y = 0) {
   elem.dispatchEvent(event);
 };
 
+
 ///////////////////////////////////////////////
 // Recalcule ce qu'il faut au redimensionnement
 export function recalcOnResize() {
   Array.from(document.getElementsByClassName('minipop'))
   .forEach((e, k) => {
     e.style.setProperty('--ordre', k);
-    let id = e.id.replace('pop-', '');
-    if (id == 'nouvelle-decouverte')
-      id = 'decouvertes';
   });
 
   if (typeof astre !== 'undefined')
-    window.coeff_fenetre = Math.round(100 * Fenetre.taille / astre.taille_fenetre) / 100;
+    Fenetre.updateCoeff(document.documentElement.dataset.tailleFenetreGen);
   else
-    window.coeff_fenetre = 1;
+    Fenetre.updateCoeff(Fenetre.taille); // coeff = 1
 }
+
 
 //////////////////////////////////
 // On détecte le redimensionnement
+let resizing;
 export function callResize() {
   clearTimeout(resizing);
   resizing = setTimeout(() => {
     recalcOnResize();
-    const devraitRedimensionner = (Fenetre.taille / window.taille_fenetre_pendant_generation > 1.2 || Fenetre.taille / window.taille_fenetre_pendant_generation < 0.8);
-    if (Fenetre.taille != window.taille_fenetre_pendant_generation && devraitRedimensionner)
-    {
+    const devraitRedimensionner = (Fenetre.taille / Fenetre.tailleLastGen > 1.2 || Fenetre.taille / Fenetre.tailleLastGen < 0.8);
+    if (Fenetre.taille != Fenetre.tailleLastGen && devraitRedimensionner) {
       document.getElementById('bouton-redimensionner').classList.add('needed');
       document.getElementById('bouton-redimensionner').disabled = false;
       document.getElementById('bouton-redimensionner').tabIndex = 0;
-    }
-    else
-    {
+    } else {
       document.getElementById('bouton-redimensionner').classList.remove('needed');
       document.getElementById('bouton-redimensionner').disabled = true;
       document.getElementById('bouton-redimensionner').tabIndex = -1;
@@ -50,12 +47,28 @@ export function callResize() {
   }, 100);
 }
 
+
+////////////////////////////////////////////////////
+// Stocke et màj les données de taille de la fenêtre
+let tailleLastGen;
+let coeffFenetre;
+let tailleBody;
 export class Fenetre {
   static get largeur() { return window.innerWidth; }
   static get hauteur() { return window.innerHeight; }
   static get taille() { return Math.max(window.innerWidth, window.innerHeight); }
+
+  static get tailleLastGen() { return tailleLastGen; }
+  static updateTaille(size) { tailleLastGen = size; }
+
+  static get coeff() { return coeffFenetre; }
+  static updateCoeff(size) { coeffFenetre = Math.round(100 * Fenetre.taille / size) / 100; }
+
+  static get tailleBody() { return tailleBody; }
+  static updateBody(size) { tailleBody = size; }
 }
 
+
 export function wait(time) { return new Promise(resolve => setTimeout(resolve, time)); }
-export function px(longueur) { return Math.round(window.coeff_fenetre * longueur); } // adapte à la taille de la fenêtre
+export function px(longueur) { return Math.round(Fenetre.coeff * longueur); } // adapte à la taille de la fenêtre
 export function even(nombre) { return 2 * Math.round(nombre / 2); } // arrondit au nombre pair le plus proche
