@@ -106,7 +106,7 @@ export class Systeme {
         planeteHTML += `
           <div class="lune animee"
                style="
-                --divide-vitesse: ${lune.divise_vitesse};
+                --divise-vitesse: ${lune.divise_vitesse};
                 --delai: ${lune.delai}ms;
                 --couleur: ${lune.couleur};
                 --lune-taille: ${px(lune.taille_px)}px;

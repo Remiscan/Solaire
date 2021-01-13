@@ -296,11 +296,17 @@ html.no-bg, html.trounoir {
 }
 
 .planete.animee {
-  animation: rotation_annee calc(1ms * var(--periode-ms)) linear var(--delai) infinite;
+  /*animation: rotation_annee calc(1ms * var(--periode-ms)) linear var(--delai) infinite;*/
+  animation-name: rotation_annee;
+  animation-duration: calc(1ms * var(--periode-ms));
+  animation-timing-function: linear;
+  animation-delay: var(--delai);
+  animation-iteration-count: infinite;
 }
 @supports not (clip-path: circle(1%)) { /* Edge */
   .planete.animee {
-    animation: rotation_annee 10s linear var(--delai) infinite;
+    /*animation: rotation_annee 10s linear var(--delai) infinite;*/
+    animation-duration: 10s;
   }
 }
 
@@ -317,7 +323,12 @@ html.no-bg, html.trounoir {
 }
 
 .coeur.animee {
-  animation: rotation_journee calc(1ms * var(--periode-ms) / var(--jours-par-an)) linear 0s infinite;
+  /*animation: rotation_journee calc(1ms * var(--periode-ms) / var(--jours-par-an)) linear 0s infinite;*/
+  animation-name: rotation_journee;
+  animation-duration: calc(1ms * var(--periode-ms) / var(--jours-par-an));
+  animation-timing-function: linear;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
 }
 @supports not (clip-path: circle(1%)) { /* Edge */
   .coeur.animee {
@@ -406,11 +417,17 @@ html.no-bg, html.trounoir {
 }
 
 .lune.animee {
-  animation: rotation_lune calc(1ms * var(--periode-ms) / var(--divise-vitesse)) linear var(--delai) infinite;
+  /*animation: rotation_lune calc(1ms * var(--periode-ms) / var(--divise-vitesse)) linear var(--delai) infinite;*/
+  animation-name: rotation_lune;
+  animation-duration: calc(1ms * var(--periode-ms) / var(--divise-vitesse));
+  animation-timing-function: linear;
+  animation-delay: var(--delai);
+  animation-iteration-count: infinite;
 }
 @supports not (clip-path: circle(1%)) { /* Edge */
   .lune.animee {
-    animation: rotation_lune 10s linear var(--delai) infinite;
+    /*animation: rotation_lune 10s linear var(--delai) infinite;*/
+    animation-duration: 10s;
   }
 }
 
