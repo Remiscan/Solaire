@@ -12,10 +12,11 @@ let initialised = false;
 
 
 export class Favoris {
-  constructor(seed, init = false) {
+  constructor(seed) {
     if (favSystemes.has(seed)) return;
 
     this.systeme = seed;
+    this.saved = false;
 
     const temp = new MersenneTwister(this.systeme);
     let r = Math.floor(1 + (40 * temp.rnd()));
@@ -52,52 +53,57 @@ export class Favoris {
                + this.nombrePlanetes
                + '<span data-string="favori-planetes"> ' + getString('favori-planetes') + '</span>';
 
-    if (!init)  this.displayed = false;
-
     favoris.add(this);
     favSystemes.add(this.systeme);
-
-    if (!init)  Favoris.updateList();
   }
 
+
+  ///////////////////////
+  // Sauvegarde un favori
   add() {
-    if (this.displayed) return;
+    if (this.saved) return;
 
     const element = document.getElementById(`favori-${this.systeme}`);
-    element.querySelector('.icon').classList.add('yes');
     element.querySelector('.icon').innerHTML = 'star';
 
-    this.displayed = true;
+    this.saved = true;
 
     Favoris.save();
   }
 
+
+  ///////////////////
+  // Oublie un favori
   remove() {
-    if (!this.displayed)  return;
+    if (!this.saved)  return;
 
     const element = document.getElementById(`favori-${this.systeme}`);
-    element.querySelector('.icon').classList.remove('yes');
     element.querySelector('.icon').innerHTML = 'star_border';
 
-    this.displayed = false;
+    this.saved = false;
 
     Favoris.save();
   }
 
+
+  ////////////////////////////////////////////////
+  // Sauvegarde ou oublie un favori selon son état
   toggle() {
-    if (favSystemes.has(this.systeme))  this.remove();
-    else                                this.add();
+    if (this.saved) this.remove();
+    else            this.add();
   }
 
-  // Crée l'élément HTML du favoris
+
+  ////////////////////////////////
+  // Crée l'élément HTML du favori
   populate() {
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
     liste.innerHTML += `
       <div class="decouverte favori" id="favori-${this.systeme}">
-        <i class="material-icons icon yes focusable" style="--couleur: ${this.couleur};">star</i>
+        <i class="material-icons icon focusable" style="--couleur: ${this.couleur};">star_border</i>
         <span class="decouverte-titre">${this.titre}</span>
-        <span class="decouverte-description">${getString('adresse') + e.systeme}</span>
-        <button class="decouverte-lien ${isHere ? 'off' : ''}" tabindex="-1" disabled>
+        <span class="decouverte-description">${getString('adresse') + this.systeme}</span>
+        <button class="decouverte-lien" tabindex="-1" disabled>
           <i class="material-icons">explore</i>
           <span data-string="bouton-revisiter">Revisiter</span>
         </button>
@@ -110,29 +116,37 @@ export class Favoris {
 
     const element = document.getElementById(`favori-${this.systeme}`);
 
-    element.querySelector('.decouverte-lien').addEventListener('click', () => visiter(this.systeme));
-    element.querySelector('.icon').addEventListener('click', this.toggle);
+    element.querySelector('.decouverte-lien').addEventListener('click', () => this.go());
+    element.querySelector('.icon').addEventListener('click', () => this.toggle());
     this.highlight();
   }
 
+
+  ////////////////////////////////////
+  // Voyage jusqu'au système du favori
+  go() {
+    const ev = new CustomEvent('voyage', { detail: { systeme: this.systeme } });
+    window.dispatchEvent(ev);
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////////////
   // Change l'icône d'étoile au survol de la souris selon qu'il soit en favori ou non
   highlight() {
     const element = document.getElementById(`favori-${this.systeme}`);
     const etoile = element.querySelector('.icon');
     etoile.addEventListener('mouseover', () => {
-      if (etoile.classList.contains('yes'))
-        etoile.innerHTML = 'star_border';
-      else
-        etoile.innerHTML = 'star';
+      if (this.saved) etoile.innerHTML = 'star_border';
+      else            etoile.innerHTML = 'star';
     });
     etoile.addEventListener('mouseout', () => {
-      if (etoile.classList.contains('yes'))
-        etoile.innerHTML = 'star';
-      else
-        etoile.innerHTML = 'star_border';
+      if (this.saved) etoile.innerHTML = 'star';
+      else            etoile.innerHTML = 'star_border';
     });
   }
 
+
+  ////////////////////////////////////////////////////
   // Initialise les favoris à partir du stockage local
   static init() {
     if (initialised) throw 'Favoris déjà initialisés';
@@ -141,45 +155,56 @@ export class Favoris {
 
     for (const f of savedData) {
       const fav = new Favoris(f, true);
+      fav.saved = true;
     }
 
     initialised = true;
   }
 
+
+  //////////////////////////////////
   // Met à jour la liste des favoris
   static updateList() {
     if (!initialised) throw 'Favoris non initialisés';
     
     for (const f of favoris) {
-      let element = document.getElementById(`favori-${this.systeme}`);
-      if (f.displayed == true) {
+      let element = document.getElementById(`favori-${f.systeme}`);
+      if (f.saved || f.systeme == Seed.current) {
         if (!element) {
           f.populate();
-          element = document.getElementById(`favori-${this.systeme}`);
+          element = document.getElementById(`favori-${f.systeme}`);
         }
+        if (f.systeme == Seed.current)  element.classList.add('actuel');
+        else                            element.classList.remove('actuel');
+
+        const etoile = element.querySelector('.icon');
+        if (f.saved) etoile.innerHTML = 'star';
+        else         etoile.innerHTML = 'star_border';
       }
-      else if (f.systeme != Seed.current) {
+      else {
         favoris.delete(this);
         favSystemes.delete(this.systeme);
+        if (!!element) element.remove();
       }
-
-      if (f.systeme == Seed.current)  element.classList.add('actuel');
-      else                            element.classList.remove('actuel');
     }
 
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
     createFocusability(liste);
   }
 
+
+  ////////////////////////////////////////////////
   // Sauvegarde les favoris dans le stockage local
   static save() {
     const savedData = [];
     for (const f of favoris) {
-      if (f.displayed)  savedData.push(f.systeme);
+      if (f.saved)  savedData.push(f.systeme);
     }
     localStorage.setItem('solaire/favoris', JSON.stringify(savedData));
   }
 
+
+  //////////////////////////
   // Efface tous les favoris
   static clearAll() {
     favoris.clear();

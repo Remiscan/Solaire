@@ -3,6 +3,7 @@ import { getString } from './traduction.js';
 import { Notification } from './Notification.js';
 import { Menu } from './Menu.js';
 import { Decouverte } from './Decouverte.js';
+import { Favoris } from './Favoris.js';
 import { resetWindow } from './custom-scroll-zoom.js';
 
 
@@ -71,6 +72,8 @@ export class Voyage {
       this.systeme.decouvertes.forEach(d => Decouverte.add(d, this.seed));
       Decouverte.save();
       Decouverte.populate();
+      new Favoris(this.systeme.seed);
+      Favoris.updateList();
     }
 
     catch(error) {
@@ -122,3 +125,11 @@ export class Voyage {
     }
   }
 }
+
+
+////////////////////////////
+// Écoute les event 'voyage'
+window.addEventListener('voyage', event => {
+  const voy = new Voyage(event.detail.systeme);
+  voy.go();
+});

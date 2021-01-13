@@ -301,17 +301,7 @@ else
       </template>
 
       <div class="pop-contenu liste-decouvertes"></div>
-      <div class="pop-contenu liste-navigation">
-        <div class="decouverte" id="favori-actuel">
-          <i class="material-icons icon focusable">star_border</i>
-          <span class="decouverte-titre"></span>
-          <span class="decouverte-description"></span>
-          <div class="vous-etes-ici">
-            <i class="material-icons">place</i>
-            <span data-string="favori-actuel"></span>
-          </div>
-        </div>
-      </div>
+      <div class="pop-contenu liste-navigation"></div>
 
       <div class="formulaire-code">
         <label for="code-saisi" data-string="saisie-placeholder"></label>
