@@ -816,6 +816,7 @@ button:focus:not(:focus-visible),
 
 .liste-navigation {
   grid-row: 2 / 3;
+  flex-direction: column-reverse;
 }
 
 .formulaire-code {
@@ -1013,15 +1014,19 @@ button:focus:not(:focus-visible),
   order: 0;
 }
 
-#favori-actuel, .favori.actuel {
+.favori.actuel {
   color: hsl(var(--etoile-couleur), 40%, 20%);
 }
 
-#favori-actuel>.vous-etes-ici, .favori.actuel>.vous-etes-ici {
+.favori.actuel>.vous-etes-ici {
   display: flex;
 }
 
-#favori-actuel.off, .favori .off {
+.favori.actuel>.decouverte-lien {
+  display: none;
+}
+
+.favori .off {
   display: none;
 }
 
@@ -1031,7 +1036,7 @@ button:focus:not(:focus-visible),
   color: inherit;
 }
 
-.favori i, #favori-actuel>.icon {
+.favori i {
   cursor: pointer;
 }
 
