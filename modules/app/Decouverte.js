@@ -66,7 +66,7 @@ export class Decouverte {
     if (k == -1)
       throw 'Découverte inexistante';
     const dec = decouvertes[k];
-    return dec.unlocked;
+    return !dec.unlocked;
   }
 
 
