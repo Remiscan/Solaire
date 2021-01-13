@@ -142,8 +142,8 @@ export function resetWindow() {
 
   minZoom = 1.01 * Math.max(window.innerWidth, window.innerHeight) / Fenetre.tailleBody;
   const coeff = (minZoom > 1) ? minZoom : 1;
-  const posX = 0.5 * (coeff * Fenetre.tailleBody - window.innerHeight);
-  const posY = 0.5 * (coeff * Fenetre.tailleBody - window.innerWidth);
+  const posX = 0.5 * (coeff * Fenetre.tailleBody - window.innerWidth);
+  const posY = 0.5 * (coeff * Fenetre.tailleBody - window.innerHeight);
   /*document.querySelector('.zoom-percent').innerHTML = '100%';
   document.querySelector('.reset-zoom>i').innerHTML = 'zoom_in';*/
   divSysteme.style.setProperty('--zoom', coeff);
