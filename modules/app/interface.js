@@ -79,19 +79,18 @@ export function initInterface() {
   }
 
   // Bouton explorer
-  document.getElementById('bouton-explorer').addEventListener('click', event => {
-    pulseBouton(event)
-    .then(() => {
-      const voy = new Voyage();
-      voy.go();
-    });
+  document.getElementById('bouton-explorer').addEventListener('click', async event => {
+    await pulseBouton(event);
+    const voy = new Voyage();
+    voy.go();
   }, {passive: true});
 
   // Bouton découvertes
   document.getElementById('bouton-decouvertes').addEventListener('click', async () => {
-    await Menu.get('decouvertes').toggle();
-    const onglet = document.getElementById('pop-decouvertes').classList.contains('on-decouvertes') ? 'onglet-decouvertes' : 
-                  document.getElementById('pop-decouvertes').classList.contains('on-navigation') ? 'onglet-navigation' : '';
+    const menu = Menu.get('decouvertes');
+    await menu.toggle();
+    const onglet =  document.getElementById('pop-decouvertes').classList.contains('on-decouvertes') ? 'onglet-decouvertes' : 
+                    document.getElementById('pop-decouvertes').classList.contains('on-navigation') ? 'onglet-navigation' : '';
     Menu.ongletCarnet(onglet);
   });
 

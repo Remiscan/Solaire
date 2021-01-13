@@ -166,7 +166,7 @@ else
           <span data-string="bouton-explorer"></span>
         </button>
 
-        <button class="pulsable" id="bouton-decouvertes" aria-label="Découvertes" data-menu="decouvertes">
+        <button class="pulsable" id="bouton-decouvertes" aria-label="Découvertes">
           <i class="material-icons">book</i>
         </button>
       </div>
