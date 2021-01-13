@@ -109,24 +109,6 @@ export class Menu {
     return menu;
   }
 
-  static async openId(id) {
-    if (!initialised) throw 'Menus non initialisés';
-    
-    const k = menus.findIndex(m => m.id == id);
-    if (k == -1) throw 'Menu inexistant';
-    const menu = menus[k];
-    menu.open();
-  }
-
-  static async toggleId(id) {
-    if (!initialised) throw 'Menus non initialisés';
-    
-    const k = menus.findIndex(m => m.id == id);
-    if (k == -1) throw 'Menu inexistant';
-    const menu = menus[k];
-    menu.toggle();
-  }
-
 
   ///////////////////////
   // Ferme tous les menus
@@ -151,7 +133,7 @@ export class Menu {
     const elements = [...document.querySelectorAll('.minipop[data-menu]')];
     
     for (const el of elements) {
-      const id = element.dataset.menu;
+      const id = el.dataset.menu;
       const menu = new Menu(id);
       menus.push(menu);
     }

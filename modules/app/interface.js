@@ -89,7 +89,7 @@ export function initInterface() {
 
   // Bouton découvertes
   document.getElementById('bouton-decouvertes').addEventListener('click', async () => {
-    await Menu.toggleId('decouvertes');
+    await Menu.get('decouvertes').toggle();
     const onglet = document.getElementById('pop-decouvertes').classList.contains('on-decouvertes') ? 'onglet-decouvertes' : 
                   document.getElementById('pop-decouvertes').classList.contains('on-navigation') ? 'onglet-navigation' : '';
     Menu.ongletCarnet(onglet);
