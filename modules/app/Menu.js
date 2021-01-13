@@ -2,8 +2,6 @@ import { wait } from './Params.js';
 
 
 
-const elements = [...document.querySelectorAll('.minipop')];
-const manuels = ['parametres', 'partage', 'decouvertes'];
 const menus = [];
 let initialised = false;
 
@@ -15,62 +13,63 @@ export class Menu {
   constructor(id) {
     this.id = id;
     this.element = document.getElementById('pop-' + id);
-    if (!manuels.includes(id)) return;
+    this.on = false;
 
-    this.bouton = document.getElementById('bouton-' + id);
+    this.bouton = document.querySelector(`button[data-menu='${id}']`);
+    if (!this.bouton) return;
     this.bouton.addEventListener('click', event => {
-      if (id == 'partage') {
-        Menu.open(this.id);
-        setTimeout(() => pop.classList.remove('on'), 3000);
-      }
-      else {
-        this.toggle();
-      }
+      this.toggle();
     });
   }
 
-  async open() {
-    await Menu.closeAll();
-    const isOn = this.element.classList.contains('on');
-    if (!isOn) {
-      window.addEventListener('keydown', window.cp = event => {
-        const key = event.which || event.keyCode;
-        if (key == 27) Menu.closeAll();
-      });
 
-      this.element.classList.add('on');
-      document.querySelector('.conteneur-systeme').addEventListener('click', Menu.closeAll);
-      if (!['pop-notification', 'pop-nouvelle-decouverte', 'pop-parametres'].includes(this.element.id))
-        isOpen = 1;
+  ////////////////
+  // Ouvre le menu
+  async open(delay = true) {
+    if (this.on) return;
 
-      if (['pop-decouvertes', 'pop-parametres'].includes(this.element.id)) {
-        // On désactive le focus des boutons en-dehors du menu (et de son bouton d'ouverture)
-        for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
-          if (!b.id.includes(this.element.id.replace('pop-', '')))
-            b.tabIndex = -1;
-        }
-        document.querySelector('.reset-zoom').tabIndex = -1;
-      }
+    this.on = true;
+    this.element.classList.add('on');
+    document.querySelector('.conteneur-systeme').addEventListener('click', Menu.closeAll);
+    window.addEventListener('keydown', window.cp = event => {
+      const key = event.which || event.keyCode;
+      if (key == 27) Menu.closeAll();
+    });
+    isOpen++;
 
-      // On active les boutons présents dans le menu
-      for (const b of [...this.element.querySelectorAll('button, input')]) {
-        b.disabled = false;
-        b.tabIndex = 0;
+    if (['pop-decouvertes', 'pop-parametres'].includes(this.element.id)) {
+      // On désactive le focus des boutons en-dehors du menu (et de son bouton d'ouverture)
+      for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
+        if (!b.id.includes(this.element.id.replace('pop-', '')))
+          b.tabIndex = -1;
       }
-      for (const b of [...this.element.querySelectorAll('.focusable')]) {
-        b.tabIndex = 0;
-      }
+      document.querySelector('.reset-zoom').tabIndex = -1;
     }
 
-    await wait(100);
+    // On active les boutons présents dans le menu
+    for (const b of [...this.element.querySelectorAll('button, input')]) {
+      b.disabled = false;
+      b.tabIndex = 0;
+    }
+    for (const b of [...this.element.querySelectorAll('.focusable')]) {
+      b.tabIndex = 0;
+    }
+
+    if (delay)  await wait(100);
     return;
   }
 
-  async close() {
-    const isOn = this.element.classList.contains('on');
-    if (!isOn) return false;
 
+  ////////////////
+  // Ferme le menu
+  async close(delay = true) {
+    if (!this.on) return;
+
+    this.on = false;
     this.element.classList.remove('on');
+    document.querySelector('.conteneur-systeme').removeEventListener('click', Menu.closeAll);
+    window.removeEventListener('keydown', window.cp);
+    isOpen--;
 
     // On active les boutons en-dehors des menus
     for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
@@ -86,15 +85,28 @@ export class Menu {
     for (const b of [...this.element.querySelectorAll('.focusable')]) {
       b.tabIndex = -1;
     }
+    document.getElementById('code-saisi').blur();
 
-    return true;
+    if (delay)  await wait(100);
+    return;
   }
 
+
+  ////////////////////////////////////////
+  // Ouvre ou ferme le menu selon son état
   async toggle() {
-    this.bouton.blur();
-    const isOn = this.element.classList.contains('on');
-    if (isOn) await Menu.closeAll();
-    else      await this.open();
+    if (this.on)  await this.close();
+    else          await this.open();
+  }
+
+
+  //////////////////////////////////
+  // Récupère un menu d'après son id
+  static get(id) {
+    const k = menus.findIndex(m => m.id == id);
+    if (k == -1) throw 'Menu inexistant';
+    const menu = menus[k];
+    return menu;
   }
 
   static async openId(id) {
@@ -115,38 +127,31 @@ export class Menu {
     menu.toggle();
   }
 
+
+  ///////////////////////
+  // Ferme tous les menus
   static async closeAll() {
     if (!initialised) throw 'Menus non initialisés';
     
-    let wereOpen = 0
+    let delay = (isOpen > 0) ? 200 : 0;
     for (const menu of menus) {
-      const wasOpen = await menu.close();
-      if (wasOpen) wereOpen++;
+      await menu.close(false);
     }
 
-    const elementsToBlur = [document.getElementById('code-saisi')];
-    elementsToBlur.forEach(e => {
-      if (e != null)
-      {
-        e.blur();
-        e.value = '';
-      }
-    });
-
-    let delay = (wereOpen > 0) ? 200 : 0;
-    document.getElementById('systeme').removeEventListener('click', Menu.closeAll);
-    window.removeEventListener('keydown', window.cp);
-    isOpen = 0;
     await wait(delay);
-
     return;
   }
 
+
+  ////////////////////
+  // Prépare les menus
   static init() {
     if (initialised) throw 'Menus déjà initialisés';
+
+    const elements = [...document.querySelectorAll('.minipop[data-menu]')];
     
     for (const el of elements) {
-      const id = el.id.replace('pop-', '');
+      const id = element.dataset.menu;
       const menu = new Menu(id);
       menus.push(menu);
     }
@@ -154,14 +159,15 @@ export class Menu {
     initialised = true;
   }
 
+
+  /////////////////////////////////////////
   // Change d'onglet dans le carnet de bord
   static ongletCarnet(ongletId) {
     const id = ongletId.replace('onglet-', '');
     const onglets = ['decouvertes', 'navigation'];
     const pop = document.getElementById('pop-decouvertes');
     onglets.forEach(e => {
-      if (e != ongletId)
-      {
+      if (e != ongletId) {
         pop.classList.remove('on-' + e);
         document.getElementById('onglet-' + e).classList.remove('on');
       }
@@ -169,8 +175,7 @@ export class Menu {
     pop.classList.add('on-' + id);
     document.getElementById('onglet-' + id).classList.add('on');
 
-    if (id == 'navigation' && pop.classList.contains('on'))
-    {
+    if (id == 'navigation' && pop.classList.contains('on')) {
       document.getElementById('code-saisi').disabled = false;
       document.getElementById('code-saisi').tabIndex = 0;
       document.getElementById('bouton-code-saisi').disabled = false;
@@ -183,8 +188,7 @@ export class Menu {
       });
       document.getElementById('supprimer-decouvertes').tabIndex = -1;
     }
-    else if (id == 'decouvertes' && pop.classList.contains('on'))
-    {
+    else if (id == 'decouvertes' && pop.classList.contains('on')) {
       document.getElementById('code-saisi').disabled = true;
       document.getElementById('code-saisi').tabIndex = -1;
       document.getElementById('bouton-code-saisi').disabled = true;
@@ -199,6 +203,9 @@ export class Menu {
     }
   }
 
+
+  /////////////////////////////////////////////////
+  // Répond à la question "un menu est-il ouvert ?"
   static get open() {
     return !!isOpen;
   }

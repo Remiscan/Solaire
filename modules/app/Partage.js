@@ -46,10 +46,13 @@ export class Partage {
     }
   }
 
+
+  ///////////////////////////////////
+  // Ouvre la notification de partage
   static async notify() {
-    const pop = document.getElementById('pop-partage');
-    await Menu.openId('partage');
+    const menu = Menu.get('partage');
+    await menu.open();
     await wait(3000);
-    pop.classList.remove('on');
+    await menu.close();
   }
 }

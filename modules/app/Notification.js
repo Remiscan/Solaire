@@ -4,17 +4,15 @@ import { wait } from './Params.js';
 
 
 export class Notification {
-  constructor() {}
-
-  static async create(message, type = null, duree = 5000, boutons = false) {
+  ///////////////////////////////////
+  // Crée et affiche une notification
+  static async create(message, type = null, duree = 5000, boutons = []) {
+    Notification.reset();
     await Menu.closeAll();
     
     const icone = document.querySelector('.notification-icone');
     const notification = document.querySelector('.notification-message');
     const actions = document.querySelector('.notification-actions');
-    icone.innerHTML = '';
-    notification.innerHTML = '';
-    actions.innerHTML = '';
     const types = ['error'];
 
     // Icône de notification, si un type est fourni
@@ -29,27 +27,34 @@ export class Notification {
 
     // Boutons de la notification, si des actions sont fournies :
     //// "boutons" est un array d'objets de la forme { texte: '', action: fonction, type: 'normal'/'icone' }
-    if (boutons)
-    {
-      boutons.forEach(e => {
-        const bouton = document.createElement('button');
-        if (e.type == 'icone')
-          bouton.innerHTML = `<i class="material-icons">${e.texte}</i>`;
-        else
-          bouton.innerHTML = e.texte;
-        bouton.onclick = () => { e.action() };
-        actions.appendChild(bouton);
-      });
+    for (const e of boutons) {
+      const bouton = document.createElement('button');
+      if (e.type == 'icone')  bouton.innerHTML = `<i class="material-icons">${e.texte}</i>`;
+      else                    bouton.innerHTML = e.texte;
+      bouton.onclick = () => { e.action() };
+      actions.appendChild(bouton);
     }
 
-    Menu.openId('notification');
+    // Affichage de la notification
+    const menu = Menu.get('notification');
+    await menu.open();
     await wait(duree);
-    Menu.closeAll();
+    await menu.close();
+
+    Notification.reset();
+    return;
+  }
+
+
+  ///////////////////////////////
+  // Réinitialise la notification
+  static reset() {
+    const icone = document.querySelector('.notification-icone');
+    const notification = document.querySelector('.notification-message');
+    const actions = document.querySelector('.notification-actions');
 
     icone.innerHTML = '';
     notification.innerHTML = '';
     actions.innerHTML = '';
-
-    return;
   }
 }

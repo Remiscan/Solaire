@@ -126,7 +126,7 @@ else
           <i class="material-icons">share</i>
         </button>
 
-        <button id="bouton-parametres" aria-label="Paramètres">
+        <button id="bouton-parametres" aria-label="Paramètres" data-menu="parametres">
           <i class="material-icons">settings</i>
         </button>
       </div>
@@ -166,7 +166,7 @@ else
           <span data-string="bouton-explorer"></span>
         </button>
 
-        <button class="pulsable" id="bouton-decouvertes" aria-label="Découvertes">
+        <button class="pulsable" id="bouton-decouvertes" aria-label="Découvertes" data-menu="decouvertes">
           <i class="material-icons">book</i>
         </button>
       </div>
@@ -187,13 +187,13 @@ else
 
     
     <!-- Partage -->
-    <div class="minipop" id="pop-partage">
+    <div class="minipop" id="pop-partage" data-menu="partage">
       <span data-string="partage-message"></span>
     </div>
 
 
     <!-- Paramètres -->
-    <div class="minipop" id="pop-parametres">
+    <div class="minipop" id="pop-parametres" data-menu="parametres">
       <h3 class="pop-titre" data-string="parametres-titre"></h3>
 
       <div class="pop-contenu">
@@ -253,7 +253,7 @@ else
 
 
     <!-- Notification -->
-    <div class="minipop bottom" id="pop-notification">
+    <div class="minipop bottom" id="pop-notification" data-menu="notification">
       <div class="notification-icone"></div>
       <div class="notification-message"></div>
       <div class="notification-actions"></div>
@@ -261,7 +261,7 @@ else
 
 
     <!-- Nouvelles découvertes -->
-    <div class="minipop bottom" id="pop-nouvelle-decouverte">
+    <div class="minipop bottom" id="pop-nouvelle-decouverte" data-menu="nouvelle-decouverte">
       <h3 class="pop-titre"></h3>
 
       <div class="pop-contenu liste-genese">
@@ -277,7 +277,7 @@ else
 
 
     <!-- Découvertes & navigation -->
-    <div class="minipop bottom" id="pop-decouvertes">
+    <div class="minipop bottom" id="pop-decouvertes" data-menu="decouvertes">
       <i class="material-icons focusable pop-titre-icone" id="supprimer-decouvertes" title="Effacer les découvertes">delete_forever</i>
       <h3 class="pop-titre" data-string="carnet-titre"></h3>
 
