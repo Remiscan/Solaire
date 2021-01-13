@@ -28,6 +28,7 @@ export class Menu {
   async open(delay = true) {
     if (this.on) return;
 
+    isOpen++;
     this.on = true;
     this.element.classList.add('on');
     document.querySelector('.conteneur-systeme').addEventListener('click', Menu.closeAll);
@@ -35,7 +36,6 @@ export class Menu {
       const key = event.which || event.keyCode;
       if (key == 27) Menu.closeAll();
     });
-    isOpen++;
 
     if (['pop-decouvertes', 'pop-parametres'].includes(this.element.id)) {
       // On désactive le focus des boutons en-dehors du menu (et de son bouton d'ouverture)
@@ -65,11 +65,13 @@ export class Menu {
   async close(delay = true) {
     if (!this.on) return;
 
+    isOpen--;
     this.on = false;
     this.element.classList.remove('on');
-    document.querySelector('.conteneur-systeme').removeEventListener('click', Menu.closeAll);
-    window.removeEventListener('keydown', window.cp);
-    isOpen--;
+    if (isOpen <= 0) {
+      document.querySelector('.conteneur-systeme').removeEventListener('click', Menu.closeAll);
+      window.removeEventListener('keydown', window.cp);
+    }
 
     // On active les boutons en-dehors des menus
     for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
