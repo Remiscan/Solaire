@@ -323,8 +323,8 @@ export class App {
     
     // Affiche les nouvelles découvertes
     // compte incorrect, à revoir
-    if (voy.systeme.decouvertes.size > 0)
-      setTimeout(() => Menu.openId('nouvelle-decouverte'), 500);
+    if (voy.countDecouvertes > 0)
+      setTimeout(() => Menu.get('nouvelle-decouverte').open(), 500);
 
       
     // Gestion de l'appli par service worker

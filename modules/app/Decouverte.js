@@ -36,6 +36,9 @@ export class Decouverte {
     this.new = false;
   }
 
+
+  /////////////////////////
+  // Débloque la découverte
   unlock(adresse) {
     if (this.unlocked) return;
     this.unlocked = true;
@@ -43,6 +46,9 @@ export class Decouverte {
     this.new = true;
   }
 
+
+  ///////////////////////
+  // Bloque la découverte
   lock() {
     if (!this.unlocked) return;
     this.unlocked = false;
@@ -50,6 +56,22 @@ export class Decouverte {
     this.new = false;
   }
 
+
+  ///////////////////////////////////////////////////
+  // Vérifie si une découverte (id) est connue ou non
+  static check(id) {
+    if (!initialised) throw 'Découvertes non initialisées';
+    
+    const k = decouvertes.findIndex(d => d.id == id);
+    if (k == -1)
+      throw 'Découverte inexistante';
+    const dec = decouvertes[k];
+    return dec.unlocked;
+  }
+
+
+  ////////////////////////////////////////////////////////
+  // Débloque une découverte (id) et y associe son système
   static add(id, adresse) {
     if (!initialised) throw 'Découvertes non initialisées';
     
@@ -60,6 +82,9 @@ export class Decouverte {
     dec.unlock(adresse);
   }
 
+
+  ////////////////////////////////////////////
+  // Renvoie une liste des découvertes connues
   static get connues() {
     if (!initialised) throw 'Découvertes non initialisées';
     
@@ -70,6 +95,9 @@ export class Decouverte {
     return c;
   }
 
+
+  //////////////////////////////////////////////
+  // Renvoie une liste des découvertes nouvelles
   static get nouvelles() {
     if (!initialised) throw 'Découvertes non initialisées';
     
@@ -80,10 +108,16 @@ export class Decouverte {
     return c;
   }
 
+
+  ////////////////////////////////////////////////
+  // Renvoie les données de toutes les découvertes
   static get all() {
     return data;
   }
 
+
+  /////////////////////////////
+  // Initialise les découvertes
   static init() {
     if (initialised) throw 'Découvertes déjà initialisées';
     
@@ -102,6 +136,9 @@ export class Decouverte {
     initialised = true;
   }
 
+
+  //////////////////////////////////////////////////////
+  // Sauvegarde les découvertes dans les données locales
   static save() {
     const savedData = [];
     for (const d of decouvertes) {
@@ -111,6 +148,9 @@ export class Decouverte {
     localStorage.setItem('solaire/decouvertes', JSON.stringify(savedData));
   }
 
+
+  /////////////////////////////////////////
+  // Supprime la sauvegarde des découvertes
   static clearAll() {
     for (const d of Decouverte.connues) {
       d.lock();
@@ -119,6 +159,9 @@ export class Decouverte {
     Decouverte.save();
   }
 
+
+  /////////////////////////////////////////////////////
+  // Affiche les découvertes dans le menu correspondant
   static async populate() {
     if (!initialised) throw 'Découvertes non initialisées';
     

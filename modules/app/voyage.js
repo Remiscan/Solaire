@@ -4,7 +4,6 @@ import { Notification } from './Notification.js';
 import { Menu } from './Menu.js';
 import { Decouverte } from './Decouverte.js';
 import { resetWindow } from './custom-scroll-zoom.js';
-import { Seed } from '../systeme/Seed.js';
 
 
 
@@ -75,8 +74,20 @@ export class Voyage {
     }
 
     catch(error) {
+      new Notification(getString('erreur-systeme-non-atteint'), 'error');
       console.error(error);
     }
+  }
+
+
+  //////////////////////////////////////////////////////////////////////
+  // Compte le nombre de nouvelles découvertes dans le système à visiter
+  get countDecouvertes() {
+    let count = 0;
+    for (const dec of this.systeme.decouvertes) {
+      if (Decouverte.check(dec))  count++;
+    }
+    return count;
   }
 
 
