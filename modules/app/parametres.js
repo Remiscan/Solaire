@@ -11,7 +11,7 @@ const parametresData = [
   { id: 'orbites', classe: 'no-orbits', classType: 'negative', switch: 'switch-orbites', default: 1 },
   { id: 'orbitesLunaires', classe: 'no-lunar-orbits', classType: 'negative', switch: 'switch-orbites-lunaires', default: 1 },
   { id: 'orbitesColorees', classe: 'orbites-blanches', classType: 'negative', switch: 'switch-orbites-colorees', default: 1 },
-  { id: 'ombresExagerees', classe: 'ombres-realistes', classType: 'negative', switch: 'switch-ombres-exagerees', default: 1 },
+  { id: 'ombresExagerees', classe: 'ombres-realistes', classType: 'negative', switch: 'switch-ombres-exagerees', default: 0 },
   { id: 'ombres', classe: 'no-shadows', classType: 'negative', switch: 'switch-ombres', default: 1 },
   { id: 'ombresNonAdditives', classe: 'ombres-non-additives', classType: 'positive', switch: 'switch-ombres-na', default: 1 }
 ];
