@@ -816,7 +816,7 @@ button:focus:not(:focus-visible),
 
 .liste-navigation {
   grid-row: 2 / 3;
-  flex-direction: column-reverse;
+  flex-direction: column;
 }
 
 .formulaire-code {
@@ -1016,6 +1016,7 @@ button:focus:not(:focus-visible),
 
 .favori.actuel {
   color: hsl(var(--etoile-couleur), 40%, 20%);
+  order: -1;
 }
 
 .favori.actuel>.vous-etes-ici {
