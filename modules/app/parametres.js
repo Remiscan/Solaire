@@ -32,11 +32,11 @@ export class Parametre {
     this.classType = data.classType;
     this.button = !!data.bouton ? document.getElementById(data.bouton) : false;
     this.switch = !!data.switch ? document.getElementById(data.switch) : false;
-    this.value = value || data.default;
+    this.value = (typeof value != 'undefined') ? Number(!!value) : Number(!!data.default);
   }
 
   async change() {
-    this.value = !this.value;
+    this.value = Number(!this.value);
     await this.apply();
     Parametre.save();
     return;
