@@ -9,6 +9,7 @@ import { resetWindow } from './custom-scroll-zoom.js';
 
 
 let derniereGeneration = 0;
+let premiereGeneration = 0;
 
 
 
@@ -40,6 +41,7 @@ export class Voyage {
   async go() {
     try {
       derniereGeneration = Math.max(derniereGeneration, this.date);
+      if (!premiereGeneration) premiereGeneration = this.date;
       await Menu.closeAll();
 
       // On (dés)active le bouton "suivant"
@@ -50,6 +52,16 @@ export class Voyage {
       } else {
         boutonSuivant.disabled = true;
         boutonSuivant.tabIndex = -1;
+      }
+
+      // On (dés)active le bouton "précédent"
+      const boutonPrecedent = document.getElementById('bouton-precedent');
+      if (this.date > premiereGeneration) {
+        boutonPrecedent.disabled = false;
+        boutonPrecedent.tabIndex = 0;
+      } else {
+        boutonPrecedent.disabled = true;
+        boutonPrecedent.tabIndex = -1;
       }
 
       // On masque le bouton "redimensionner"
