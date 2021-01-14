@@ -114,27 +114,13 @@ export class Favoris {
       </div>
     `;
 
+    // Active le lien
     const element = document.getElementById(`favori-${this.systeme}`);
-
     element.querySelector('.decouverte-lien').addEventListener('click', () => this.go());
-    element.querySelector('.icon').addEventListener('click', () => this.toggle());
-    this.highlight();
-  }
-
-
-  ////////////////////////////////////
-  // Voyage jusqu'au système du favori
-  go() {
-    const ev = new CustomEvent('voyage', { detail: { systeme: this.systeme } });
-    window.dispatchEvent(ev);
-  }
-
-
-  ///////////////////////////////////////////////////////////////////////////////////
-  // Change l'icône d'étoile au survol de la souris selon qu'il soit en favori ou non
-  highlight() {
-    const element = document.getElementById(`favori-${this.systeme}`);
+    
+    // Rend l'icône interactive
     const etoile = element.querySelector('.icon');
+    etoile.addEventListener('click', () => this.toggle());
     etoile.addEventListener('mouseover', () => {
       if (this.saved) etoile.innerHTML = 'star_border';
       else            etoile.innerHTML = 'star';
@@ -143,6 +129,18 @@ export class Favoris {
       if (this.saved) etoile.innerHTML = 'star';
       else            etoile.innerHTML = 'star_border';
     });
+
+    element.onclick = () => console.log(this);
+
+    return element;
+  }
+
+
+  ////////////////////////////////////
+  // Voyage jusqu'au système du favori
+  go() {
+    const ev = new CustomEvent('voyage', { detail: { systeme: this.systeme } });
+    window.dispatchEvent(ev);
   }
 
 
@@ -170,13 +168,11 @@ export class Favoris {
     for (const f of favoris) {
       let element = document.getElementById(`favori-${f.systeme}`);
       if (f.saved || f.systeme == Seed.current) {
-        if (!element) {
-          f.populate();
-          element = document.getElementById(`favori-${f.systeme}`);
-        }
+        if (!element) element = f.populate();
         if (f.systeme == Seed.current)  element.classList.add('actuel');
         else                            element.classList.remove('actuel');
 
+        // Affiche l'icône correcte
         const etoile = element.querySelector('.icon');
         if (f.saved) etoile.innerHTML = 'star';
         else         etoile.innerHTML = 'star_border';

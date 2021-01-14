@@ -145,8 +145,7 @@ export class Decouverte {
   static save() {
     const savedData = [];
     for (const d of decouvertes) {
-      if (d.unlocked)
-        savedData.push({ id: d.id, systeme: d.systeme });
+      if (d.unlocked) savedData.push({ id: d.id, systeme: d.systeme });
     }
     localStorage.setItem('solaire/decouvertes', JSON.stringify(savedData));
   }
@@ -167,8 +166,6 @@ export class Decouverte {
   // Affiche les découvertes dans le menu correspondant
   static async populate() {
     if (!initialised) throw 'Découvertes non initialisées';
-    
-    await Menu.closeAll();
 
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-decouvertes');
     const listeNew = document.getElementById('pop-nouvelle-decouverte').querySelector('.liste-nouvelle-decouverte');
@@ -177,17 +174,10 @@ export class Decouverte {
 
     const nouvelles = Decouverte.nouvelles;
 
-    let texte;
-    if (nouvelles.length <= 1)
-      texte = getString('notification-une-decouverte');
-    else
-      texte = getString('notification-plusieurs-decouvertes');
-    document.getElementById('pop-nouvelle-decouverte').querySelector('h3').innerHTML = texte;
-
     for (const d of decouvertes) {
       if (d.unlocked) {
         liste.innerHTML += `
-          <div class="decouverte">
+          <div class="decouverte" data-decouverte="${d.id}">
             <i class="material-icons icon">bookmark</i>
             <span class="decouverte-titre" data-string="decouverte-${d.id}-titre">
               ${getString('decouverte-' + d.id + '-titre')}
@@ -195,7 +185,7 @@ export class Decouverte {
             <span class="decouverte-description" data-string="decouverte-${d.id}-description">
               ${getString('decouverte-' + d.id + '-description')}
             </span>
-            <button class="decouverte-lien" tabindex="-1" disabled="" data-systeme="${d.systeme}">
+            <button class="decouverte-lien" tabindex="-1" disabled>
               <i class="material-icons">explore</i>
               <span data-string="bouton-revisiter">
                 ${getString('bouton-revisiter')}
@@ -203,6 +193,9 @@ export class Decouverte {
             </button>
           </div>
         `;
+
+        const element = liste.querySelector(`.decouverte[data-decouverte="${d.id}"]`);
+        element.querySelector('.decouverte-lien').onclick = d.go;
       } else {
         liste.innerHTML += `
           <div class="decouverte non">
@@ -244,5 +237,12 @@ export class Decouverte {
       setTimeout(() => Menu.get('nouvelle-decouverte').open(), 500);
     }
   }
+
+
+  ///////////////////////////////////////////
+  // Voyage jusqu'au système de la découverte
+  go() {
+    const ev = new CustomEvent('voyage', { detail: { systeme: this.systeme } });
+    window.dispatchEvent(ev);
   }
 }
