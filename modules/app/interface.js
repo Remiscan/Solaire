@@ -101,6 +101,7 @@ export function initInterface() {
     }
   });
 
+  // Onglets du menu découvertes
   for (const onglet of [...document.querySelectorAll('.onglet')]) {
     onglet.addEventListener('click', event => Menu.ongletCarnet(event.currentTarget.id));
   }

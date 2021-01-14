@@ -87,8 +87,8 @@ export class Voyage {
         if (isNew) newDecouvertes++;
       });
       if (newDecouvertes > 0) {
-      Decouverte.save();
-      Decouverte.populate();
+        Decouverte.save();
+        Decouverte.populate();
       }
       new Favoris(this.systeme.seed);
       Favoris.updateList();
@@ -109,38 +109,6 @@ export class Voyage {
       if (Decouverte.check(dec))  count++;
     }
     return count;
-  }
-
-
-  //////////////////////////////////////////////////////////////////////////
-  // Prépare et effectue un voyage à partir de l'adresse saisie manuellement
-  static saisie() {
-    let i_kc = 0;
-    const codeSaisi = document.getElementById('code-saisi').value;
-    if (codeSaisi != '')
-    {
-      document.getElementById('code-saisi').readonly = true;
-      document.getElementById('code-saisi').blur();
-      const isKeyboardClosed = () => {
-        i_kc++;
-        return new Promise((resolve, reject) => {
-          if (document.getElementById('bouton-redimensionner').classList.contains('needed') && i_kc < 50)
-            return wait(100).then(reject);
-          else {
-            i_kc = 0;
-            return resolve();
-          }
-        })
-        .catch(isKeyboardClosed);
-      }
-
-      isKeyboardClosed()
-      .then(() => {
-        document.getElementById('code-saisi').readonly = false;
-        const voy = new Voyage(codeSaisi);
-        voy.go();
-      });
-    }
   }
 }
 
