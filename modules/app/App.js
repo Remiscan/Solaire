@@ -359,6 +359,7 @@ export class App {
       }
       else if (appChargee === true)
         App.checkUpdate();
+        App.checkInstall();
     }
     catch(error) {
       console.error(error);
