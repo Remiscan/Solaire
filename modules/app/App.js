@@ -317,11 +317,6 @@ export class App {
 
     window.addEventListener('resize', callResize);
     window.addEventListener('orientationchange', callResize);
-    
-    // Affiche les nouvelles découvertes
-    // compte incorrect, à revoir
-    if (voy.countDecouvertes > 0)
-      setTimeout(() => Menu.get('nouvelle-decouverte').open(), 500);
 
       
     // Gestion de l'appli par service worker

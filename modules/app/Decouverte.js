@@ -40,10 +40,11 @@ export class Decouverte {
   /////////////////////////
   // Débloque la découverte
   unlock(adresse) {
-    if (this.unlocked) return;
+    if (this.unlocked) return 0;
     this.unlocked = true;
     this.systeme = adresse;
     this.new = true;
+    return 1;
   }
 
 
@@ -76,10 +77,9 @@ export class Decouverte {
     if (!initialised) throw 'Découvertes non initialisées';
     
     const k = decouvertes.findIndex(d => d.id == id);
-    if (k == -1)
-      throw 'Découverte inexistante';
+    if (k == -1) throw 'Découverte inexistante';
     const dec = decouvertes[k];
-    dec.unlock(adresse);
+    return dec.unlock(adresse);
   }
 
 
@@ -90,7 +90,7 @@ export class Decouverte {
     
     const c = [];
     for (const d of decouvertes) {
-      if (d.unlocked) c.push(d.id);
+      if (d.unlocked) c.push(d);
     }
     return c;
   }
@@ -127,7 +127,10 @@ export class Decouverte {
       const dec = new Decouverte(d);
 
       const k = savedData.findIndex(s => s.id == d);
-      if (k != -1) dec.unlock(savedData[k].systeme);
+      if (k != -1) {
+        dec.unlock(savedData[k].systeme);
+        dec.new = false;
+      }
 
       decouvertes.push(dec);
     }
@@ -227,5 +230,19 @@ export class Decouverte {
         `;
       }
     }
+
+    // Notification des nouvelles découvertes
+    let texte;
+    if (nouvelles.length <= 1)
+      texte = getString('notification-une-decouverte');
+    else
+      texte = getString('notification-plusieurs-decouvertes');
+    document.getElementById('pop-nouvelle-decouverte').querySelector('h3').innerHTML = texte;
+
+    if (nouvelles.length > 0) {
+      Menu.ongletCarnet('onglet-decouvertes');
+      setTimeout(() => Menu.get('nouvelle-decouverte').open(), 500);
+    }
+  }
   }
 }

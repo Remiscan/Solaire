@@ -114,6 +114,8 @@ export function initInterface() {
 
   // Bouton découvertes
   document.getElementById('bouton-decouvertes').addEventListener('click', async () => {
+    const menuNouv = Menu.get('nouvelle-decouverte');
+    if (menuNouv.on) await menuNouv.close();
     const menu = Menu.get('decouvertes');
     await menu.toggle();
     const onglet =  document.getElementById('pop-decouvertes').classList.contains('on-decouvertes') ? 'onglet-decouvertes' : 

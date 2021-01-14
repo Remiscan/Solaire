@@ -69,9 +69,15 @@ export class Voyage {
         history.pushState( { systeme: this.systeme.seed, date: this.date }, '', '/solaire/'/* + 'systeme/' + this.seed*/);
 
       // On met à jour le carnet de bord avec les découvertes du système visité
-      this.systeme.decouvertes.forEach(d => Decouverte.add(d, this.seed));
+      let newDecouvertes = 0;
+      this.systeme.decouvertes.forEach(d => {
+        const isNew = Decouverte.add(d, this.systeme.seed);
+        if (isNew) newDecouvertes++;
+      });
+      if (newDecouvertes > 0) {
       Decouverte.save();
       Decouverte.populate();
+      }
       new Favoris(this.systeme.seed);
       Favoris.updateList();
     }
