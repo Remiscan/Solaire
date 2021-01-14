@@ -194,9 +194,9 @@ export class Decouverte {
           </div>
         `;
 
-        const element = liste.querySelector(`.decouverte[data-decouverte="${d.id}"]`);
-        element.querySelector('.decouverte-lien').onclick = d.go;
-      } else {
+        d.element.querySelector('.decouverte-lien').onclick = d.go;
+      }
+      else {
         liste.innerHTML += `
           <div class="decouverte non">
             <i class="material-icons icon">bookmark_border</i>
@@ -244,5 +244,12 @@ export class Decouverte {
   go() {
     const ev = new CustomEvent('voyage', { detail: { systeme: this.systeme } });
     window.dispatchEvent(ev);
+  }
+
+
+  //////////////////////////////////////
+  // Récupère l'élément de la découverte
+  get element() {
+    return document.querySelector(`.decouverte[data-decouverte="${this.id}"]`);
   }
 }

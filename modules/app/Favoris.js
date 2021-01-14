@@ -63,11 +63,8 @@ export class Favoris {
   add() {
     if (this.saved) return;
 
-    const element = document.getElementById(`favori-${this.systeme}`);
-    element.querySelector('.icon').innerHTML = 'star';
-
+    this.element.querySelector('.icon').innerHTML = 'star';
     this.saved = true;
-
     Favoris.save();
   }
 
@@ -77,11 +74,8 @@ export class Favoris {
   remove() {
     if (!this.saved)  return;
 
-    const element = document.getElementById(`favori-${this.systeme}`);
-    element.querySelector('.icon').innerHTML = 'star_border';
-
+    this.element.querySelector('.icon').innerHTML = 'star_border';
     this.saved = false;
-
     Favoris.save();
   }
 
@@ -115,7 +109,7 @@ export class Favoris {
     `;
 
     // Active le lien
-    const element = document.getElementById(`favori-${this.systeme}`);
+    const element = this.element;
     element.querySelector('.decouverte-lien').addEventListener('click', () => this.go());
     
     // Rend l'icône interactive
@@ -144,6 +138,13 @@ export class Favoris {
   }
 
 
+  ///////////////////////////////
+  // Récupère l'élément du favori
+  get element() {
+    return document.getElementById(`favori-${this.systeme}`);
+  }
+
+
   ////////////////////////////////////////////////////
   // Initialise les favoris à partir du stockage local
   static init() {
@@ -166,7 +167,7 @@ export class Favoris {
     if (!initialised) throw 'Favoris non initialisés';
     
     for (const f of favoris) {
-      let element = document.getElementById(`favori-${f.systeme}`);
+      let element = f.element;
       if (f.saved || f.systeme == Seed.current) {
         if (!element) element = f.populate();
         if (f.systeme == Seed.current)  element.classList.add('actuel');
