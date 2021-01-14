@@ -134,19 +134,6 @@ else
 
     <div id="progression-maj"></div>
 
-
-    <!-- Barre du côté : zoom -->
-    <div id="zoom-manuel">
-      <input id="input-zoom" type="range" name="zoom" min="100" max="300" step="1" value="100" list="zoom-levels" tabIndex="-1">
-
-      <div class="track"></div>
-
-      <span class="reset-zoom focusable">
-        <i class="material-icons">zoom_in</i>
-        <span class="zoom-percent"></span>
-      </span>
-    </div>
-
   
     <!-- Barre du bas : interface, play/pause, explorer, découvertes/navigation, redim. -->
     <div id="appbar">

@@ -142,9 +142,6 @@ export function initInterface() {
   // Pop nouvelles découvertes
   document.getElementById('pop-nouvelle-decouverte').addEventListener('click', Menu.closeAll);
 
-  // Bouton resetZoom
-  document.querySelector('.reset-zoom').addEventListener('click',resetWindow);
-
   // Bouton recherche màj et bouton màj
   document.querySelector('.bouton-check-maj').addEventListener('click', () => window.dispatchEvent(new Event('check-update')));
   document.getElementById('bouton-maj').addEventListener('click', () => window.dispatchEvent(new Event('app-update')));

@@ -84,17 +84,14 @@ export class Parametre {
           }, {passive: true});
         }
         else if (param.button.id == 'bouton-interface') {
-          param.button.addEventListener('click', () => {
-            Menu.closeAll()
-            .then(() => {
-              const hideInterface = !document.documentElement.classList.contains('no-interface');
-              param.change();
-              for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
-                if (b.id != 'bouton-explorer' && b.id != 'bouton-interface')
-                  b.tabIndex = hideInterface ? -1 : 0;
-              }
-              document.querySelector('.reset-zoom').tabIndex = hideInterface ? -1 : (document.querySelector('.reset-zoom').classList.contains('on') ? 0 : -1);
-            });
+          param.button.addEventListener('click', async () => {
+            await Menu.closeAll();
+            const hideInterface = !document.documentElement.classList.contains('no-interface');
+            param.change();
+            for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
+              if (b.id != 'bouton-explorer' && b.id != 'bouton-interface')
+                b.tabIndex = hideInterface ? -1 : 0;
+            }
           });
         }
       }

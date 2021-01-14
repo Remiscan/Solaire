@@ -69,15 +69,6 @@ function systemeScroll(event) {
 /////////////////////////
 // Gestion du zoom custom
 function zoom(nouveauZoom, point = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }) {
-  if (ancienZoom == 1) {
-    document.querySelector('.reset-zoom').classList.add('on');
-    document.querySelector('.reset-zoom').tabIndex = 0;
-  }
-  if (nouveauZoom > 1)
-    document.querySelector('.reset-zoom>i').innerHTML = 'zoom_in';
-  else if (nouveauZoom < 1)
-    document.querySelector('.reset-zoom>i').innerHTML = 'zoom_out';
-
   const Z = nouveauZoom / ancienZoom;
   document.getElementById('systeme').style.setProperty('--zoom', nouveauZoom);
   document.querySelector('.zoom-percent').innerHTML = Math.round(100 * nouveauZoom) + '%';
@@ -144,12 +135,8 @@ export function resetWindow() {
   const coeff = (minZoom > 1) ? minZoom : 1;
   const posX = 0.5 * (coeff * Fenetre.tailleBody - window.innerWidth);
   const posY = 0.5 * (coeff * Fenetre.tailleBody - window.innerHeight);
-  /*document.querySelector('.zoom-percent').innerHTML = '100%';
-  document.querySelector('.reset-zoom>i').innerHTML = 'zoom_in';*/
   divSysteme.style.setProperty('--zoom', coeff);
   ancienZoom = coeff;
-  document.querySelector('.reset-zoom').classList.remove('on');
-  document.querySelector('.reset-zoom').tabIndex = -1;
   conteneurSysteme.customScroll(posX, posY);
 }
 

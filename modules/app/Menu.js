@@ -43,7 +43,6 @@ export class Menu {
         if (!b.id.includes(this.element.id.replace('pop-', '')))
           b.tabIndex = -1;
       }
-      document.querySelector('.reset-zoom').tabIndex = -1;
     }
 
     // On active les boutons présents dans le menu
@@ -77,7 +76,6 @@ export class Menu {
     for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
       b.tabIndex = 0;
     }
-    document.querySelector('.reset-zoom').tabIndex = document.querySelector('.reset-zoom').classList.contains('on') ? 0 : -1;
 
     // On désactive les boutons dans les menus
     for (const b of [...this.element.querySelectorAll('button, input')]) {
