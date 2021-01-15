@@ -88,7 +88,7 @@ export class Voyage {
       });
       if (newDecouvertes > 0) {
         Decouverte.save();
-        Decouverte.populate();
+        Decouverte.updateList();
       }
       new Favoris(this.systeme.seed);
       Favoris.updateList();
