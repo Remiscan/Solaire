@@ -111,140 +111,124 @@ self.addEventListener('message', event => {
 
 
 // Supprimer tous les caches qui ne sont pas newCache
-function deleteOldCaches(newCache, action)
-{
-  return caches.keys()
-  .then(allCaches => {
-    if (allCaches.length <= 1)
-      throw 'aucun-redondant';
-    console.log('[' + action + '] Nettoyage des anciennes versions du cache');
-    return Promise.all(
-      allCaches.map(ceCache => {
-        if (ceCache.startsWith(PRE_CACHE) && newCache != ceCache)
-          return caches.delete(ceCache);
-      })
-    )
-    .then(() => {
-      console.log('[' + action + '] Nettoyage terminé !');
-      return '[' + action + '] Nettoyage terminé !';
-    });
-  })
-  .catch(error => {
+async function deleteOldCaches(newCache, action) {
+  try {
+    const allCaches = await caches.keys();
+    if (allCaches.length <= 1) throw 'aucun-redondant';
+
+    console.log(`[${action}] Nettoyage des anciennes versions du cache`);
+    await Promise.all(allCaches.map(ceCache => {
+      if (ceCache.startsWith(PRE_CACHE) && newCache != ceCache)
+        return caches.delete(ceCache);
+    }));
+
+    return console.log(`[${action}] Nettoyage terminé !`);
+  }
+  catch(error) {
     if (error != 'aucun-redondant')
-      console.log(error);
-  });
+      return console.error(error);
+  }
 }
 
 
 // Place les fichiers du cache.json en cache, puis prévient source
-function json2cache(cache, source = false)
-{
+async function json2cache(cache, source = false) {
   const extToBust = /\.(css|json|js|php|html)$/;
-  const action = source?'update':'install';
+  const action = source ? 'update' : 'install';
 
   // On récupère le contenu du fichier cache.json
-  return fetch('cache.json?' + Date.now())
-  .then(response => response.json())
+  let jsondata = await fetch(`cache.json?${Date.now()}`);
+  if (jsondata.status != 200)
+    throw 'Erreur ' + jsondata.status + ' lors de la requête de cache.json';
+  jsondata = await jsondata.json();
 
   // Ensuite, on ajoute au cache la liste des fichiers du cache.json
-  .then(jsondata => {
-    console.log('[' + action + '] Mise en cache des fichiers listés dans cache.json : ', jsondata.fichiers);
-    const totalFichiers = jsondata.fichiers.length;
-    const version = jsondata.version;
+  console.log(`[${action}] Mise en cache des fichiers listés dans cache.json : `, jsondata.fichiers);
+  const totalFichiers = jsondata.fichiers.length;
+  const version = jsondata.version;
 
-    return updateDBversion(version)
-    .then(Promise.all(jsondata.fichiers.map(url => {
-      let request = new Request(url.replace(extToBust, '--' + version + '.$1'), {cache: 'no-store'});
-      return fetch(request)
-      .then(response => {
-        if (!response.ok)   throw Error('[' + action + '] Le fichier n\'a pas pu être récupéré...');
-        if (source)         source.postMessage({loaded: true, total: totalFichiers, url: request.url});
-        return cache.put(request, response);
-      });
-    })));
-  });
+  await updateDBversion(version);
+  await Promise.all(jsondata.fichiers.map(async url => {
+    let request = new Request(url.replace(extToBust, '--' + version + '.$1'), {cache: 'no-store'});
+    const response = await fetch(request);
+    if (!response.ok) throw Error(`[${action}] Le fichier n\'a pas pu être récupéré...`);
+    if (source)       source.postMessage({ loaded: true, total: totalFichiers, url: request.url });
+    return cache.put(request, response);
+  }));
+  return;
 }
 
 
 // Met à jour la version dans indedexDB
-function updateDBversion(ver)
-{
-  return new Promise((resolve, reject) => {
-    const ouvertureDB = indexedDB.open('solaire', 1);
+async function updateDBversion(ver) {
+  try {
+    const result = await new Promise((resolve, reject) => {
+      const ouvertureDB = indexedDB.open('solaire', 1);
 
-    // Si la DBB n'existe pas, on la crée et on stocke la version dedans
-    ouvertureDB.onupgradeneeded = event => {
-      const db = event.target.result;
-      const store = db.createObjectStore('version', {keyPath: 'id'});
-      store.createIndex('id', 'id', {unique: true});
-      
-      store.transaction.oncomplete = () => {
-        const store = db.transaction('version', 'readwrite')
-                        .objectStore('version');
-        store.add({id: 'version', version: ver});
-        resolve('[bdd-install] Numéro de version stocké');
-      }
-    };
+      // Si la DBB n'existe pas, on la crée et on stocke la version dedans
+      ouvertureDB.onupgradeneeded = event => {
+        const db = event.target.result;
+        const store = db.createObjectStore('version', { keyPath: 'id' });
+        store.createIndex('id', 'id', { unique: true });
 
-    // On met à jour la version stockée dans la BDD
-    ouvertureDB.onsuccess = event => {
-      const db = event.target.result;
-      const store = db.transaction('version', 'readwrite')
-                    .objectStore('version');
-      const getVersion = store.get('version');
-                    
-      getVersion.onsuccess = () => {
-        const data = getVersion.result;
-        data.version = ver;
-        
-        const maj = store.put(data);
-        
-        maj.onsuccess = () => {
-          resolve('[bdd-update] Numéro de version mis à jour');
-        }
-        
-        maj.onerror = () => {
-          reject('[bdd-update] Numéro de version périmé');
-        }
-        
-      }
-      getVersion.onerror = () => {
-        reject('[bdd-check] Numéro de version indisponible');
-      }
-    }
+        store.transaction.oncomplete = () => {
+          const store_1 = db.transaction('version', 'readwrite')
+            .objectStore('version');
+          store_1.add({ id: 'version', version: ver });
+          resolve('[bdd-install] Numéro de version stocké');
+        };
+      };
 
-    ouvertureDB.onerror = () => {
-      reject('[bdd] Indisponible');
-    }
-  })
-  .then(result => console.log(result))
-  .catch(error => console.error(error));
+      // On met à jour la version stockée dans la BDD
+      ouvertureDB.onsuccess = event_1 => {
+        const db_1 = event_1.target.result;
+        const store_2 = db_1.transaction('version', 'readwrite')
+          .objectStore('version');
+        const getVersion = store_2.get('version');
+
+        getVersion.onsuccess = () => {
+          const data = getVersion.result;
+          data.version = ver;
+
+          const maj = store_2.put(data);
+
+          maj.onsuccess = () => resolve('[bdd-update] Numéro de version mis à jour');
+          maj.onerror = () => reject('[bdd-update] Numéro de version périmé');
+        };
+
+        getVersion.onerror = () => reject('[bdd-check] Numéro de version indisponible');
+      };
+
+      ouvertureDB.onerror = () => reject('[bdd] Indisponible');
+    });
+    return console.log(result);
+  }
+  catch (error) {
+    return console.error(error);
+  }
 }
 
 
 // Récupère le numéro de version dans la BDD
-function getDBversion()
-{
-  return new Promise((resolve, reject) => {
-    const ouvertureDB = indexedDB.open('solaire', 1);
+async function getDBversion() {
+  try {
+    return new Promise((resolve, reject) => {
+      const ouvertureDB = indexedDB.open('solaire', 1);
 
-    ouvertureDB.onsuccess = event => {
-      const db = event.target.result;
-      const getVersion = db.transaction('version', 'readwrite')
-                         .objectStore('version')
-                         .get('version');
-                    
-      getVersion.onsuccess = () => {
-        resolve(getVersion.result.version);
-      }
-      getVersion.onerror = () => {
-        reject('[bdd-check] Numéro de version indisponible');
-      }
-    }
+      ouvertureDB.onsuccess = event => {
+        const db = event.target.result;
+        const getVersion = db.transaction('version', 'readwrite')
+          .objectStore('version')
+          .get('version');
 
-    ouvertureDB.onerror = () => {
-      reject('[bdd] Indisponible');
-    }
-  })
-  .catch(error => console.error(error));
+        getVersion.onsuccess = () => resolve(getVersion.result.version);
+        getVersion.onerror = () => reject('[bdd-check] Numéro de version indisponible');
+      };
+
+      ouvertureDB.onerror = () => reject('[bdd] Indisponible');
+    });
+  }
+  catch (error) {
+    return console.error(error);
+  }
 }
