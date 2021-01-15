@@ -1,7 +1,7 @@
 import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
 import { Partage } from './Partage.js';
-import { resetWindow } from './custom-scroll-zoom.js';
+import { getString } from './traduction.js';
 
 
 
@@ -36,11 +36,12 @@ export function initInterface() {
   });
 
   // Champ de saisie d'adresse
-  document.getElementById('code-saisi').addEventListener('focus', event => {
+  const champ = document.getElementById('code-saisi');
+  champ.placeholder = getString('saisie-placeholder');
+  champ.addEventListener('focus', event => {
     const inputCode = event.currentTarget;
 
-    if (navigator.clipboard)
-    {
+    if (navigator.clipboard) {
       navigator.clipboard.readText()
       .then(texte => { 
         if (isNaN(texte)) {
@@ -51,8 +52,7 @@ export function initInterface() {
             inputCode.value = '';
           }
         }
-        else
-          inputCode.value = texte;
+        else inputCode.value = texte;
       });
     }
 
