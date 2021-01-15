@@ -299,4 +299,23 @@ export class Systeme {
   static get versionUnivers() {
     return versionUnivers;
   }
+
+
+  //////////////////////////////////////////////////////////////////
+  // Génère des systèmes en boucle jusqu'à en trouver un qui vérifie
+  // une caractéristique, fournie en tant que fonction {verification}
+  // (ex: verification = s => s?.etoile?.couleur == 300)
+  static find(verification, maxIterations = 1000) {
+    if (typeof verification != 'function')
+      throw 'Fonction de vérification incorrecte';
+
+    let s;
+    let i = 0;
+    while (!verification(s) && i < maxIterations) {
+      s = new Systeme();
+      i++;
+    }
+    if (verification(s))  return s;
+    else                  return false;
+  }
 }
