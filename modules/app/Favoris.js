@@ -92,7 +92,9 @@ export class Favoris {
   // Crée l'élément HTML du favori
   populate() {
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
-    liste.innerHTML += `
+
+    // Ajout à la liste du carnet
+    let html = `
       <div class="decouverte favori" id="favori-${this.systeme}">
         <i class="material-icons icon focusable" style="--couleur: ${this.couleur};">star_border</i>
         <span class="decouverte-titre">${this.titre}</span>
@@ -107,10 +109,13 @@ export class Favoris {
         </div>
       </div>
     `;
+    const temp = document.createElement('template');
+    temp.innerHTML = html;
+    liste.appendChild(temp.content.cloneNode(true));
 
     // Active le lien
     const element = this.element;
-    element.querySelector('.decouverte-lien').addEventListener('click', () => this.go());
+    element.querySelector('.decouverte-lien').onclick = () => this.go();
     
     // Rend l'icône interactive
     const etoile = element.querySelector('.icon');
@@ -123,8 +128,6 @@ export class Favoris {
       if (this.saved) etoile.innerHTML = 'star';
       else            etoile.innerHTML = 'star_border';
     });
-
-    element.onclick = () => console.log(this);
 
     return element;
   }
