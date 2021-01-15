@@ -71,7 +71,6 @@ function systemeScroll(event) {
 function zoom(nouveauZoom, point = { clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 }) {
   const Z = nouveauZoom / ancienZoom;
   document.getElementById('systeme').style.setProperty('--zoom', nouveauZoom);
-  document.querySelector('.zoom-percent').innerHTML = Math.round(100 * nouveauZoom) + '%';
 
   const past = {
     scrollX: conteneurSysteme.scrollLeft,
