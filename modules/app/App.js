@@ -37,7 +37,7 @@ export class App {
       keys = keys.filter(e => e.includes('solaire'));
       keys = keys.length;
 
-      if (result >= 1 && localStorage.getItem('solaire/version') !== null) {
+      if (keys >= 1 && localStorage.getItem('solaire/version') !== null) {
         appCached = true;
         result = '[:)] L\'application est déjà installée localement.';
       }
@@ -49,7 +49,14 @@ export class App {
 
       // Étape 2 : si la réponse est non, on installe l'application
       //   si l'installation est impossible, on arrête et on retentera une fois le service worker disponible
-      if (!appCached) await App.update();
+      if (!appCached) {
+        try {
+          await App.update();
+        }
+        catch(error) {
+          console.log(`[:(] Installation impossible : ${error}`);
+        }
+      }
 
       // Fini !! :)
 
@@ -77,7 +84,7 @@ export class App {
     const version = Date.now();
 
     if (typeof currentWorker === 'undefined' || currentWorker == null)
-      throw '[:(] Service worker indisponible';
+      throw 'Service worker indisponible';
 
     if (checkedVersion != null)
       return { version: checkedVersion };
@@ -85,7 +92,7 @@ export class App {
     // Si checkUpdate() n'a pas eu lieu, on récupère le numéro de version
     let data = await fetch('/solaire/update.php?&date=' + Date.now());
     if (data.status != 200)
-      throw '[:(] Erreur ' + data.status + ' lors de la requête de màj';
+      throw 'Erreur ' + data.status + ' lors de la requête de màj';
     data = await data.json();
 
     try {
@@ -197,14 +204,12 @@ export class App {
   /////////////////////////////////////////
   // Vérifie si l'appli peut être installée
   static checkInstall() {
-    let installPrompt;
     const installBouton = document.getElementById('bouton-installer');
     const boutonPrecedent = document.getElementById('bouton-precedent');
     const boutonSuivant = document.getElementById('bouton-suivant');
 
-    window.addEventListener('beforeinstallprompt', e => {
-      e.preventDefault();
-      installPrompt = e;
+    window.addEventListener('beforeinstallprompt', bipEvent => {
+      bipEvent.preventDefault();
       installBouton.classList.add('on');
       installBouton.disabled = false;
       installBouton.tabIndex = 0;
@@ -215,7 +220,7 @@ export class App {
       boutonSuivant.disabled = true;
       boutonSuivant.tabIndex = -1;
 
-      installBouton.addEventListener('click', e => {
+      installBouton.addEventListener('click', () => {
         installBouton.classList.remove('on');
         installBouton.disabled = true;
         installBouton.tabIndex = -1;
@@ -225,19 +230,18 @@ export class App {
         boutonSuivant.classList.remove('off');
         boutonSuivant.disabled = false;
         boutonSuivant.tabIndex = 0;
-        installPrompt.prompt();
-        installPrompt.userChoice
+        bipEvent.prompt();
+        bipEvent.userChoice
         .then(choix => {
           if (choix.outcome === 'accepted')
             console.log('[app] Installation acceptée !');
           else
             console.log('[app] Installation refusée');
-            installPrompt = null;
         });
       });
     });
 
-    window.addEventListener('appinstalled', e => {
+    window.addEventListener('appinstalled', () => {
       console.log('[app] Installation terminée !');
     });
   }
@@ -352,9 +356,10 @@ export class App {
         console.log('[sw] Démarrage...');
         App.start();
       }
-      else if (appChargee === true)
+      else if (appChargee === true) {
         App.checkUpdate();
         App.checkInstall();
+      }
     }
     catch(error) {
       console.error(error);
