@@ -563,20 +563,20 @@ html.no-bg, html.trounoir {
   transform: rotate(180deg);
   transform-origin: center left;
   clip-path: polygon(0 0, 100% 50%, 100% 50%, 0 100%);
-  --coeff-ombre: 4px;
+  --coeff-ombre: 1px;
   width: calc(var(--coeff-ombre) * var(--longueur));
 }
 
-.gazeuse .ombre {
+.ombres-exagerees .ombre {
+  --coeff-ombre: 4px;
+}
+
+.ombres-exagerees .gazeuse .ombre {
   --coeff-ombre: 2px;
 }
 
-.etoile-neutrons .ombre {
+.ombres-exagerees.etoile-neutrons .ombre {
   --coeff-ombre: 2px;
-}
-
-.ombres-realistes .ombre {
-  --coeff-ombre: 1px;
 }
 
 .meme-taille-que-etoile>.ombre {
