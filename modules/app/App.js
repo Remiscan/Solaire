@@ -6,7 +6,6 @@ import { Menu } from './Menu.js';
 import { wait, recalcOnResize, callResize } from './Params.js';
 import { Parametre } from './parametres.js';
 import { initInterface, createFocusability } from './interface.js';
-import { getString } from './traduction.js';
 import { Voyage } from './Voyage.js';
 import { Seed } from '../systeme/Seed.js';
 
@@ -85,9 +84,6 @@ export class App {
 
     if (typeof currentWorker === 'undefined' || currentWorker == null)
       throw 'Service worker indisponible';
-
-    if (checkedVersion != null)
-      return { version: checkedVersion };
 
     // Si checkUpdate() n'a pas eu lieu, on récupère le numéro de version
     let data = await fetch('/solaire/update.php?&date=' + Date.now());
@@ -271,34 +267,31 @@ export class App {
       bouton.title = 'Microsoft Edge supporte mal la présence de certaines variables CSS dans les animations de Solaire. Par conséquent, elles sont désactivées. Désolé pour ce désagrément !';
     }
 
-    // Initialisation des textes
+    // Initialisation
     await textualiser();
   
-    // Initialisation des données sauvegardées
     Parametre.init();
     Decouverte.init();
     Favoris.init();
     Menu.init();
 
+    Decouverte.updateList();
     Favoris.updateList();
-    await Decouverte.populate();
-
     Menu.ongletCarnet('onglet-decouvertes');
+
     initInterface();
     createFocusability(document);
 
     // Suppression du champ 'url-getter' si inutile
-    document.getElementById('code-saisi').placeholder = getString('saisie-placeholder');
     if (navigator.share || navigator.clipboard)
       document.getElementById('url-getter').remove();
 
     // Si l'univers a changé depuis la dernière visite, on efface les références à l'ancien univers
-    if (Systeme.universObsolete)
-    {
+    if (Systeme.universObsolete) {
       Decouverte.clearAll();
       Favoris.clearAll();
       localStorage.setItem('solaire/version-univers', Systeme.versionUnivers);
-      pop.querySelector('.nouvel-univers').classList.add('on');
+      document.querySelector('.nouvel-univers').classList.add('on');
     }
 
     // Récupération de l'adresse de système fournie dans l'URL
@@ -370,7 +363,7 @@ export class App {
     }
 
     // Surveille les demandes de mise à jour manuelles
-    window.addEventListener('check-update', App.checkUpdate);
+    window.addEventListener('check-update', () => App.checkUpdate());
     window.addEventListener('app-update', () => App.update(true));
   }
 }
