@@ -51,7 +51,7 @@
     "adresse": "Adresse : ",
     "favori-planetes": " planètes",
     "reset-zoom": "Réinit. zoom",
-    "partage-description": "🚀 Viens explorer ce système planétaire :"
+    "partage-description": "🪐 Viens explorer ce système planétaire :"
   },
   "en": {
     "bouton-installer": "Install",
@@ -103,6 +103,6 @@
     "adresse": "Address: ",
     "favori-planetes": " planets",
     "reset-zoom": "Reset zoom",
-    "partage-description": "🚀 Come explore this planetary system:"
+    "partage-description": "🪐 Come explore this planetary system:"
   }
 }
