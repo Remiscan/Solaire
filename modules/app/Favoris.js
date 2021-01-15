@@ -115,19 +115,22 @@ export class Favoris {
 
     // Active le lien
     const element = this.element;
-    element.querySelector('.decouverte-lien').onclick = () => this.go();
+    const lien = element?.querySelector('.decouverte-lien');
+    if (lien) lien.onclick = () => this.go();
     
     // Rend l'icône interactive
-    const etoile = element.querySelector('.icon');
-    etoile.addEventListener('click', () => this.toggle());
-    etoile.addEventListener('mouseover', () => {
-      if (this.saved) etoile.innerHTML = 'star_border';
-      else            etoile.innerHTML = 'star';
-    });
-    etoile.addEventListener('mouseout', () => {
-      if (this.saved) etoile.innerHTML = 'star';
-      else            etoile.innerHTML = 'star_border';
-    });
+    const etoile = element?.querySelector('.icon');
+    if (etoile) {
+      etoile.addEventListener('click', () => this.toggle());
+      etoile.addEventListener('mouseover', () => {
+        if (this.saved) etoile.innerHTML = 'star_border';
+        else            etoile.innerHTML = 'star';
+      });
+      etoile.addEventListener('mouseout', () => {
+        if (this.saved) etoile.innerHTML = 'star';
+        else            etoile.innerHTML = 'star_border';
+      });
+    }
 
     return element;
   }

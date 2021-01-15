@@ -98,7 +98,7 @@ export class Decouverte {
     const temp = document.createElement('template');
     temp.innerHTML = html;
     liste.appendChild(temp.content.cloneNode(true));
-    const lien = this.element.querySelector('.decouverte-lien');
+    const lien = this.element?.querySelector('.decouverte-lien');
     if (lien) lien.onclick = () => this.go();
 
     // Ajout à la notification de nouvelle découverte
