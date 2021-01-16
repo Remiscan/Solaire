@@ -173,7 +173,7 @@ async function updateDBversion(ver) {
 
         store.transaction.oncomplete = () => {
           const store_1 = db.transaction('version', 'readwrite')
-            .objectStore('version');
+                            .objectStore('version');
           store_1.add({ id: 'version', version: ver });
           resolve('[bdd-install] Numéro de version stocké');
         };
@@ -183,7 +183,7 @@ async function updateDBversion(ver) {
       ouvertureDB.onsuccess = event_1 => {
         const db_1 = event_1.target.result;
         const store_2 = db_1.transaction('version', 'readwrite')
-          .objectStore('version');
+                            .objectStore('version');
         const getVersion = store_2.get('version');
 
         getVersion.onsuccess = () => {
@@ -218,8 +218,8 @@ async function getDBversion() {
       ouvertureDB.onsuccess = event => {
         const db = event.target.result;
         const getVersion = db.transaction('version', 'readwrite')
-          .objectStore('version')
-          .get('version');
+                             .objectStore('version')
+                             .get('version');
 
         getVersion.onsuccess = () => resolve(getVersion.result.version);
         getVersion.onerror = () => reject('[bdd-check] Numéro de version indisponible');
