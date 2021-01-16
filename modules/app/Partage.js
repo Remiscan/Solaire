@@ -9,8 +9,7 @@ export class Partage {
     const codeSysteme = history.state.systeme;
     const urlSysteme = window.location.href.includes(codeSysteme) ? window.location.href : window.location.href + 'systeme/' + codeSysteme;
 
-    if (navigator.share)
-    {
+    if (navigator.share) {
       navigator.share({
         title: 'Solaire',
         text: getString('partage-description'),
@@ -20,15 +19,13 @@ export class Partage {
       .catch(error => console.log('[:(] Erreur de partage...', error));
     }
 
-    else if (navigator.clipboard)
-    {
+    else if (navigator.clipboard) {
       navigator.clipboard.writeText(urlSysteme)
       .then(() => Partage.notify())
       .catch(() => notify(getString('erreur-partage'), 'error'));
     }
     
-    else
-    {
+    else {
       const input = document.getElementById('url-getter');
       input.innerHTML = urlSysteme;
       input.select();
@@ -36,12 +33,13 @@ export class Partage {
 
       try {
         copie = document.execCommand('copy');
-      } catch(error) {
+      }
+      catch(error) {
         console.log('[:(] Copie impossible...');
         notify(getString('erreur-partage'), 'error');
-      } finally {
-        if (copie)
-          Partage.notify();
+      }
+      finally {
+        if (copie) Partage.notify();
       }
     }
   }
