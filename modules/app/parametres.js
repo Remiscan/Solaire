@@ -35,6 +35,9 @@ export class Parametre {
     this.value = (typeof value != 'undefined') ? Number(!!value) : Number(!!data.default);
   }
 
+
+  ///////////////////////////////////
+  // Inverse la valeur d'un paramètre
   async change() {
     this.value = Number(!this.value);
     await this.apply();
@@ -42,6 +45,9 @@ export class Parametre {
     return;
   }
 
+
+  //////////////////////////////////
+  // Applique un paramètre à l'appli
   async apply() {
     if (!!this.button) {
       const bouton = this.button.querySelector('.material-icons');
@@ -60,6 +66,8 @@ export class Parametre {
     return;
   }
 
+
+  ///////////////////////////////////////////////////////
   // Initialise les paramètres à partir du stockage local
   static init() {
     if (initialised) throw 'Paramètres déjà initialisés';
@@ -103,6 +111,8 @@ export class Parametre {
     Parametre.save();
   }
 
+
+  ///////////////////////////////////////////////////
   // Sauvegarde les paramètres dans le stockage local
   static save() {
     if (!initialised) throw 'Paramètres non initialisés';
