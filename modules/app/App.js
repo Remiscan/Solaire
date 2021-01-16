@@ -25,10 +25,10 @@ let isStarted = 0;
 
 
 
-export class App {
+const App = {
   /////////////////////////////////////////////////////////
   // Démarre l'application (update? => populate => display)
-  static async start() {
+  start: async () => {
     let result;
     try {
       // Étape 1 : on vérifie si l'application est installée localement
@@ -74,12 +74,12 @@ export class App {
       console.error(error);
       appChargee = false;
     }    
-  }
+  },
 
 
   ///////////////////////////
   // Met à jour l'application
-  static async update(update = false) {
+  update: async (update = false) => {
     const version = Date.now();
 
     if (typeof currentWorker === 'undefined' || currentWorker == null)
@@ -136,12 +136,12 @@ export class App {
       console.error(error);
     }
     return;
-  }
+  },
 
 
   /////////////////////////////////////////////
   // Vérifie la disponibilité d'une mise à jour
-  static async checkUpdate() {
+  checkUpdate: async () => {
     if (lastCheck + 10000 > Date.now())
       return;
     lastCheck = Date.now();
@@ -194,12 +194,12 @@ export class App {
 
     checkingUpdate = 0;
     return;
-  }
+  },
 
 
   /////////////////////////////////////////
   // Vérifie si l'appli peut être installée
-  static checkInstall() {
+  checkInstall: () => {
     const installBouton = document.getElementById('bouton-installer');
     const boutonPrecedent = document.getElementById('bouton-precedent');
     const boutonSuivant = document.getElementById('bouton-suivant');
@@ -240,19 +240,19 @@ export class App {
     window.addEventListener('appinstalled', () => {
       console.log('[app] Installation terminée !');
     });
-  }
+  },
 
 
   /////////////////////////////////
   // Si service worker indisponible
-  static noStart() {
+  noStart: () => {
     recalcOnResize();
-  }
+  },
 
 
   ////////////////////////////////
   // Au lancement de l'application
-  static async launch() {
+  launch: async () => {
     // Affichage d'un avertissement sur les navigateurs non/mal supportés
     const warning = document.querySelector('.warning');
     if (getComputedStyle(warning).display == 'none') {
@@ -367,3 +367,5 @@ export class App {
     window.addEventListener('app-update', () => App.update(true));
   }
 }
+
+export default App;

@@ -1,4 +1,4 @@
-import { App } from './modules/app/App.js';
+import App from './modules/app/App.js';
 import { Voyage } from './modules/app/Voyage.js';
 import './modules/app/custom-scroll-zoom.js';
 
