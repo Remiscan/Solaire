@@ -114,7 +114,7 @@ else
         </button>
       </div>
 
-      <div class="boutons-groupe">
+      <div class="boutons-groupe maj">
         <button id="bouton-maj" tabIndex="-1" disabled>
           <i class="material-icons">update</i>
           <span data-string="bouton-maj"></span>

@@ -97,7 +97,7 @@ body {
   align-items: center;
   margin: .375rem;
   background-color: transparent;
-  pointer-events: none;
+  pointer-events: none; /* Autorise scroll custom sur les barres */
 }
 
 #appbar {
@@ -118,6 +118,10 @@ body {
   justify-content: space-around;
   align-items: center;
   height: 100%;
+}
+
+:not(.maj).boutons-groupe {
+  pointer-events: auto; /* Bloque scroll custom entre boutons */
 }
 
 button {
