@@ -211,7 +211,7 @@ export class Favoris {
   // Efface tous les favoris
   static clearAll() {
     favoris.clear();
-    Favoris.populateAll();
+    Favoris.updateList();
     Favoris.save();
   }
 }
