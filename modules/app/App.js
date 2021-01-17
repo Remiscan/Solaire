@@ -166,8 +166,9 @@ const App = {
         data = await data.json();
 
         checkedVersion = data['version'];
+        const localVersion = localStorage.getItem('solaire/version');
 
-        if (localStorage.getItem('solaire/version') != data['version']) {
+        if (localVersion && localVersion != data['version']) {
           updateAvailable = 1;
           console.log('[:|] Mise à jour détectée');
           console.log('     Installé : v. ' + localStorage.getItem('solaire/version'));
