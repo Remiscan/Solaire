@@ -99,7 +99,7 @@ export class Decouverte {
     temp.innerHTML = html;
     liste.appendChild(temp.content.cloneNode(true));
     const lien = this.element?.querySelector('.decouverte-lien');
-    if (lien) lien.onclick = () => this.go();
+    if (lien) lien.addEventListener('click', () => this.go());
 
     // Ajout à la notification de nouvelle découverte
     if (this.new) {

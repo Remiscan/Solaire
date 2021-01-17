@@ -116,7 +116,7 @@ export class Favoris {
     // Active le lien
     const element = this.element;
     const lien = element?.querySelector('.decouverte-lien');
-    if (lien) lien.onclick = () => this.go();
+    if (lien) lien.addEventListener('click', () => this.go());
     
     // Rend l'icône interactive
     const etoile = element?.querySelector('.icon');

@@ -31,7 +31,7 @@ export class Notification {
       const bouton = document.createElement('button');
       if (e.type == 'icone')  bouton.innerHTML = `<i class="material-icons">${e.texte}</i>`;
       else                    bouton.innerHTML = e.texte;
-      bouton.onclick = () => { e.action() };
+      bouton.addEventListener('click', () => { e.action() });
       actions.appendChild(bouton);
     }
 
