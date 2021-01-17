@@ -120,7 +120,7 @@ body {
   height: 100%;
 }
 
-:not(.maj).boutons-groupe {
+html:not(.no-interface) .boutons-groupe:not(.allow-scroll) {
   pointer-events: auto; /* Bloque scroll custom entre boutons */
 }
 

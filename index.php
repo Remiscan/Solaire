@@ -114,7 +114,7 @@ else
         </button>
       </div>
 
-      <div class="boutons-groupe maj">
+      <div class="boutons-groupe allow-scroll">
         <button id="bouton-maj" tabIndex="-1" disabled>
           <i class="material-icons">update</i>
           <span data-string="bouton-maj"></span>
@@ -158,7 +158,7 @@ else
         </button>
       </div>
 
-      <div class="boutons-groupe">
+      <div class="boutons-groupe allow-scroll">
         <button class="pulsable" id="bouton-redimensionner" aria-label="Redimensionner" tabIndex="-1" disabled>
           <i class="material-icons">aspect_ratio</i>
         </button>
