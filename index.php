@@ -226,11 +226,6 @@ else
           <div class="switch"></div>
         </label>
 
-        <div class="groupe-parametres" style="display: none">
-          <span data-string="parametre-ombres-additives"></span>
-          <div><input type="checkbox" id="switch-ombres-na"><label for="switch-ombres-na" class="focusable"></label></div>
-        </div>
-
         <div class="groupe-parametres">
           <span data-string="parametre-langage"></span>
           <div><button class="bouton-langage" data-string="bouton-langage" tabIndex="-1" disabled></button></div>
