@@ -2,6 +2,7 @@ import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
 import { Partage } from './Partage.js';
 import { getString } from './traduction.js';
+import { simulateClick } from './Params.js';
 
 
 
@@ -155,8 +156,7 @@ export function initInterface() {
 let focused = false;
 
 // Quand un objet est en focus, on surveille les appuis sur entrée et on simule un clic dessus
-export function createFocusability(parent)
-{
+export function createFocusability(parent) {
   const iFocus = element => { if (focused != element) focused = element; }
   const focusable = [...parent.getElementsByClassName('focusable')];
   focusable.forEach(e => {
@@ -168,20 +168,12 @@ export function createFocusability(parent)
     // Quand on appuie sur entrée alors qu'un élément est en focus, on simule un clic dessus
     // sauf si c'est un a avec attribut href.
     e.addEventListener('keypress', event => {
-      if (e.tagName.toLowerCase() != 'button')
-      {
+      if (e.tagName.toLowerCase() != 'button') {
         const key = event.which || event.keyCode;
-        if (key === 13 || key == 32)
-        {
-          if (!e.getAttribute('href'))
-            simulateClick(e);
+        if (key === 13 || key == 32) {
+          if (!e.getAttribute('href')) simulateClick(e);
         }
       }
-    });
-
-    // On perd le focus après avoir cliqué sur l'élément, sinon il garde son style :focus
-    e.addEventListener('mouseleave', () => {
-      e.blur();
     });
   });
 }
