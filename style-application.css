@@ -299,10 +299,11 @@ button i + span {
 input[type=checkbox] {
 	height: 0;
 	width: 0;
-	visibility: hidden;
+  visibility: hidden;
+  position: absolute;
 }
 
-input[type=checkbox] + label {
+.switch {
   display: block;
   --height: 1.625rem;
 	width: calc(var(--height) * 2);
@@ -315,9 +316,11 @@ input[type=checkbox] + label {
   overflow: hidden;
 }
 
-input[type=checkbox] + label::before {
+.switch::before {
 	content: '';
-	display: block;
+  display: block;
+  width: calc(var(--height) * 2);
+  height: var(--height);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -328,7 +331,7 @@ input[type=checkbox] + label::before {
 	transition: opacity .2s var(--easing-decelerate);
 }
 
-input[type=checkbox] + label::after {
+.switch::after {
   content: '';
   display: block;
   width: calc(var(--height) - 2 * var(--padding));
@@ -341,11 +344,11 @@ input[type=checkbox] + label::after {
   transition: transform .2s var(--easing-decelerate);
 }
 
-input:checked + label::before {
+input:checked + label>.switch::before {
 	opacity: 1;
 }
 
-input:checked + label::after {
+input:checked + label>.switch::after {
   background-color: white;
 	transform: translateX(calc(2.875rem - 100%));
 }
@@ -475,12 +478,18 @@ button.off {
  */
 
 button:focus:not(:hover),
-.focusable:focus:not(:hover) {
+.focusable:focus:not(:hover),
+label[for^="switch"].focusable:focus>.switch {
   box-shadow: 0 0 0 .125rem white;
 }
 
 button:focus:not(:focus-visible),
-.focusable:focus:not(:focus-visible) {
+.focusable:focus:not(:focus-visible),
+label[for^="switch"].focusable:focus:not(:focus-visible)>.switch {
+  box-shadow: none;
+}
+
+label[for^="switch"].focusable:focus {
   box-shadow: none;
 }
 
@@ -609,17 +618,14 @@ button:focus:not(:focus-visible),
   --before-right: 1.125rem;
 }
 
-.groupe-parametres {
+.groupe-parametres,
+label[for^="switch"] {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   width: 100%;
   margin: .625rem 0;
-}
-
-.groupe-parametres div {
-  display: flex;
 }
 
 

@@ -534,7 +534,7 @@ html.no-bg, html.trounoir {
   border-color: transparent;
 }
 
-.no-orbits #gp-orbites-colorees, .no-orbits #gp-orbites-lunaires, .no-shadows #gp-ombres-exagerees {
+.no-orbits [for^="switch-orbites-colorees"], .no-orbits [for^="switch-orbites-lunaires"], .no-shadows [for^="switch-ombres-exagerees"] {
   opacity: 0.5;
   pointer-events: none;
 }

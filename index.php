@@ -184,40 +184,47 @@ else
       <h3 class="pop-titre" data-string="parametres-titre"></h3>
 
       <div class="pop-contenu">
-        <div class="groupe-parametres">
+        <input type="checkbox" id="switch-bg">
+        <label for="switch-bg" class="focusable">
           <span data-string="parametre-couleur-fond"></span>
-          <input type="checkbox" id="switch-bg"><label for="switch-bg" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres">
+        <input type="checkbox" id="switch-textures">
+        <label for="switch-textures" class="focusable">
           <span data-string="parametre-planetes-texturees"></span>
-          <input type="checkbox" id="switch-textures"><label for="switch-textures" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres">
+        <input type="checkbox" id="switch-orbites">
+        <label for="switch-orbites" class="focusable">
           <span data-string="parametre-orbites"></span>
-          <input type="checkbox" id="switch-orbites"><label for="switch-orbites" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres" id="gp-orbites-lunaires">
+        <input type="checkbox" id="switch-orbites-lunaires">
+        <label for="switch-orbites-lunaires" class="focusable">
           <span data-string="parametre-orbites-lunes"></span>
-          <input type="checkbox" id="switch-orbites-lunaires"><label for="switch-orbites-lunaires" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres" id="gp-orbites-colorees">
+        <input type="checkbox" id="switch-orbites-colorees">
+        <label for="switch-orbites-colorees" class="focusable">
           <span data-string="parametre-orbites-colorees"></span>
-          <input type="checkbox" id="switch-orbites-colorees"><label for="switch-orbites-colorees" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres">
+        <input type="checkbox" id="switch-ombres">
+        <label for="switch-ombres" class="focusable">
           <span data-string="parametre-ombres"></span>
-          <input type="checkbox" id="switch-ombres"><label for="switch-ombres" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
-        <div class="groupe-parametres" id="gp-ombres-exagerees">
+        <input type="checkbox" id="switch-ombres-exagerees">
+        <label for="switch-ombres-exagerees" class="focusable">
           <span data-string="parametre-ombres-exagerees"></span>
-          <input type="checkbox" id="switch-ombres-exagerees"><label for="switch-ombres-exagerees" class="focusable"></label>
-        </div>
+          <div class="switch"></div>
+        </label>
 
         <div class="groupe-parametres" style="display: none">
           <span data-string="parametre-ombres-additives"></span>
