@@ -185,43 +185,43 @@ else
 
       <div class="pop-contenu">
         <input type="checkbox" id="switch-bg">
-        <label for="switch-bg" class="focusable">
+        <label for="switch-bg">
           <span data-string="parametre-couleur-fond"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-textures">
-        <label for="switch-textures" class="focusable">
+        <label for="switch-textures">
           <span data-string="parametre-planetes-texturees"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-orbites">
-        <label for="switch-orbites" class="focusable">
+        <label for="switch-orbites">
           <span data-string="parametre-orbites"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-orbites-lunaires">
-        <label for="switch-orbites-lunaires" class="focusable">
+        <label for="switch-orbites-lunaires">
           <span data-string="parametre-orbites-lunes"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-orbites-colorees">
-        <label for="switch-orbites-colorees" class="focusable">
+        <label for="switch-orbites-colorees">
           <span data-string="parametre-orbites-colorees"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-ombres">
-        <label for="switch-ombres" class="focusable">
+        <label for="switch-ombres">
           <span data-string="parametre-ombres"></span>
           <div class="switch"></div>
         </label>
 
         <input type="checkbox" id="switch-ombres-exagerees">
-        <label for="switch-ombres-exagerees" class="focusable">
+        <label for="switch-ombres-exagerees">
           <span data-string="parametre-ombres-exagerees"></span>
           <div class="switch"></div>
         </label>
