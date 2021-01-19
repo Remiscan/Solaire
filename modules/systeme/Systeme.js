@@ -225,8 +225,6 @@ export class Systeme {
     if (comparaison.classe == 'plus-grande-que-etoile') {
       scale = Math.ceil(rayonSysteme / distance);
       longueur = distance * (scale - 1);
-
-      //longueur = 4 * (distance + tailleEtoile * distance / (tailleObjet - tailleEtoile)); // tq fin de ombre = 5x plus large que début ombre
       longueurAttenuee = Math.min(10 * tailleObjet, longueur);
     }
     else if (comparaison.classe == 'meme-taille-que-etoile') {
@@ -238,7 +236,7 @@ export class Systeme {
       longueurAttenuee = Math.min(20 * tailleObjet, longueur);
     }
 
-    longueur = Math.min(rayonSysteme, Math.round(longueur));
+    longueur = Math.min(2 * rayonSysteme, Math.round(longueur));
 
     const resultat = {
       longueur,
