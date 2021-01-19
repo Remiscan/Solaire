@@ -74,7 +74,7 @@ export class Systeme {
       const ombre = this.longueurOmbre(planete);
 
       let planeteHTML = `
-        <div id="planete${p}" class="corps planete animee ${planete.type}" 
+        <div id="planete${p}" class="corps planete animee ${planete.type} ${ombre.classe}" 
              style="
               --size: ${px(planete.taille_px)};
               --distance-x: ${Math.round(-1 * px(planete.distance))}px;
@@ -89,7 +89,7 @@ export class Systeme {
               --distance-nu: ${planete.distance};
              ">
 
-          <div class="ombre ${ombre.classe}" style="--longueur: ${ombre.longueur};"></div>
+          <div class="ombre" style="--longueur: ${ombre.longueur};"></div>
 
           <div class="coeur ${Planete.texturesNonSymetriques.includes(planete.texture) ? 'animee' : ''}"></div>
       `;
