@@ -89,7 +89,7 @@ export class Systeme {
               --distance-nu: ${planete.distance};
              ">
 
-          <div class="ombre" style="--longueur: ${ombre.longueur};"></div>
+          <div class="ombre" style="--longueur: ${ombre.longueur}; --scale: ${ombre.scale};"></div>
 
           <div class="coeur ${Planete.texturesNonSymetriques.includes(planete.texture) ? 'animee' : ''}"></div>
       `;
@@ -104,7 +104,7 @@ export class Systeme {
         const ombre = this.longueurOmbre(lune);
 
         planeteHTML += `
-          <div class="lune animee"
+          <div class="lune animee ${ombre.classe}"
                style="
                 --divise-vitesse: ${lune.divise_vitesse};
                 --delai: ${lune.delai}ms;
@@ -114,7 +114,7 @@ export class Systeme {
                 --distance-lune: ${px(lune.distance_planete)};
                 --ordre: ${k};
                ">
-            <div class="ombre ${ombre.classe}"
+            <div class="ombre"
                  style="
                   --longueur: ${ombre.longueur};
                   --scale-max: ${ombre.scaleMax};
@@ -159,10 +159,6 @@ export class Systeme {
       // Orbite de la planète
       const nombrePlanetes = etoile.planetes.length;
       conteneur.style.setProperty('--ordre-max', nombrePlanetes);
-      if (p == nombrePlanetes - 1)
-        previousOrbitSize = Math.round(2 * px(planete.distance));
-      else if (p == nombrePlanetes)
-        lastOrbitSize = Math.round(2 * px(planete.distance));
       conteneurOrbites.innerHTML += `
         <div class="orbite"
              style="
@@ -208,7 +204,7 @@ export class Systeme {
     const themeColor = `hsl(${etoile.couleur}, ${saturation}%, ${luminosite}%)`;
     document.querySelector('meta[name=theme-color]').setAttribute('content', themeColor);
 
-    const tailleBody = 2 * lastOrbitSize - previousOrbitSize;
+    const tailleBody = this.tailleBody;
     document.body.style.setProperty('--taille', tailleBody + 'px');
     Fenetre.updateBody(tailleBody);
 
@@ -223,15 +219,18 @@ export class Systeme {
     const tailleEtoile = this.tailleEtoile;
     const distance = Math.round(px(distanceAEtoile || objet.distance));
     const tailleObjet = px(objet.taille_px);
-    const max = Fenetre.taille;
-    let longueur, longueurAttenuee;
+    let longueur, longueurAttenuee, scale = 1;
+    const rayonSysteme = .51 * Math.sqrt(2) * this.tailleBody;
 
     if (comparaison.classe == 'plus-grande-que-etoile') {
-      longueur = 4 * (distance + tailleEtoile * distance / (tailleObjet - tailleEtoile)); // tq fin de ombre = 5x plus large que début ombre
+      scale = Math.ceil(rayonSysteme / distance);
+      longueur = distance * (scale - 1);
+
+      //longueur = 4 * (distance + tailleEtoile * distance / (tailleObjet - tailleEtoile)); // tq fin de ombre = 5x plus large que début ombre
       longueurAttenuee = Math.min(10 * tailleObjet, longueur);
     }
     else if (comparaison.classe == 'meme-taille-que-etoile') {
-      longueur = 3 * max;
+      longueur = rayonSysteme;
       longueurAttenuee = Math.min(10 * tailleObjet, longueur);
     }
     else {
@@ -239,11 +238,12 @@ export class Systeme {
       longueurAttenuee = Math.min(20 * tailleObjet, longueur);
     }
 
-    longueur = Math.min(max, Math.round(longueur));
+    longueur = Math.min(rayonSysteme, Math.round(longueur));
 
     const resultat = {
-      longueur: longueur,
-      longueurAttenuee: longueurAttenuee,
+      longueur,
+      longueurAttenuee,
+      scale,
       classe: comparaison.classe
     };
 
@@ -280,6 +280,17 @@ export class Systeme {
     else if (type == 'normal')
       taille = Math.round(.8 * taille);
     return taille;
+  }
+
+
+  /////////////////////////////////////////
+  // Calcule la taille en pixels du système
+  get tailleBody() {
+    const nombrePlanetes = this.etoile.planetes.length;
+    const tailleAvantDerniereOrbite = Math.round(2 * px(this.etoile.planetes[nombrePlanetes - 2].distance));
+    const tailleDerniereOrbite = Math.round(2 * px(this.etoile.planetes[nombrePlanetes - 1].distance));
+    const tailleBody = 2 * tailleDerniereOrbite - tailleAvantDerniereOrbite;
+    return tailleBody;
   }
 
 

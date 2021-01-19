@@ -584,9 +584,9 @@ html.no-bg, html.trounoir {
 }
 
 .plus-grande-que-etoile>.ombre {
-  --scale: 5;
   transform: rotate(180deg) scaleY(var(--scale)); /* voir aussi rotation_lune_opposee */
-  clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+  --clip-scale: calc(100% / var(--scale));
+  clip-path: polygon(0 calc(50% - 0.5 * var(--clip-scale)), 100% 0, 100% 100%, 0 calc(50% + 0.5 * var(--clip-scale)));
 }
 @supports not (clip-path: circle(1%)) { /* Edge */
   .plus-grande-que-etoile>.ombre {
