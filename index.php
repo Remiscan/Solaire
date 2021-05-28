@@ -100,33 +100,33 @@ else
     <!-- Barre du haut : Installer, préc./suiv., màj, partage, paramètres -->
     <div id="topbar">
       <div class="boutons-groupe">
-        <button id="bouton-precedent" aria-label="Système précédent">
+        <button type="button" id="bouton-precedent" aria-label="Système précédent">
           <i class="material-icons">arrow_back</i>
         </button>
 
-        <button id="bouton-suivant" aria-label="Système suivant" tabIndex="-1" disabled>
+        <button type="button" id="bouton-suivant" aria-label="Système suivant" tabIndex="-1" disabled>
           <i class="material-icons">arrow_forward</i>
         </button>
 
-        <button id="bouton-installer" tabIndex="-1" disabled>
+        <button type="button" id="bouton-installer" tabIndex="-1" disabled>
           <i class="material-icons">get_app</i>
           <span data-string="bouton-installer"></span>
         </button>
       </div>
 
       <div class="boutons-groupe allow-scroll">
-        <button id="bouton-maj" tabIndex="-1" disabled>
+        <button type="button" id="bouton-maj" tabIndex="-1" disabled>
           <i class="material-icons">update</i>
           <span data-string="bouton-maj"></span>
         </button>
       </div>
 
       <div class="boutons-groupe">
-        <button id="bouton-partage" aria-label="Partager">
+        <button type="button" id="bouton-partage" aria-label="Partager">
           <i class="material-icons">share</i>
         </button>
 
-        <button id="bouton-parametres" aria-label="Paramètres" data-menu="parametres">
+        <button type="button" id="bouton-parametres" aria-label="Paramètres" data-menu="parametres">
           <i class="material-icons">settings</i>
         </button>
       </div>
@@ -138,28 +138,28 @@ else
     <!-- Barre du bas : interface, play/pause, explorer, découvertes/navigation, redim. -->
     <div id="appbar">
       <div class="boutons-groupe">
-        <button id="bouton-interface" data-off="visibility_off" data-on="visibility" aria-label="Visibilité de l'interface">
+        <button type="button" id="bouton-interface" data-off="visibility_off" data-on="visibility" aria-label="Visibilité de l'interface">
           <i class="material-icons">visibility</i>
         </button>
       </div>
 
       <div class="boutons-groupe">
-        <button class="pulsable" id="bouton-pause" data-off="play_arrow" data-on="pause" aria-label="(Dés)activer animations">
+        <button type="button" class="pulsable" id="bouton-pause" data-off="play_arrow" data-on="pause" aria-label="(Dés)activer animations">
           <i class="material-icons">pause</i>
         </button>
 
-        <button class="pulsable" id="bouton-explorer" aria-label="Explorer">
+        <button type="button" class="pulsable" id="bouton-explorer" aria-label="Explorer">
           <i class="material-icons">explore</i>
           <span data-string="bouton-explorer"></span>
         </button>
 
-        <button class="pulsable" id="bouton-decouvertes" aria-label="Découvertes">
+        <button type="button" class="pulsable" id="bouton-decouvertes" aria-label="Découvertes">
           <i class="material-icons">book</i>
         </button>
       </div>
 
       <div class="boutons-groupe allow-scroll">
-        <button class="pulsable" id="bouton-redimensionner" aria-label="Redimensionner" tabIndex="-1" disabled>
+        <button type="button" class="pulsable" id="bouton-redimensionner" aria-label="Redimensionner" tabIndex="-1" disabled>
           <i class="material-icons">aspect_ratio</i>
         </button>
       </div>
@@ -228,12 +228,12 @@ else
 
         <div class="groupe-parametres">
           <span data-string="parametre-langage"></span>
-          <div><button class="bouton-langage" data-string="bouton-langage" tabIndex="-1" disabled></button></div>
+          <div><button type="button" class="bouton-langage" data-string="bouton-langage" tabIndex="-1" disabled></button></div>
         </div>
 
         <div class="groupe-parametres" style="display: none;">
           <div class="conteneur-check-maj">
-            <button class="bouton-check-maj" data-string="bouton-check-maj" tabIndex="-1" disabled></button>
+            <button type="button" class="bouton-check-maj" data-string="bouton-check-maj" tabIndex="-1" disabled></button>
             <span>v.</span>
           </div>
         </div>
@@ -275,7 +275,7 @@ else
           <i class="material-icons icon">bookmark</i>
           <span class="decouverte-titre"></span>
           <span class="decouverte-description"></span>
-          <button class="decouverte-lien" tabIndex="-1" disabled></button>
+          <button type="button" class="decouverte-lien" tabIndex="-1" disabled></button>
         </div>
       </template>
 
@@ -284,7 +284,7 @@ else
           <i class="material-icons icon yes focusable">star</i>
           <span class="decouverte-titre"></span>
           <span class="decouverte-description"></span>
-          <button class="decouverte-lien" tabIndex="-1" disabled></button>
+          <button type="button" class="decouverte-lien" tabIndex="-1" disabled></button>
           <div class="vous-etes-ici"></div>
         </div>
       </template>
@@ -295,7 +295,7 @@ else
       <div class="formulaire-code">
         <label for="code-saisi" data-string="saisie-placeholder"></label>
         <input type="text" id="code-saisi" placeholder="Adresse d'un système" tabIndex="-1" disabled>
-        <button id="bouton-code-saisi" tabIndex="-1" disabled>
+        <button type="button" id="bouton-code-saisi" tabIndex="-1" disabled>
           <i class="material-icons">explore</i><span data-string="bouton-visiter"></span>
         </button>
       </div>

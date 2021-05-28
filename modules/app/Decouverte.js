@@ -77,7 +77,7 @@ export class Decouverte {
           <span class="decouverte-description" data-string="decouverte-${this.id}-description">
             ${getString('decouverte-' + this.id + '-description')}
           </span>
-          <button class="decouverte-lien" tabindex="-1" disabled>
+          <button type="button" class="decouverte-lien" tabindex="-1" disabled>
             <i class="material-icons">explore</i>
             <span data-string="bouton-revisiter">
               ${getString('bouton-revisiter')}
