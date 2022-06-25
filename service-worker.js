@@ -40,6 +40,9 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   //console.log('[fetch] Le service worker récupère l\'élément ' + event.request.url);
 
+  const ignore = ['find.php'];
+  if (event.request.url.match(ignore.join('|'))) return;
+
   // Si on demande index.php via n'importe quel lien qui y mène,
   // On récupère index.php dans le cache, et s'il n'y est pas, sur le réseau
   if (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html')))
