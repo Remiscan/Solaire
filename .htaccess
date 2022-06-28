@@ -8,12 +8,3 @@
         FileETag None
     </filesMatch>
 </IfModule>
-
-
-
-### Rewrite URLs
-
-RewriteEngine On
-
-# Rewrite /solaire/systeme/code to /solaire/
-RewriteRule ^systeme/(.*)$ / [L,QSA]
