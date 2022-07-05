@@ -177,5 +177,5 @@ function updateDBversion(ver) {
 
 // Récupère le numéro de version dans la BDD
 function getDBversion() {
-  return dataStorage.getItem('version');
+  return dataStorage.getItem('version')
 }
