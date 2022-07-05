@@ -155,7 +155,7 @@ async function json2cache(cache, source = false) {
   // Ensuite, on ajoute au cache la liste des fichiers du cache.json
   console.log(`[${action}] Mise en cache des fichiers listés dans cache.json : `, jsondata.fichiers);
   const totalFichiers = jsondata.fichiers.length;
-  const version = jsondata.version;
+  const version = await dataStorage.getItem('version');
 
   await updateDBversion(version);
   await Promise.all(jsondata.fichiers.map(async url => {
