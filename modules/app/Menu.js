@@ -72,6 +72,10 @@ export class Menu {
       window.removeEventListener('keydown', window.cp);
     }
 
+    if (this.id === 'nouvelle-decouverte' && document.querySelector('.nouvel-univers').classList.contains('on')) {
+      document.querySelector('.nouvel-univers').classList.remove('on');
+    }
+
     // On active les boutons en-dehors des menus
     for (const b of [...document.querySelectorAll('.boutons-groupe>button')]) {
       b.tabIndex = 0;
