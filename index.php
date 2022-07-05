@@ -1,17 +1,9 @@
 <?php
 $commonDir = '../_common';
 require_once $commonDir.'/php/httpLanguage.php';
-
-if (isset($_GET['v']))
-  $version = preg_replace('/[^0-9-­_\.]/', '', $_GET['v']);
-else
-{
-  $json = json_decode(file_get_contents('cache.json'), true);
-  $version = $json['version'];
-}
 ?>
 <!doctype html>
-<html data-version="<?=$version?>" data-http-lang="<?=httpLanguage()?>">
+<html data-http-lang="<?=httpLanguage()?>">
   <head>
     <meta charset="utf-8">
     <title>Solaire</title>
@@ -32,13 +24,13 @@ else
     <link rel="apple-touch-icon" href="/solaire/icons/apple-touch-icon.png">
     <link rel="manifest" href="/solaire/manifest.json">
 
-    <link rel="stylesheet" href="/solaire/style-application--<?=$version?>.css">
-    <link rel="stylesheet" href="/solaire/style-systeme--<?=$version?>.css">
-    <link rel="preload" as="fetch" href="/solaire/strings--<?=$version?>.json" crossorigin>
+    <link rel="stylesheet" href="/solaire/style-application.css">
+    <link rel="stylesheet" href="/solaire/style-systeme.css">
+    <link rel="preload" as="fetch" href="/solaire/strings.json" crossorigin>
 
-    <script defer src="/solaire/ext/MersenneTwister--<?=$version?>.js"></script>
-    <script defer src="/solaire/ext/localforage.min--<?=$version?>.js"></script>
-    <script src="/solaire/scripts--<?=$version?>.js" type="module"></script>
+    <script defer src="/solaire/ext/MersenneTwister.js"></script>
+    <script defer src="/solaire/ext/localforage.min.js"></script>
+    <script src="/solaire/scripts.js" type="module"></script>
 
     <style id="style-welcome">
       #welcome {

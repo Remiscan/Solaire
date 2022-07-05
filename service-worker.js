@@ -7,6 +7,7 @@ const dataStorage = localforage.createInstance({
 });
 
 const PRE_CACHE = 'solaire-sw';
+const extToBust = /\.(css|json|js|php|html)$/;
 
 
 
@@ -44,7 +45,7 @@ self.addEventListener('activate', event => {
 
 
 // FETCH
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', async event => {
   //console.log('[fetch] Le service worker récupère l\'élément ' + event.request.url);
 
   const ignore = ['find.php'];
@@ -69,9 +70,13 @@ self.addEventListener('fetch', event => {
   else
   {
     event.respondWith(
-      caches.match(event.request)
-      .then(matching => {
-        return matching || fetch(event.request);
+      getDBversion()
+      .then(version => Promise.resolve(new Request(event.request.url.replace(extToBust, '--' + version + '.$1'), { cache: 'no-store' })))
+      .then(request => {
+        return caches.match(request)
+        .then(matching => {
+          return matching || fetch(request);
+        })
       })
       .catch(error => console.error(error))
     )
@@ -143,7 +148,6 @@ async function deleteOldCaches(newCache, action) {
 
 // Place les fichiers du cache.json en cache, puis prévient source
 async function json2cache(cache, source = false) {
-  const extToBust = /\.(css|json|js|php|html)$/;
   const action = source ? 'update' : 'install';
 
   // On récupère le contenu du fichier cache.json
