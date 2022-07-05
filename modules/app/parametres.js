@@ -1,3 +1,4 @@
+import dataStorage from './localForage.js';
 import { Menu } from './Menu.js';
 import { wait } from './Params.js';
 
@@ -41,7 +42,7 @@ export class Parametre {
   async change() {
     this.value = Number(!this.value);
     await this.apply();
-    Parametre.save();
+    await Parametre.save();
     return;
   }
 
@@ -69,10 +70,10 @@ export class Parametre {
 
   ///////////////////////////////////////////////////////
   // Initialise les paramètres à partir du stockage local
-  static init() {
+  static async init() {
     if (initialised) throw 'Paramètres déjà initialisés';
 
-    const savedData = JSON.parse(localStorage.getItem('solaire/parametres')) || [];
+    const savedData = await dataStorage.getItem('parametres') || [];
     for (const p of parametresData) {
       const k = savedData.findIndex(d => d.id == p.id);
       const value = (k != -1) ? savedData[k].valeur : p.default;
@@ -108,19 +109,19 @@ export class Parametre {
     }
 
     initialised = true;
-    Parametre.save();
+    await Parametre.save();
   }
 
 
   ///////////////////////////////////////////////////
   // Sauvegarde les paramètres dans le stockage local
-  static save() {
+  static async save() {
     if (!initialised) throw 'Paramètres non initialisés';
 
     const savedData = [];
     for (const p of parametres) {
       savedData.push({ id: p.id, valeur: p.value });
     }
-    localStorage.setItem('solaire/parametres', JSON.stringify(savedData));
+    return await dataStorage.setItem('parametres', savedData);
   }
 }

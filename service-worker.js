@@ -1,4 +1,11 @@
-// REV 3
+importScripts('./ext/localforage.min.js');
+
+const dataStorage = localforage.createInstance({
+  name: 'solaire',
+  storeName: 'data',
+  driver: localforage.INDEXEDDB
+});
+
 const PRE_CACHE = 'solaire-sw';
 
 
@@ -163,75 +170,12 @@ async function json2cache(cache, source = false) {
 
 
 // Met à jour la version dans indedexDB
-async function updateDBversion(ver) {
-  try {
-    const result = await new Promise((resolve, reject) => {
-      const ouvertureDB = indexedDB.open('solaire', 1);
-
-      // Si la DBB n'existe pas, on la crée et on stocke la version dedans
-      ouvertureDB.onupgradeneeded = event => {
-        const db = event.target.result;
-        const store = db.createObjectStore('version', { keyPath: 'id' });
-        store.createIndex('id', 'id', { unique: true });
-
-        store.transaction.oncomplete = () => {
-          const store_1 = db.transaction('version', 'readwrite')
-                            .objectStore('version');
-          store_1.add({ id: 'version', version: ver });
-          resolve('[bdd-install] Numéro de version stocké');
-        };
-      };
-
-      // On met à jour la version stockée dans la BDD
-      ouvertureDB.onsuccess = event_1 => {
-        const db_1 = event_1.target.result;
-        const store_2 = db_1.transaction('version', 'readwrite')
-                            .objectStore('version');
-        const getVersion = store_2.get('version');
-
-        getVersion.onsuccess = () => {
-          const data = getVersion.result;
-          data.version = ver;
-
-          const maj = store_2.put(data);
-
-          maj.onsuccess = () => resolve('[bdd-update] Numéro de version mis à jour');
-          maj.onerror = () => reject('[bdd-update] Numéro de version périmé');
-        };
-
-        getVersion.onerror = () => reject('[bdd-check] Numéro de version indisponible');
-      };
-
-      ouvertureDB.onerror = () => reject('[bdd] Indisponible');
-    });
-    return console.log(result);
-  }
-  catch (error) {
-    return console.error(error);
-  }
+function updateDBversion(ver) {
+  return dataStorage.setItem('version', ver);
 }
 
 
 // Récupère le numéro de version dans la BDD
-async function getDBversion() {
-  try {
-    return new Promise((resolve, reject) => {
-      const ouvertureDB = indexedDB.open('solaire', 1);
-
-      ouvertureDB.onsuccess = event => {
-        const db = event.target.result;
-        const getVersion = db.transaction('version', 'readwrite')
-                             .objectStore('version')
-                             .get('version');
-
-        getVersion.onsuccess = () => resolve(getVersion.result.version);
-        getVersion.onerror = () => reject('[bdd-check] Numéro de version indisponible');
-      };
-
-      ouvertureDB.onerror = () => reject('[bdd] Indisponible');
-    });
-  }
-  catch (error) {
-    return console.error(error);
-  }
+function getDBversion() {
+  return dataStorage.getItem('version');
 }

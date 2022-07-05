@@ -1,3 +1,4 @@
+import dataStorage from './localForage.js';
 import { recalcOnResize, wait } from './Params.js';
 
 
@@ -7,9 +8,9 @@ const Textes = {};
 
 ///////////////////////////////////////////////////////
 // Place le texte français ou anglais aux bons endroits
-export function textualiser()
+export async function textualiser()
 {
-  const localLang = localStorage.getItem('solaire/langage');
+  const localLang = await dataStorage.getItem('langage');
   const httpLang = document.documentElement.dataset.httpLang;
   const navLang = navigator.language;
   if (localLang != null)
@@ -72,10 +73,10 @@ export function getString(id, lang = langage)
 
 //////////////////////////////////
 // Change la langue entre FR et EN
-export function switchLangage()
+export async function switchLangage()
 {
   langage = (langage == 'fr') ? 'en' : 'fr';
-  localStorage.setItem('solaire/langage', langage);
+  await dataStorage.setItem('langage', langage);
   document.querySelector('.bouton-langage').removeEventListener('click', switchLangage);
   document.querySelector('.bouton-langage').innerHTML = '•••';
   return wait(50)

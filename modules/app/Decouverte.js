@@ -1,11 +1,12 @@
-import { getString } from './traduction.js';
+import dataStorage from './localForage.js';
 import { Menu } from './Menu.js';
+import { getString } from './traduction.js';
 
 
 
 //////////////////////////////////////////////////////////////
 //
-// Les découvertes sont localement stockées dans localStorage,
+// Les découvertes sont localement stockées dans localForage,
 // sous l'id 'solaire/decouvertes' contenant un array d'objets
 // de la forme { id: 'planete-anneau', systeme: 9865645 } pour
 // chaque découverte connue.
@@ -164,10 +165,10 @@ export class Decouverte {
 
   /////////////////////////////
   // Initialise les découvertes
-  static init() {
+  static async init() {
     if (initialised) throw 'Découvertes déjà initialisées';
     
-    const savedData = JSON.parse(localStorage.getItem('solaire/decouvertes')) || [];
+    const savedData = await dataStorage.getItem('decouvertes') || [];
 
     for (const d of data) {
       const dec = new Decouverte(d);
@@ -181,8 +182,9 @@ export class Decouverte {
       decouvertes.push(dec);
     }
 
-    Decouverte.save();
+    await Decouverte.save();
     initialised = true;
+    return initialised;
   }
 
 
@@ -219,23 +221,23 @@ export class Decouverte {
 
   //////////////////////////////////////////////////////
   // Sauvegarde les découvertes dans les données locales
-  static save() {
+  static async save() {
     const savedData = [];
     for (const d of decouvertes) {
       if (d.unlocked) savedData.push({ id: d.id, systeme: d.systeme });
     }
-    localStorage.setItem('solaire/decouvertes', JSON.stringify(savedData));
+    return await dataStorage.setItem('decouvertes', savedData);
   }
 
 
   /////////////////////////////////////////
   // Supprime la sauvegarde des découvertes
-  static clearAll() {
+  static async clearAll() {
     for (const d of Decouverte.connues) {
       d.lock();
     }
     Decouverte.updateList();
-    Decouverte.save();
+    await Decouverte.save();
   }
 
 

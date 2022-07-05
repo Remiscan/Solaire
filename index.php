@@ -36,6 +36,10 @@ else
     <link rel="stylesheet" href="/solaire/style-systeme--<?=$version?>.css">
     <link rel="preload" as="fetch" href="/solaire/strings--<?=$version?>.json" crossorigin>
 
+    <script defer src="/solaire/ext/MersenneTwister--<?=$version?>.js"></script>
+    <script defer src="/solaire/ext/localforage.min--<?=$version?>.js"></script>
+    <script src="/solaire/scripts--<?=$version?>.js" type="module"></script>
+
     <style id="style-welcome">
       #welcome {
         display: flex;
@@ -304,26 +308,5 @@ else
         <li id="onglet-navigation" class="focusable onglet" data-string="nav-navigation"></li>
       </ul>
     </div>
-
-
-
-    <!----- SCRIPTS ---------------------------------------------------------->
-
-
-    <script src="/solaire/ext/MersenneTwister--<?=$version?>.js"></script>
-    <script id="test-support-script">
-      <?php include $commonDir.'/js/test-support.js'; ?>
-      
-      TestSupport.getSupportResults([
-        { name: 'CSS clip-path', priority: 0 },
-        { name: 'CSS custom properties', priority: 1 },
-        { name: 'localStorage', priority: 1 },
-        { name: 'service workers', priority: 1 },
-        { name: 'ES const & let', priority: 1 },
-        { name: 'ES template literals', priority: 1 }
-      ]);
-    </script>
-    <script src="/solaire/scripts--<?=$version?>.js" type="module"></script>
-
   </body>
 </html>
