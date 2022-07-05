@@ -207,7 +207,8 @@ async function updateDBversion(ver) {
     return console.log(result);
   }
   catch (error) {
-    return console.error(error);
+    console.error(error);
+    return 0;
   }
 }
 
@@ -215,7 +216,7 @@ async function updateDBversion(ver) {
 // Récupère le numéro de version dans la BDD
 async function getDBversion() {
   try {
-    return new Promise((resolve, reject) => {
+    const version = await new Promise((resolve, reject) => {
       const ouvertureDB = indexedDB.open('solaire', 1);
 
       ouvertureDB.onsuccess = event => {
@@ -230,8 +231,10 @@ async function getDBversion() {
 
       ouvertureDB.onerror = () => reject('[bdd] Indisponible');
     });
+    return version;
   }
   catch (error) {
-    return console.error(error);
+    console.error(error);
+    return 0;
   }
 }
