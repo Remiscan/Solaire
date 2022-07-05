@@ -1,10 +1,10 @@
 import { Systeme } from '../systeme/Systeme.js';
-import { getString } from './traduction.js';
-import { Notification } from './Notification.js';
-import { Menu } from './Menu.js';
+import { resetWindow } from './custom-scroll-zoom.js';
 import { Decouverte } from './Decouverte.js';
 import { Favoris } from './Favoris.js';
-import { resetWindow } from './custom-scroll-zoom.js';
+import { Menu } from './Menu.js';
+import { Notification } from './Notification.js';
+import { getString } from './traduction.js';
 
 
 
@@ -87,7 +87,7 @@ export class Voyage {
         if (isNew) newDecouvertes++;
       });
       if (newDecouvertes > 0) {
-        Decouverte.save();
+        await Decouverte.save();
         Decouverte.updateList();
       }
       new Favoris(this.systeme.seed);

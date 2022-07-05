@@ -1,7 +1,8 @@
-import { Decouverte } from './Decouverte.js';
-import { getString } from './traduction.js';
 import { Seed } from '../systeme/Seed.js';
+import { Decouverte } from './Decouverte.js';
 import { createFocusability } from './interface.js';
+import dataStorage from './localForage.js';
+import { getString } from './traduction.js';
 
 
 
@@ -60,23 +61,23 @@ export class Favoris {
 
   ///////////////////////
   // Sauvegarde un favori
-  add() {
+  async add() {
     if (this.saved) return;
 
     this.element.querySelector('.icon').innerHTML = 'star';
     this.saved = true;
-    Favoris.save();
+    await Favoris.save();
   }
 
 
   ///////////////////
   // Oublie un favori
-  remove() {
+  async remove() {
     if (!this.saved)  return;
 
     this.element.querySelector('.icon').innerHTML = 'star_border';
     this.saved = false;
-    Favoris.save();
+    await Favoris.save();
   }
 
 
@@ -153,10 +154,10 @@ export class Favoris {
 
   ////////////////////////////////////////////////////
   // Initialise les favoris à partir du stockage local
-  static init() {
+  static async init() {
     if (initialised) throw 'Favoris déjà initialisés';
     
-    const savedData = JSON.parse(localStorage.getItem('solaire/favoris')) || [];
+    const savedData = await dataStorage.getItem('favoris') || [];
 
     for (const f of savedData) {
       const fav = new Favoris(f, true);
@@ -164,6 +165,7 @@ export class Favoris {
     }
 
     initialised = true;
+    return initialised;
   }
 
 
@@ -198,20 +200,20 @@ export class Favoris {
 
   ////////////////////////////////////////////////
   // Sauvegarde les favoris dans le stockage local
-  static save() {
+  static async save() {
     const savedData = [];
     for (const f of favoris) {
       if (f.saved)  savedData.push(f.systeme);
     }
-    localStorage.setItem('solaire/favoris', JSON.stringify(savedData));
+    return await dataStorage.setItem('favoris', savedData);
   }
 
 
   //////////////////////////
   // Efface tous les favoris
-  static clearAll() {
+  static async clearAll() {
     favoris.clear();
     Favoris.updateList();
-    Favoris.save();
+    await Favoris.save();
   }
 }

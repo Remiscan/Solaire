@@ -1,8 +1,9 @@
-import { Seed } from './Seed.js';
+import dataStorage from '../app/localForage.js';
+import { even, Fenetre, px } from '../app/Params.js';
 import { Etoile } from './Etoile.js';
-import { Planete } from './Planete.js';
 import { Lune } from './Lune.js';
-import { even, px, Fenetre } from '../app/Params.js';
+import { Planete } from './Planete.js';
+import { Seed } from './Seed.js';
 
 
 
@@ -300,8 +301,8 @@ export class Systeme {
     return this.etoile.planetes;
   }
 
-  static get universObsolete() {
-    const versionLocale = localStorage.getItem('solaire/version-univers');
+  static async universObsolete() {
+    const versionLocale = await dataStorage.getItem('version-univers');
     return versionLocale != versionUnivers;
   }
 

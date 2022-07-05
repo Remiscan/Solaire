@@ -1,13 +1,14 @@
+import { Seed } from '../systeme/Seed.js';
 import { Systeme } from '../systeme/Systeme.js';
-import { textualiser } from './traduction.js';
 import { Decouverte } from './Decouverte.js';
 import { Favoris } from './Favoris.js';
+import { createFocusability, initInterface } from './interface.js';
+import dataStorage from './localForage.js';
 import { Menu } from './Menu.js';
-import { wait, recalcOnResize, callResize } from './Params.js';
 import { Parametre } from './parametres.js';
-import { initInterface, createFocusability } from './interface.js';
+import { callResize, recalcOnResize, wait } from './Params.js';
+import { textualiser } from './traduction.js';
 import { Voyage } from './Voyage.js';
-import { Seed } from '../systeme/Seed.js';
 
 
 
@@ -36,7 +37,9 @@ const App = {
       keys = keys.filter(e => e.includes('solaire'));
       keys = keys.length;
 
-      if (keys >= 1 && localStorage.getItem('solaire/version') !== null) {
+      const version = await dataStorage.getItem('version');
+
+      if (keys >= 1 && version !== null) {
         appCached = true;
         result = '[:)] L\'application est déjà installée localement.';
       }
@@ -60,7 +63,7 @@ const App = {
       // Fini !! :)
 
       appChargee = 'loaded';
-      document.querySelector('.conteneur-check-maj>span').innerHTML = 'v. ' + localStorage.getItem('solaire/version');
+      document.querySelector('.conteneur-check-maj>span').innerHTML = 'v. ' + version;
       recalcOnResize();
       if (typeof currentWorker !== 'undefined' && currentWorker != null) {
         App.checkInstall();
@@ -100,13 +103,13 @@ const App = {
 
         //// Le SW répondra au message pour signaler la fin de l'update.
         //// On se prépare à réagir à cette réponse.
-        chan.port1.onmessage = event => {
+        chan.port1.onmessage = async event => {
           if (event.data.error) {
             console.error(event.data.error);
             reject('[:(] Erreur de contact du service worker');
           } else {
             console.log('[:)] Fichiers correctement installés !');
-            localStorage.setItem('solaire/version', data['version']);
+            await dataStorage.setItem('version', data['version']);
 
             if (update)
               setTimeout(() => { location.reload(true); }, 1000);
@@ -166,12 +169,12 @@ const App = {
         data = await data.json();
 
         checkedVersion = data['version'];
-        const localVersion = localStorage.getItem('solaire/version');
+        const localVersion = await dataStorage.getItem('version');
 
         if (localVersion && localVersion != data['version']) {
           updateAvailable = 1;
           console.log('[:|] Mise à jour détectée');
-          console.log('     Installé : v. ' + localStorage.getItem('solaire/version'));
+          console.log('     Installé : v. ' + localVersion);
           console.log('   Disponible : v. ' + data['version']);
           result = texteSucces;
 
@@ -183,7 +186,7 @@ const App = {
         else {
           updateAvailable = 0;
           console.log('[:)] Aucune mise à jour disponible');
-          console.log('     Installé : v. ' + localStorage.getItem('solaire/version'));
+          console.log('     Installé : v. ' + localVersion);
           result = 'Pas de mise à jour';
         }
       }
@@ -271,9 +274,9 @@ const App = {
     // Initialisation
     await textualiser();
   
-    Parametre.init();
-    Decouverte.init();
-    Favoris.init();
+    await Parametre.init();
+    await Decouverte.init();
+    await Favoris.init();
     Menu.init();
 
     Decouverte.updateList();
@@ -288,10 +291,10 @@ const App = {
       document.getElementById('url-getter').remove();
 
     // Si l'univers a changé depuis la dernière visite, on efface les références à l'ancien univers
-    if (Systeme.universObsolete) {
-      Decouverte.clearAll();
-      Favoris.clearAll();
-      localStorage.setItem('solaire/version-univers', Systeme.versionUnivers);
+    if (await Systeme.universObsolete()) {
+      await Decouverte.clearAll();
+      await Favoris.clearAll();
+      await dataStorage.setItem('version-univers', Systeme.versionUnivers);
       document.querySelector('.nouvel-univers').classList.add('on');
     }
 

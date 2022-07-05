@@ -1,5 +1,4 @@
 {
-    "version": "2021.01.15_17.30.21",
     "fichiers": [
         "index.php",
         "style-application.css",
@@ -11,6 +10,7 @@
         "modules/app/Decouverte.js",
         "modules/app/Favoris.js",
         "modules/app/interface.js",
+        "modules/app/localForage.js",
         "modules/app/Menu.js",
         "modules/app/Notification.js",
         "modules/app/parametres.js",
@@ -24,6 +24,7 @@
         "modules/systeme/Planete.js",
         "modules/systeme/Seed.js",
         "modules/systeme/Systeme.js",
+        "ext/localforage.min.js",
         "ext/MersenneTwister.js",
         "ext/MaterialIcons-Regular.woff2",
         "icons/apple-touch-icon.png",
