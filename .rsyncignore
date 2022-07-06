@@ -2,4 +2,4 @@
 .gitattributes
 .gitignore
 .rsyncignore
-.deploy.sh
+.deploy
