@@ -23,9 +23,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'),
-       local('MaterialIcons-Regular'),
-       url('ext/MaterialIcons-Regular.woff2') format('woff2');
+  src: url('ext/material_icons.woff2') format('woff2');
 }
 
 .material-icons {
@@ -187,18 +185,20 @@ button i + span {
   transition: opacity .2s var(--easing-decelerate);
 }
 
-@keyframes rotatexplorer {
-  0% { transform: rotate(0deg) }
-  50% { transform: rotate(45deg) }
-  100% { transform: rotate(0deg) }
+#bouton-explorer .material-icons {
+  font-size: 2rem;
+}
+
+#bouton-explorer .material-icons::after {
+  content: 'rocket';
 }
 
 #bouton-explorer.on .material-icons {
-  animation: rotatexplorer .2s ease;
+  transform: rotate(-45deg);
 }
 
-#bouton-explorer .material-icons {
-  font-size: 2rem;
+#bouton-explorer.on .material-icons::after {
+  content: 'rocket_launch';
 }
 
 @media screen and (max-width: 600px) {

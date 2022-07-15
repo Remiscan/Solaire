@@ -145,7 +145,7 @@ require_once $commonDir.'/php/httpLanguage.php';
         </button>
 
         <button type="button" class="pulsable" id="bouton-explorer" aria-label="Explorer">
-          <i class="material-icons">explore</i>
+          <i class="material-icons"></i>
           <span data-string="bouton-explorer"></span>
         </button>
 

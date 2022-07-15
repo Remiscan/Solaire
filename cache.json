@@ -26,7 +26,7 @@
         "modules/systeme/Systeme.js",
         "ext/localforage.min.js",
         "ext/MersenneTwister.js",
-        "ext/MaterialIcons-Regular.woff2",
+        "ext/material_icons.woff2",
         "icons/apple-touch-icon.png",
         "icons/icon-192.png",
         "textures/1.svg",
