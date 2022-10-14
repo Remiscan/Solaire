@@ -1,9 +1,11 @@
 <?php
 $commonDir = '../_common';
-require_once $commonDir.'/php/httpLanguage.php';
+require_once $commonDir.'/php/Translation.php';
+$translation = new Translation('{ "fr": {}, "en": {} }');
+$httpLanguage = $translation->getLanguage();
 ?>
 <!doctype html>
-<html data-http-lang="<?=httpLanguage()?>">
+<html data-http-lang="<?=$httpLanguage?>">
   <head>
     <meta charset="utf-8">
     <title>Solaire</title>
