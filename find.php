@@ -7,6 +7,7 @@
 <button type="button" id="finder">Trouver</button>
 
 <script src="/solaire/ext/MersenneTwister.js"></script>
+<script defer src="/solaire/ext/localforage.min.js"></script>
 <script type="module">
   import { Systeme } from '/solaire/modules/systeme/Systeme.js?d=<?=time()?>';
 
