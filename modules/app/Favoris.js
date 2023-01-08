@@ -1,6 +1,5 @@
 import { Seed } from '../systeme/Seed.js';
 import { Decouverte } from './Decouverte.js';
-import { createFocusability } from './interface.js';
 import dataStorage from './localForage.js';
 import { getString } from './traduction.js';
 
@@ -64,7 +63,7 @@ export class Favoris {
   async add() {
     if (this.saved) return;
 
-    this.element.querySelector('.icon').innerHTML = 'star';
+    this.element.querySelector('.icon > i').innerHTML = 'star';
     this.saved = true;
     await Favoris.save();
   }
@@ -75,7 +74,7 @@ export class Favoris {
   async remove() {
     if (!this.saved)  return;
 
-    this.element.querySelector('.icon').innerHTML = 'star_border';
+    this.element.querySelector('.icon > i').innerHTML = 'star_border';
     this.saved = false;
     await Favoris.save();
   }
@@ -95,9 +94,11 @@ export class Favoris {
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
 
     // Ajout à la liste du carnet
-    let html = `
+    let html = /*html*/`
       <div class="decouverte favori" id="favori-${this.systeme}">
-        <i class="material-icons icon focusable" style="--couleur: ${this.couleur};">star_border</i>
+        <button type="button" class="transparent icon">
+          <i style="--couleur: ${this.couleur};" class="material-icons">star_border</i>
+        </button>
         <span class="decouverte-titre">${this.titre}</span>
         <span class="decouverte-description"><span data-string="adresse">${getString('adresse')}</span>${this.systeme}</span>
         <button type="button" class="decouverte-lien" tabindex="-1" disabled>
@@ -120,9 +121,10 @@ export class Favoris {
     if (lien) lien.addEventListener('click', () => this.go());
     
     // Rend l'icône interactive
-    const etoile = element?.querySelector('.icon');
-    if (etoile) {
-      etoile.addEventListener('click', () => this.toggle());
+    const etoileButton = element?.querySelector('.icon');
+    if (etoileButton) {
+      etoileButton.addEventListener('click', () => this.toggle());
+      const etoile = etoileButton.querySelector('i');
       etoile.addEventListener('mouseover', () => {
         if (this.saved) etoile.innerHTML = 'star_border';
         else            etoile.innerHTML = 'star';
@@ -182,7 +184,7 @@ export class Favoris {
         else                            element.classList.remove('actuel');
 
         // Affiche l'icône correcte
-        const etoile = element.querySelector('.icon');
+        const etoile = element.querySelector('.icon > i');
         if (f.saved) etoile.innerHTML = 'star';
         else         etoile.innerHTML = 'star_border';
       }
@@ -194,7 +196,6 @@ export class Favoris {
     }
 
     const liste = document.getElementById('pop-decouvertes').querySelector('.liste-navigation');
-    createFocusability(liste);
   }
 
 

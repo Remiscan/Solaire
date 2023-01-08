@@ -6,7 +6,7 @@ import { Menu } from './Menu.js';
 import { Notification } from './Notification.js';
 import { Params, callResize, recalcOnResize, wait } from './Params.js';
 import { Voyage } from './Voyage.js';
-import { createFocusability, initInterface, pulseBouton } from './interface.js';
+import { initInterface, pulseBouton } from './interface.js';
 import dataStorage from './localForage.js';
 import { Parametre } from './parametres.js';
 import { textualiser } from './traduction.js';
@@ -259,79 +259,84 @@ export function noStart() {
 ////////////////////////////////
 // Au lancement de l'application
 export async function launch() {
-  // Initialisation
-  await textualiser();
-
-  await Parametre.init();
-  await Decouverte.init();
-  await Favoris.init();
-  Menu.init();
-
-  Decouverte.updateList();
-  Favoris.updateList();
-  Menu.ongletCarnet('onglet-decouvertes');
-
-  // Suppression du champ 'url-getter' si inutile
-  if (navigator.share || navigator.clipboard)
-    document.getElementById('url-getter').remove();
-
-  const firstVisit = (await dataStorage.getItem('version-univers')) == null;
-  // Si c'est la première visite, montrer un message de bienvenue
-  if (firstVisit) {
-    document.body.setAttribute('data-first-visit', '');
-    await dataStorage.setItem('version-univers', Systeme.versionUnivers);
-    const bouton = document.querySelector('#bouton-explorer');
-    await new Promise(resolve => {
-      bouton.addEventListener('click', async event => {
-        await pulseBouton(event);
-        resolve();
-      }, { once: true });
-    });
-  }
-
-  else if (await Systeme.universObsolete()) {
-    // Si l'univers a changé depuis la dernière visite, on efface les références à l'ancien univers
-    await Decouverte.clearAll();
-    await Favoris.clearAll();
-    await dataStorage.setItem('version-univers', Systeme.versionUnivers);
-    document.querySelector('.nouvel-univers').classList.add('on');
-  }
-
-  initInterface();
-  createFocusability(document);
-
-  // Récupération de l'adresse de système fournie dans l'URL
-  let URLcode;
   try {
-    URLcode = window.location.href.match(/(solaire\/systeme\/)(.+)/)[2];
-    if (!Seed.validate(URLcode)) throw 'Bad initial seed';
-    console.log('Code détecté :', URLcode);
-  } catch(error) {}
+    // Initialisation
+    await textualiser();
 
-  // Création d'un premier système planétaire
-  const voy = new Voyage(URLcode);
-  voy.go();
+    await Parametre.init();
+    await Decouverte.init();
+    await Favoris.init();
+    Menu.init();
 
-  await wait(100);
+    Decouverte.updateList();
+    Favoris.updateList();
+    Menu.ongletCarnet('onglet-decouvertes');
 
-  // Suppression de l'écran de chargement
-  const loadScreen = document.getElementById('welcome');
-  if (loadScreen != null) {
-    document.body.removeAttribute('data-first-visit');
-    const loadAway = loadScreen.animate([
-      { opacity: 1 },
-      { opacity: 0 }
-    ], {
-      duration: 500,
-      easing: Params.easingStandard,
-      fill: 'forwards'
-    });
-    await new Promise(resolve => loadAway.addEventListener('finish', resolve));
-    loadScreen.remove();
+    // Suppression du champ 'url-getter' si inutile
+    if (navigator.share || navigator.clipboard)
+      document.getElementById('url-getter').remove();
+
+    const firstVisit = (await dataStorage.getItem('version-univers')) == null;
+    // Si c'est la première visite, montrer un message de bienvenue
+    if (firstVisit) {
+      document.body.setAttribute('data-first-visit', '');
+      await dataStorage.setItem('version-univers', Systeme.versionUnivers);
+      const bouton = document.querySelector('#bouton-explorer');
+      await new Promise(resolve => {
+        bouton.addEventListener('click', async event => {
+          await pulseBouton(event);
+          resolve();
+        }, { once: true });
+      });
+    }
+
+    else if (await Systeme.universObsolete()) {
+      // Si l'univers a changé depuis la dernière visite, on efface les références à l'ancien univers
+      await Decouverte.clearAll();
+      await Favoris.clearAll();
+      await dataStorage.setItem('version-univers', Systeme.versionUnivers);
+      document.querySelector('.nouvel-univers').classList.add('on');
+    }
+
+    initInterface();
+
+    // Récupération de l'adresse de système fournie dans l'URL
+    let URLcode;
+    try {
+      URLcode = window.location.href.match(/(solaire\/systeme\/)(.+)/)[2];
+      if (!Seed.validate(URLcode)) throw 'Bad initial seed';
+      console.log('Code détecté :', URLcode);
+    } catch(error) {}
+
+    // Création d'un premier système planétaire
+    const voy = new Voyage(URLcode);
+    voy.go();
+
+    await wait(100);
+
+    // Suppression de l'écran de chargement
+    const loadScreen = document.getElementById('welcome');
+    if (loadScreen != null) {
+      document.body.removeAttribute('data-first-visit');
+      const loadAway = loadScreen.animate([
+        { opacity: 1 },
+        { opacity: 0 }
+      ], {
+        duration: 500,
+        easing: Params.easingStandard,
+        fill: 'forwards'
+      });
+      await new Promise(resolve => loadAway.addEventListener('finish', resolve));
+      loadScreen.remove();
+    }
+
+    window.addEventListener('resize', callResize);
+    window.addEventListener('orientationchange', callResize);
   }
 
-  window.addEventListener('resize', callResize);
-  window.addEventListener('orientationchange', callResize);
+  catch (error) {
+    console.log(error);
+  }
 
     
   // Gestion de l'appli par service worker

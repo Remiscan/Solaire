@@ -11,10 +11,6 @@
   /* Empêche le font scaling auto moche sous chrome Android */
   max-height: 1000000px;
 }
-*:active, 
-*:focus {
-  outline-style: none;
-}
 ::-moz-focus-inner {
   border: 0;
 }
@@ -89,7 +85,16 @@ body {
 
 
 button.transparent {
-  display: contents;
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto;
+  color: inherit;
 }
 
 #appbar, #topbar {
@@ -495,20 +500,17 @@ button.off {
  * FOCUS
  */
 
-button:focus:not(:hover),
-.focusable:focus:not(:hover),
 input:focus + label[for^="switch"]>.switch {
-  box-shadow: 0 0 0 .125rem white;
+  outline: 5px auto Highlight;
+  outline: 5px auto -webkit-focus-ring-color;
 }
 
-button:focus:not(:focus-visible),
-.focusable:focus:not(:focus-visible),
 input:focus:not(:focus-visible) + label[for^="switch"]>.switch {
-  box-shadow: none;
+  outline: none;
 }
 
 input:focus + label[for^="switch"] {
-  box-shadow: none;
+  outline: none;
 }
 
 
@@ -799,6 +801,10 @@ label[for^="switch"] {
   transform: translate3D(-50%, 0, 0) scaleX(1);
   transition-duration: .2s;
   transition-timing-function: var(--easing-standard);
+}
+
+.carnet-onglets li > button {
+  outline-offset: 10px;
 }
 
 #pop-nouvelle-decouverte {

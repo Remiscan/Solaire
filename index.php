@@ -275,7 +275,9 @@ $httpLanguage = $translation->getLanguage();
 
     <!-- Découvertes & navigation -->
     <div class="minipop bottom" id="pop-decouvertes" data-menu="decouvertes">
-      <i class="material-icons focusable pop-titre-icone" id="supprimer-decouvertes" title="Effacer les découvertes">delete_forever</i>
+      <button type="button" class="transparent pop-titre-icone" id="supprimer-decouvertes" aria-label="Effacer les découvertes">
+        <i class="material-icons">delete_forever</i>
+      </button>
       <h3 class="pop-titre" data-string="carnet-titre"></h3>
 
       <template id="template-decouverte">
@@ -289,7 +291,9 @@ $httpLanguage = $translation->getLanguage();
 
       <template id="template-favori">
         <div class="decouverte favori">
-          <i class="material-icons icon yes focusable">star</i>
+          <button type="button" class="transparent icon yes">
+            <i class="material-icons">star</i>
+          </button>
           <span class="decouverte-titre"></span>
           <span class="decouverte-description"></span>
           <button type="button" class="decouverte-lien" tabIndex="-1" disabled></button>
@@ -302,14 +306,18 @@ $httpLanguage = $translation->getLanguage();
 
       <div class="formulaire-code">
         <label for="code-saisi" data-string="saisie-placeholder"></label>
-        <input type="text" id="code-saisi" placeholder="Adresse d'un système" tabIndex="-1" disabled>
+        <input type="text" id="code-saisi" placeholder="Adresse d'un système" tabIndex="-1" disabled autocomplete="off">
         <button type="button" id="bouton-code-saisi" tabIndex="-1" disabled>
           <i class="material-icons">explore</i><span data-string="bouton-visiter"></span>
         </button>
       </div>
       <ul class="carnet-onglets">
-        <li id="onglet-decouvertes" class="on focusable onglet" data-string="nav-decouvertes"></li>
-        <li id="onglet-navigation" class="focusable onglet" data-string="nav-navigation"></li>
+        <li id="onglet-decouvertes" class="on onglet">
+          <button type="button" class="transparent" data-string="nav-decouvertes"></button>
+        </li>
+        <li id="onglet-navigation" class="onglet">
+          <button type="button" class="transparent" data-string="nav-navigation"></button>
+        </li>
       </ul>
     </div>
   </body>

@@ -50,9 +50,6 @@ export class Menu {
       b.disabled = false;
       b.tabIndex = 0;
     }
-    for (const b of [...this.element.querySelectorAll('.focusable')]) {
-      b.tabIndex = 0;
-    }
 
     if (delay)  await wait(100);
     return;
@@ -84,9 +81,6 @@ export class Menu {
     // On désactive les boutons dans les menus
     for (const b of [...this.element.querySelectorAll('button, input')]) {
       b.disabled = true;
-      b.tabIndex = -1;
-    }
-    for (const b of [...this.element.querySelectorAll('.focusable')]) {
       b.tabIndex = -1;
     }
     document.getElementById('code-saisi').blur();
@@ -166,10 +160,10 @@ export class Menu {
       document.getElementById('code-saisi').tabIndex = 0;
       document.getElementById('bouton-code-saisi').disabled = false;
       document.getElementById('bouton-code-saisi').tabIndex = 0;
-      Array.from(pop.querySelector('.liste-decouvertes').querySelectorAll('button, input, .focusable')).forEach(b => {
+      Array.from(pop.querySelector('.liste-decouvertes').querySelectorAll('button, input')).forEach(b => {
         b.tabIndex = -1;
       });
-      Array.from(pop.querySelector('.liste-navigation').querySelectorAll('button, input, .focusable')).forEach(b => {
+      Array.from(pop.querySelector('.liste-navigation').querySelectorAll('button, input')).forEach(b => {
         b.tabIndex = 0;
       });
       document.getElementById('supprimer-decouvertes').tabIndex = -1;
@@ -179,10 +173,10 @@ export class Menu {
       document.getElementById('code-saisi').tabIndex = -1;
       document.getElementById('bouton-code-saisi').disabled = true;
       document.getElementById('bouton-code-saisi').tabIndex = -1;
-      Array.from(pop.querySelector('.liste-decouvertes').querySelectorAll('button, input, .focusable')).forEach(b => {
+      Array.from(pop.querySelector('.liste-decouvertes').querySelectorAll('button, input')).forEach(b => {
         b.tabIndex = 0;
       });
-      Array.from(pop.querySelector('.liste-navigation').querySelectorAll('button, input, .focusable')).forEach(b => {
+      Array.from(pop.querySelector('.liste-navigation').querySelectorAll('button, input')).forEach(b => {
         b.tabIndex = -1;
       });
       document.getElementById('supprimer-decouvertes').tabIndex = 0;

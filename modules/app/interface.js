@@ -1,6 +1,5 @@
 import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
-import { simulateClick } from './Params.js';
 import { Partage } from './Partage.js';
 import { getString } from './traduction.js';
 
@@ -39,38 +38,6 @@ export function initInterface() {
   // Champ de saisie d'adresse
   const champ = document.getElementById('code-saisi');
   champ.placeholder = getString('saisie-placeholder');
-  champ.addEventListener('focus', event => {
-    const inputCode = event.currentTarget;
-
-    if (navigator.clipboard) {
-      navigator.clipboard.readText()
-      .then(texte => { 
-        if (isNaN(texte)) {
-          try {
-            inputCode.value = texte.match(/(solaire\/systeme\/)(.+)/)[2];
-          }
-          catch(error) {
-            inputCode.value = '';
-          }
-        }
-        else inputCode.value = texte;
-      });
-    }
-
-    inputCode.addEventListener('paste', event => {
-      event.preventDefault();
-      let texte = (event.clipboardData || window.clipboardData).getData('text');
-      if (isNaN(texte)) {
-        try {
-          texte = texte.match(/(solaire\/systeme\/)(.+)/)[2];
-        }
-        catch(error) {
-          texte = '';
-        }
-      }
-      inputCode.value = texte;
-    });
-  });
 
   document.getElementById('bouton-code-saisi').addEventListener('click', () => {
     let i_kc = 0;
@@ -146,34 +113,4 @@ export function initInterface() {
   // Bouton recherche màj et bouton màj
   document.querySelector('.bouton-check-maj').addEventListener('click', () => window.dispatchEvent(new Event('check-update')));
   document.getElementById('bouton-maj').addEventListener('click', () => window.dispatchEvent(new Event('app-update')));
-}
-
-
-///////////////////////////////////////////////////////////////////////
-// Gère le focus sur les éléments non-boutons, avec la classe focusable
-
-// Spécifie quel objet est en focus
-let focused = false;
-
-// Quand un objet est en focus, on surveille les appuis sur entrée et on simule un clic dessus
-export function createFocusability(parent) {
-  const iFocus = element => { if (focused != element) focused = element; }
-  const focusable = [...parent.getElementsByClassName('focusable')];
-  focusable.forEach(e => {
-    // Quand le focus est placé sur un élément, on le met dans la variable focused
-    e.addEventListener('focusin', () => {
-      iFocus(e);
-    });
-
-    // Quand on appuie sur entrée alors qu'un élément est en focus, on simule un clic dessus
-    // sauf si c'est un a avec attribut href.
-    e.addEventListener('keypress', event => {
-      if (e.tagName.toLowerCase() != 'button') {
-        const key = event.which || event.keyCode;
-        if (key === 13 || key == 32) {
-          if (!e.getAttribute('href')) simulateClick(e);
-        }
-      }
-    });
-  });
 }
