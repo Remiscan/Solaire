@@ -1,5 +1,5 @@
-import dataStorage from './localForage.js';
 import { Menu } from './Menu.js';
+import dataStorage from './localForage.js';
 import { getString } from './traduction.js';
 
 
@@ -69,9 +69,9 @@ export class Decouverte {
     // Ajout à la liste du carnet
     let html = ``;
     if (this.unlocked) {
-      html += `
+      html += /*html*/`
         <div class="decouverte" data-decouverte="${this.id}">
-          <i class="material-icons icon">bookmark</i>
+          <i class="material-icons icon" aria-hidden="true">bookmark</i>
           <span class="decouverte-titre" data-string="decouverte-${this.id}-titre">
             ${getString('decouverte-' + this.id + '-titre')}
           </span>
@@ -79,7 +79,7 @@ export class Decouverte {
             ${getString('decouverte-' + this.id + '-description')}
           </span>
           <button type="button" class="decouverte-lien" tabindex="-1" disabled>
-            <i class="material-icons">explore</i>
+            <i class="material-icons" aria-hidden="true">explore</i>
             <span data-string="bouton-revisiter">
               ${getString('bouton-revisiter')}
             </span>
@@ -88,9 +88,9 @@ export class Decouverte {
       `;
     }
     else {
-      html += `
+      html += /*html*/`
         <div class="decouverte non">
-          <i class="material-icons icon">bookmark_border</i>
+          <i class="material-icons icon" aria-hidden="true">bookmark_border</i>
           <span class="decouverte-titre">???</span>
           <span class="decouverte-description"></span>
         </div>
@@ -105,9 +105,9 @@ export class Decouverte {
     // Ajout à la notification de nouvelle découverte
     if (this.new) {
       this.new = false;
-      let html = `
+      let html = /*html*/`
         <div class="decouverte new">
-          <i class="material-icons icon">bookmark</i>
+          <i class="material-icons icon" aria-hidden="true">bookmark</i>
           <span class="decouverte-titre" data-string="decouverte-${this.id}-titre">
             ${getString('decouverte-' + this.id + '-titre')}
           </span>

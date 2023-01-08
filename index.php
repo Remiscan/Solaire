@@ -88,7 +88,7 @@ $httpLanguage = $translation->getLanguage();
     <!----- SYSTÈME PLANÉTAIRE ----------------------------------------------->
     
 
-    <div class="conteneur-systeme">
+    <div class="conteneur-systeme" aria-hidden="true">
       <div id="systeme"></div>
     </div>
 
@@ -108,34 +108,34 @@ $httpLanguage = $translation->getLanguage();
     <!-- Barre du haut : Installer, préc./suiv., màj, partage, paramètres -->
     <div id="topbar">
       <div class="boutons-groupe">
-        <button type="button" id="bouton-precedent" aria-label="Système précédent">
-          <i class="material-icons">arrow_back</i>
+        <button type="button" id="bouton-precedent" data-label="systeme-precedent">
+          <i class="material-icons" aria-hidden="true">arrow_back</i>
         </button>
 
-        <button type="button" id="bouton-suivant" aria-label="Système suivant" tabIndex="-1" disabled>
-          <i class="material-icons">arrow_forward</i>
+        <button type="button" id="bouton-suivant" data-label="systeme-suivant" tabIndex="-1" disabled>
+          <i class="material-icons" aria-hidden="true">arrow_forward</i>
         </button>
 
         <button type="button" id="bouton-installer" tabIndex="-1" disabled>
-          <i class="material-icons">get_app</i>
+          <i class="material-icons" aria-hidden="true">get_app</i>
           <span data-string="bouton-installer"></span>
         </button>
       </div>
 
       <div class="boutons-groupe allow-scroll">
         <button type="button" id="bouton-maj" tabIndex="-1" disabled>
-          <i class="material-icons">update</i>
+          <i class="material-icons" aria-hidden="true">update</i>
           <span data-string="bouton-maj"></span>
         </button>
       </div>
 
       <div class="boutons-groupe">
-        <button type="button" id="bouton-partage" aria-label="Partager">
-          <i class="material-icons">share</i>
+        <button type="button" id="bouton-partage" data-label="partager">
+          <i class="material-icons" aria-hidden="true">share</i>
         </button>
 
-        <button type="button" id="bouton-parametres" aria-label="Paramètres" data-menu="parametres">
-          <i class="material-icons">settings</i>
+        <button type="button" id="bouton-parametres" aria-labelledby="parametres-titre" data-menu="parametres">
+          <i class="material-icons" aria-hidden="true">settings</i>
         </button>
       </div>
     </div>
@@ -146,29 +146,29 @@ $httpLanguage = $translation->getLanguage();
     <!-- Barre du bas : interface, play/pause, explorer, découvertes/navigation, redim. -->
     <div id="appbar">
       <div class="boutons-groupe">
-        <button type="button" id="bouton-interface" data-off="visibility_off" data-on="visibility" aria-label="Visibilité de l'interface">
-          <i class="material-icons">visibility</i>
+        <button type="button" id="bouton-interface" data-off="visibility_off" data-on="visibility" data-label="visibilite-interface">
+          <i class="material-icons" aria-hidden="true">visibility</i>
         </button>
       </div>
 
       <div class="boutons-groupe">
-        <button type="button" class="pulsable" id="bouton-pause" data-off="play_arrow" data-on="pause" aria-label="(Dés)activer animations">
-          <i class="material-icons">pause</i>
+        <button type="button" class="pulsable" id="bouton-pause" data-off="play_arrow" data-on="pause" data-label="pauser-animations">
+          <i class="material-icons" aria-hidden="true">pause</i>
         </button>
 
-        <button type="button" class="pulsable" id="bouton-explorer" aria-label="Explorer">
-          <i class="material-icons"></i>
+        <button type="button" class="pulsable" id="bouton-explorer" data-label="bouton-explorer">
+          <i class="material-icons" aria-hidden="true"></i>
           <span data-string="bouton-explorer"></span>
         </button>
 
-        <button type="button" class="pulsable" id="bouton-decouvertes" aria-label="Découvertes">
-          <i class="material-icons">book</i>
+        <button type="button" class="pulsable" id="bouton-decouvertes" aria-labelledby="carnet-titre">
+          <i class="material-icons" aria-hidden="true">book</i>
         </button>
       </div>
 
       <div class="boutons-groupe allow-scroll">
-        <button type="button" class="pulsable" id="bouton-redimensionner" aria-label="Redimensionner" tabIndex="-1" disabled>
-          <i class="material-icons">aspect_ratio</i>
+        <button type="button" class="pulsable" id="bouton-redimensionner" data-label="redimensionner" tabIndex="-1" disabled>
+          <i class="material-icons" aria-hidden="true">aspect_ratio</i>
         </button>
       </div>
     </div>
@@ -189,7 +189,7 @@ $httpLanguage = $translation->getLanguage();
 
     <!-- Paramètres -->
     <div class="minipop" id="pop-parametres" data-menu="parametres">
-      <h3 class="pop-titre" data-string="parametres-titre"></h3>
+      <h3 class="pop-titre" data-string="parametres-titre" id="parametres-titre"></h3>
 
       <div class="pop-contenu">
         <input type="checkbox" id="switch-bg">
@@ -263,7 +263,7 @@ $httpLanguage = $translation->getLanguage();
 
       <div class="pop-contenu liste-genese">
         <div class="decouverte nouvel-univers new">
-          <i class="material-icons icon">mode_comment</i>
+          <i class="material-icons icon" aria-hidden="true">mode_comment</i>
           <span class="decouverte-titre" data-string="genese-titre"></span>
           <span class="decouverte-description" data-string="genese-description"></span>
         </div>
@@ -275,14 +275,14 @@ $httpLanguage = $translation->getLanguage();
 
     <!-- Découvertes & navigation -->
     <div class="minipop bottom" id="pop-decouvertes" data-menu="decouvertes">
-      <button type="button" class="transparent pop-titre-icone" id="supprimer-decouvertes" aria-label="Effacer les découvertes">
-        <i class="material-icons">delete_forever</i>
+      <button type="button" class="transparent pop-titre-icone" id="supprimer-decouvertes" data-label="supprimer-decouvertes">
+        <i class="material-icons" aria-hidden="true">delete_forever</i>
       </button>
-      <h3 class="pop-titre" data-string="carnet-titre"></h3>
+      <h3 class="pop-titre" data-string="carnet-titre" id="carnet-titre"></h3>
 
       <template id="template-decouverte">
         <div class="decouverte">
-          <i class="material-icons icon">bookmark</i>
+          <i class="material-icons icon" aria-hidden="true">bookmark</i>
           <span class="decouverte-titre"></span>
           <span class="decouverte-description"></span>
           <button type="button" class="decouverte-lien" tabIndex="-1" disabled></button>
@@ -292,7 +292,7 @@ $httpLanguage = $translation->getLanguage();
       <template id="template-favori">
         <div class="decouverte favori">
           <button type="button" class="transparent icon yes">
-            <i class="material-icons">star</i>
+            <i class="material-icons" aria-hidden="true">star</i>
           </button>
           <span class="decouverte-titre"></span>
           <span class="decouverte-description"></span>
@@ -308,7 +308,7 @@ $httpLanguage = $translation->getLanguage();
         <label for="code-saisi" data-string="saisie-placeholder"></label>
         <input type="text" id="code-saisi" placeholder="Adresse d'un système" tabIndex="-1" disabled autocomplete="off">
         <button type="button" id="bouton-code-saisi" tabIndex="-1" disabled>
-          <i class="material-icons">explore</i><span data-string="bouton-visiter"></span>
+          <i class="material-icons" aria-hidden="true">explore</i><span data-string="bouton-visiter"></span>
         </button>
       </div>
       <ul class="carnet-onglets">

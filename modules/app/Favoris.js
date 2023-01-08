@@ -97,16 +97,16 @@ export class Favoris {
     let html = /*html*/`
       <div class="decouverte favori" id="favori-${this.systeme}">
         <button type="button" class="transparent icon">
-          <i style="--couleur: ${this.couleur};" class="material-icons">star_border</i>
+          <i style="--couleur: ${this.couleur};" class="material-icons" aria-hidden="true">star_border</i>
         </button>
         <span class="decouverte-titre">${this.titre}</span>
         <span class="decouverte-description"><span data-string="adresse">${getString('adresse')}</span>${this.systeme}</span>
         <button type="button" class="decouverte-lien" tabindex="-1" disabled>
-          <i class="material-icons">explore</i>
+          <i class="material-icons" aria-hidden="true">explore</i>
           <span data-string="bouton-revisiter">Revisiter</span>
         </button>
         <div class="vous-etes-ici">
-          <i class="material-icons">place</i>
+          <i class="material-icons" aria-hidden="true">place</i>
           <span data-string="bouton-revisiter">${getString('favori-actuel')}</span>
         </div>
       </div>

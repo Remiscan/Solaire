@@ -19,7 +19,7 @@ export class Notification {
     types.forEach(t => notification.parentElement.classList.remove(t));
     if (type != null) {
       notification.parentElement.classList.add(type);
-      icone.innerHTML += `<i class="material-icons">${type}</i>`;
+      icone.innerHTML += `<i class="material-icons" aria-hidden="true">${type}</i>`;
     }
 
     // Message de notification
@@ -29,7 +29,7 @@ export class Notification {
     //// "boutons" est un array d'objets de la forme { texte: '', action: fonction, type: 'normal'/'icone' }
     for (const e of boutons) {
       const bouton = document.createElement('button');
-      if (e.type == 'icone')  bouton.innerHTML = `<i class="material-icons">${e.texte}</i>`;
+      if (e.type == 'icone')  bouton.innerHTML = `<i class="material-icons" aria-hidden="true">${e.texte}</i>`;
       else                    bouton.innerHTML = e.texte;
       bouton.addEventListener('click', () => { e.action() });
       actions.appendChild(bouton);

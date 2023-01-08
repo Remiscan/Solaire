@@ -52,6 +52,9 @@ export async function textualiser()
     Array.from(document.querySelectorAll('[data-string]')).forEach(e => {
       e.innerHTML = getString(e.dataset.string);
     });
+    Array.from(document.querySelectorAll('[data-label]')).forEach(e => {
+      e.setAttribute('aria-label', getString(e.dataset.string));
+    });
     return;
   })
   .catch(error => console.error(error));

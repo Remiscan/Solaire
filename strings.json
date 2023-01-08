@@ -15,7 +15,7 @@
     "parametre-ombres-additives": "Ombres non-additives",
     "parametre-langage": "Translate into",
     "bouton-langage": "English",
-    "bouton-check-maj": "<i class=material-icons>update</i>Chercher mise à jour",
+    "bouton-check-maj": "<i class=material-icons aria-hidden=\"true\">update</i>Chercher mise à jour",
     "genese-titre": "Nouvelle genèse",
     "genese-description": "Un nouvel univers a été généré. Les systèmes précédemment visités ne sont plus accessibles.",
     "carnet-titre": "Carnet de bord",
@@ -54,7 +54,14 @@
     "partage-description": "🪐 Viens explorer ce système planétaire :",
     "first-visit-1": "Bienvenue sur Solaire.",
     "first-visit-2": "Découvrez de nombreux systèmes planétaires générés procéduralement, et observez les diverses étoiles et planètes qu'ils contiennent.",
-    "first-visit-3": "Appuyez sur le bouton en bas de l'écran pour démarrer votre fusée et voyager vers un nouveau soleil."
+    "first-visit-3": "Appuyez sur le bouton en bas de l'écran pour démarrer votre fusée et voyager vers un nouveau soleil.",
+    "systeme-precedent": "Système précédent",
+    "systeme-suivant": "Système suivant",
+    "partager": "Partager",
+    "visibilite-interface": "Visibilité de l'interface",
+    "pauser-animations": "(Dés)activer animations",
+    "redimensionner": "Redimensionner",
+    "supprimer-decouvertes": "Effacer les découvertes"
   },
   "en": {
     "bouton-installer": "Install",
@@ -71,7 +78,7 @@
     "parametre-ombres-exagerees": "Longer shadows",
     "parametre-langage": "Traduire en",
     "bouton-langage": "Français",
-    "bouton-check-maj": "<i class=material-icons>update</i>Check for updates",
+    "bouton-check-maj": "<i class=material-icons aria-hidden=\"true\">update</i>Check for updates",
     "genese-titre": "New genesis",
     "genese-description": "A new universe was generated. Previously visited systems are no longer accessible.",
     "carnet-titre": "Logbook",
@@ -109,6 +116,13 @@
     "partage-description": "🪐 Come explore this planetary system:",
     "first-visit-1": "Welcome to Solaire.",
     "first-visit-2": "Discover numerous procedurally generated planetary systems, and observe the diverse starts and planets they contain.",
-    "first-visit-3": "Press the button at the bottom of the screen to launch your rocket and travel towards a new sun."
+    "first-visit-3": "Press the button at the bottom of the screen to launch your rocket and travel towards a new sun.",
+    "systeme-precedent": "Previous system",
+    "systeme-suivant": "Next system",
+    "partager": "Share",
+    "visibilite-interface": "Interface visibility",
+    "pauser-animations": "Enable or disable animations",
+    "redimensionner": "Resize",
+    "supprimer-decouvertes": "Erase discoveries"
   }
 }
