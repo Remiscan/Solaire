@@ -1,7 +1,7 @@
 <?php
 $cache = array();
 $cache['files'] = [
-  "./index.php",
+  "./",
   "./strings.json",
   "./icons/apple-touch-icon.png",
   "./icons/icon-192.png",

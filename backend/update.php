@@ -10,6 +10,7 @@ function getFilesVersion(int $versionFrom = 0): array {
   $rootDir = dirname(__DIR__, 1);
 
   $listeFichiers = json_decode(file_get_contents(__DIR__.'/../cache.json'), true)['files'];
+  $listeFichiers[0] = './index.php';
 
   // Calcule la version de fichier la plus récente
   // et la liste des fichiers modifiés.

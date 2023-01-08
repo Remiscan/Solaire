@@ -51,15 +51,15 @@ self.addEventListener('activate', function(event) {
 
 // FETCH
 self.addEventListener('fetch', function(event) {
-  const ignore = ['find.php', 'service-worker.js.php'];
+  const ignore = ['find.php', 'service-worker.js.php', 'backend/update.php'];
   if (event.request.url.match(ignore.join('|'))) return;
 
-  const fetchIndex = (event.request.mode === 'navigate' || (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html')));
+  const fetchIndex = event.request.url.match('solaire/systeme/');
 
   event.respondWith(
     caches.open(currentCacheName)
     .then(cache => {
-      const request = fetchIndex ? 'index.php' : event.request;
+      const request = fetchIndex ? './' : event.request;
       return cache.match(request)
     })
     .then(matching => {
