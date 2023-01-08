@@ -1,10 +1,10 @@
-import App from './modules/app/App.js';
-import { Voyage } from './modules/app/Voyage.js';
-import './modules/app/custom-scroll-zoom.js';
+import * as App from './app/App.js';
+import { Voyage } from './app/Voyage.js';
+import './app/custom-scroll-zoom.js';
 
 
 
-window.onload = App.launch();
+App.launch();
 
 // Gère l'historique
 window.addEventListener('popstate', event => {

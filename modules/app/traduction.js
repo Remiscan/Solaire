@@ -1,5 +1,5 @@
-import dataStorage from './localForage.js';
 import { recalcOnResize, wait } from './Params.js';
+import dataStorage from './localForage.js';
 
 
 
@@ -28,7 +28,7 @@ export async function textualiser()
   return new Promise((resolve, reject) => {
     if (Object.keys(Textes).length === 0 && Textes.constructor === Object)
     {
-      fetch('/solaire/strings--' + version + '.json')
+      fetch('/solaire/strings.json')
       .then(response => {
         if (response.status == 200)
           return response;

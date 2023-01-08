@@ -26,13 +26,13 @@ $httpLanguage = $translation->getLanguage();
     <link rel="apple-touch-icon" href="/solaire/icons/apple-touch-icon.png">
     <link rel="manifest" href="/solaire/manifest.json">
 
-    <link rel="stylesheet" href="/solaire/style-application.css">
-    <link rel="stylesheet" href="/solaire/style-systeme.css">
+    <link rel="stylesheet" href="/solaire/styles/application.css">
+    <link rel="stylesheet" href="/solaire/styles/systeme.css">
     <link rel="preload" as="fetch" href="/solaire/strings.json" crossorigin>
 
     <script defer src="/solaire/ext/MersenneTwister.js"></script>
     <script defer src="/solaire/ext/localforage.min.js"></script>
-    <script src="/solaire/scripts.js" type="module"></script>
+    <script type="module" src="/solaire/modules/main.js"></script>
 
     <style id="style-welcome">
       #welcome {

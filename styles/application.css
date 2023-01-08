@@ -23,7 +23,7 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: url('ext/material_icons.woff2') format('woff2');
+  src: url('../ext/material_icons.woff2') format('woff2');
 }
 
 .material-icons {
@@ -87,6 +87,10 @@ body {
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
 
+
+button.transparent {
+  display: contents;
+}
 
 #appbar, #topbar {
   display: flex;
@@ -170,6 +174,15 @@ button i + span {
 
 .boutons-groupe>button:active {
   color: hsl(var(--etoile-couleur), 100%, 95%);
+}
+
+@keyframes apparition {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+body #appbar button:not(#bouton-explorer) {
+  animation: apparition .5s var(--easing-standard);
 }
 
 
