@@ -1,15 +1,15 @@
 import { Decouverte } from './Decouverte.js';
 import { Menu } from './Menu.js';
+import { simulateClick } from './Params.js';
 import { Partage } from './Partage.js';
 import { getString } from './traduction.js';
-import { simulateClick } from './Params.js';
 
 
 
 //////////////////////////////////////////////////
 // Affiche un effet d'animation autour des boutons
 let pulseTimeout;
-function pulseBouton(event) {
+export function pulseBouton(event) {
   return new Promise(resolve => {
     const target = event.currentTarget;
     clearTimeout(pulseTimeout);

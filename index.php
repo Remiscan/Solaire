@@ -36,10 +36,9 @@ $httpLanguage = $translation->getLanguage();
 
     <style id="style-welcome">
       #welcome {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        display: grid;
+        place-items: center;
+        grid-template-columns: 100%;
         width: 100%;
         height: calc(100% + 56px);
         position: fixed;
@@ -50,30 +49,36 @@ $httpLanguage = $translation->getLanguage();
         opacity: 1;
         cursor: wait;
       }
-    </style>
 
-    <style id="warning-edge">
-      .warning {
+      body[data-first-visit] {
+        --etoile-couleur: 342;
+      }
+
+      body[data-first-visit] #welcome {
+        cursor: auto;
+      }
+
+      .first-visit {
         display: none;
-        position: absolute;
-        top: 10%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        opacity: 0;
-        pointer-events: none;
+        grid-template-columns: auto;
+        max-width: 50ch;
+        color: white;
+        font-size: 1.5em;
+        position: relative;
+        top: calc(-1.5 * 56px);
       }
-      @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-        /* IE10+ WARNING */
-        .warning {
-          display: block;
-          z-index: 50;
-        }
+
+      body[data-first-visit] .first-visit {
+        display: grid;
       }
-      @supports not (clip-path: circle(1%)) {
-        /* EDGE WARNING */
-        .warning {
-          display: block;
-        }
+
+      body[data-first-visit] #appbar {
+        position: relative;
+        z-index: 2000;
+      }
+
+      body[data-first-visit] #appbar button:not(#bouton-explorer) {
+        display: none;
       }
     </style>
   </head>
@@ -84,11 +89,16 @@ $httpLanguage = $translation->getLanguage();
     
 
     <div class="conteneur-systeme">
-      <div class="warning">Internet Explorer ne supporte pas les variables CSS sur lesquelles reposent Solaire. Désolé pour ce désagrément !</div>
       <div id="systeme"></div>
     </div>
 
-    <div id="welcome"></div>
+    <div id="welcome">
+      <div class="first-visit">
+        <p data-string="first-visit-1"></p>
+        <p data-string="first-visit-2"></p>
+        <p data-string="first-visit-3"></p>
+      </div>
+    </div>
 
 
 

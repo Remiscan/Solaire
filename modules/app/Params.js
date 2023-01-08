@@ -1,3 +1,10 @@
+export const Params = {
+  easingStandard: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+  easingDecelerate: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
+  easingAccelerate: 'cubic-bezier(0.4, 0.0, 1, 1)',
+};
+
+
 /////////////////////////////////
 // Simule un click sur un élément
 export function simulateClick(elem, x = 0, y = 0) {

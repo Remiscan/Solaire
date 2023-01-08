@@ -51,7 +51,10 @@
     "adresse": "Adresse : ",
     "favori-planetes": " planètes",
     "reset-zoom": "Réinit. zoom",
-    "partage-description": "🪐 Viens explorer ce système planétaire :"
+    "partage-description": "🪐 Viens explorer ce système planétaire :",
+    "first-visit-1": "Bienvenue sur Solaire.",
+    "first-visit-2": "Découvrez de nombreux systèmes planétaires générés procéduralement, et observez les diverses étoiles et planètes qu'ils contiennent.",
+    "first-visit-3": "Appuyez sur le bouton en bas de l'écran pour démarrer votre fusée et voyager vers un nouveau soleil."
   },
   "en": {
     "bouton-installer": "Install",
@@ -103,6 +106,9 @@
     "adresse": "Address: ",
     "favori-planetes": " planets",
     "reset-zoom": "Reset zoom",
-    "partage-description": "🪐 Come explore this planetary system:"
+    "partage-description": "🪐 Come explore this planetary system:",
+    "first-visit-1": "Welcome to Solaire.",
+    "first-visit-2": "Discover numerous procedurally generated planetary systems, and observe the diverse starts and planets they contain.",
+    "first-visit-3": "Press the button at the bottom of the screen to launch your rocket and travel towards a new sun."
   }
 }

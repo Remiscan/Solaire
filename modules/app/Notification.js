@@ -57,4 +57,8 @@ export class Notification {
     notification.innerHTML = '';
     actions.innerHTML = '';
   }
+
+  static get maxDelay() {
+    return 2147483000;
+  }
 }
