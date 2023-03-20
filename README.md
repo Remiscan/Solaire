@@ -7,3 +7,5 @@ Inspired by games like No Man's Sky, Solaire is a web app that generates random 
 There are a few types of stars and planets to discover by visiting different systems. The logbook keeps track of things you've discovered.
 
 ![Screenshot_20230320_201908_Chrome](https://user-images.githubusercontent.com/1685446/226445339-ccfa0ef0-7a71-4c9a-8a01-feeab0816f18.jpg)
+
+Try it out at <https://remiscan.fr/solaire/>.
