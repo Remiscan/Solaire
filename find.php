@@ -24,7 +24,7 @@
   // Pour trouver un système en cliquant sur le bouton
   const button = document.querySelector('#finder');
   button.addEventListener('click', () => {
-    const verification = s => s?.etoile?.couleur == 300;
+    const verification = s => s?.etoile?.couleur == 342;
     const maxIterations = 1000;
     find(verification, maxIterations);
   });
