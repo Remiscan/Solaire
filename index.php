@@ -3,9 +3,10 @@ $commonDir = '../_common';
 require_once $commonDir.'/php/Translation.php';
 $translation = new Translation('{ "fr": {}, "en": {} }');
 $httpLanguage = $translation->getLanguage();
+$urlLang = isset($_GET['lang']) ? htmlspecialchars($_GET['lang']) : null;
 ?>
 <!doctype html>
-<html data-http-lang="<?=$httpLanguage?>">
+<html data-http-lang="<?=$httpLanguage?>" data-forced-lang="<?=$urlLang ?? ''?>">
   <head>
     <meta charset="utf-8">
     <title>Solaire</title>

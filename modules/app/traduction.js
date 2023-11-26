@@ -10,10 +10,14 @@ const Textes = {};
 // Place le texte français ou anglais aux bons endroits
 export async function textualiser()
 {
+  const forcedLang = document.documentElement.dataset.forcedLang;
+  document.documentElement.removeAttribute('data-forced-lang');
   const localLang = await dataStorage.getItem('langage');
   const httpLang = document.documentElement.dataset.httpLang;
   const navLang = navigator.language;
-  if (localLang != null)
+  if (forcedLang != null && ['en', 'fr'].includes(forcedLang))
+    langage = forcedLang;
+  else if (localLang != null)
     langage = (localLang == 'fr') ? 'fr' : 'en';
   else if (httpLang)
     langage = (httpLang == 'fr') ? 'fr' : 'en';
