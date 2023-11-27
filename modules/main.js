@@ -1,3 +1,4 @@
+import 'remiscan-logo';
 import * as App from './app/App.js';
 import { Voyage } from './app/Voyage.js';
 import './app/custom-scroll-zoom.js';

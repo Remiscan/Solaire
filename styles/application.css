@@ -648,6 +648,15 @@ label[for^="switch"] {
   margin: .625rem 0;
 }
 
+.link-to-remiscan {
+  justify-content: center;
+  gap: 1ch;
+}
+
+remiscan-logo {
+  --text-color: hsl(var(--etoile-couleur), 50%, 40%) !important;
+}
+
 
 
 /*

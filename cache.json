@@ -32,6 +32,10 @@
         "./textures/1.svg",
         "./textures/2.svg",
         "./textures/3.svg",
-        "./textures/4.svg"
+        "./textures/4.svg",
+        "/_common/components/remiscan-logo/remiscan-logo.js",
+        "/_common/components/remiscan-logo/logo.svg",
+        "/_common/components/remiscan-logo/logo-horizontal.svg",
+        "/_common/components/remiscan-logo/logo-square.svg"
     ]
 }

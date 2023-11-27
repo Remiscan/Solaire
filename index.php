@@ -31,6 +31,17 @@ $urlLang = isset($_GET['lang']) ? htmlspecialchars($_GET['lang']) : null;
     <link rel="stylesheet" href="/solaire/styles/systeme.css">
     <link rel="preload" as="fetch" href="/solaire/strings.json" crossorigin>
 
+    <script type="importmap">
+    {
+      "imports": {
+        "remiscan-logo": "/_common/components/remiscan-logo/remiscan-logo.js",
+        "remiscan-logo-svg": "/_common/components/remiscan-logo/logo.svg",
+        "remiscan-logo-svg-horizontal": "/_common/components/remiscan-logo/logo-horizontal.svg",
+        "remiscan-logo-svg-square": "/_common/components/remiscan-logo/logo-square.svg"
+      }
+    }
+    </script>
+
     <script defer src="/solaire/ext/MersenneTwister.js"></script>
     <script defer src="/solaire/ext/localforage.min.js"></script>
     <script type="module" src="/solaire/modules/main.js"></script>
@@ -245,6 +256,11 @@ $urlLang = isset($_GET['lang']) ? htmlspecialchars($_GET['lang']) : null;
             <button type="button" class="bouton-check-maj" data-string="bouton-check-maj" tabIndex="-1" disabled></button>
             <span>v.</span>
           </div>
+        </div>
+
+        <div class="groupe-parametres link-to-remiscan">
+          <span data-string="parametre-remiscan"></span>
+          <div><remiscan-logo text-color></remiscan-logo></div>
         </div>
       </div>
     </div>
