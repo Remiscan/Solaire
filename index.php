@@ -26,6 +26,7 @@ $urlLang = isset($_GET['lang']) ? htmlspecialchars($_GET['lang']) : null;
     <link rel="icon" type="image/png" href="/solaire/icons/icon-192.png">
     <link rel="apple-touch-icon" href="/solaire/icons/apple-touch-icon.png">
     <link rel="manifest" href="/solaire/manifest.json">
+    <link rel="canonical" href="https://remiscan.fr/solaire/">
 
     <link rel="stylesheet" href="/solaire/styles/application.css">
     <link rel="stylesheet" href="/solaire/styles/systeme.css">
