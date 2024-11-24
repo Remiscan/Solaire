@@ -190,6 +190,78 @@ document.addEventListener('wheel', event => {
 }, {passive: false});
 
 
+// On surveille le double clic
+let lastPointerUp = 0;
+let pointerUpCount = 0;
+const maxDoubleClickDelay = 500;
+const movedThreshold = 10;
+divSysteme.addEventListener('pointerdown', event => {
+  let hasMoved = false;
+
+  const startPoint = {
+    clientX: event.clientX,
+    clientY: event.clientY
+  };
+
+  const onPointerMove = event => {
+    const moveDistance = Math.sqrt((startPoint.clientX - event.clientX) ** 2 + (startPoint.clientY - event.clientY) ** 2);
+    if (moveDistance > movedThreshold) {
+      hasMoved = true;
+    }
+  };
+
+  const onPointerUp = event => {
+    pointerUpCount++;
+    const now = Date.now();
+
+    if (pointerUpCount === 2 && now - lastPointerUp < maxDoubleClickDelay && !hasMoved) {
+      pointerUpCount = 0;
+      divSysteme.dispatchEvent(new CustomEvent('double-pointerup', { detail: { clientX: event.clientX, clientY: event.clientY }}));
+    } else if (hasMoved) {
+      pointerUpCount = 0;
+    }
+
+    divSysteme.removeEventListener('pointermove', onPointerMove);
+    divSysteme.removeEventListener('pointerup', onPointerUp);
+
+    lastPointerUp = now;
+  };
+
+  divSysteme.addEventListener('pointermove', onPointerMove);
+  divSysteme.addEventListener('pointerup', onPointerUp);
+});
+
+
+// On surveille le zoom au double clic
+divSysteme.addEventListener('double-pointerup', async event => {
+  if (patience) {
+    patience = 0;
+
+    const zoomDuration = 400; //ms
+    const start = Date.now();
+
+    const point = {
+      clientX: event.detail.clientX,
+      clientY: event.detail.clientY
+    };
+
+    const z = Math.max(minZoom, Math.min(ancienZoom * 1.7, maxZoom));
+
+    while (Date.now() - start < zoomDuration) {
+      const tempZ = ancienZoom + (z - ancienZoom) * (Date.now() - start) / zoomDuration;
+      const futur = zoom(tempZ, point);
+      conteneurSysteme.customScroll(futur.scrollX, futur.scrollY);
+      await new Promise(resolve => requestAnimationFrame(resolve));
+    }
+
+    const futur = zoom(z, point);
+    conteneurSysteme.customScroll(futur.scrollX, futur.scrollY);
+
+    requestAnimationFrame(() => { patience = 1 });
+  }
+});
+
+
 // On surveille le scroll et le zoom au toucher
 divSysteme.addEventListener('touchstart', gestionTouch);
 divSysteme.addEventListener('touchend', gestionTouch);
